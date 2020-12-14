@@ -1,6 +1,5 @@
 package ru.inversion.plshed.mainWin;
 
-import javafx.application.Application;
 import javafx.fxml.FXML;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.IDataSet;
@@ -13,13 +12,12 @@ import ru.inversion.fx.form.controls.JInvTableColumn;
 import ru.inversion.fx.form.controls.JInvToolBar;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
-import ru.inversion.plshed.PLShedMain;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
-import ru.inversion.plshed.utils.ManifestData;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
+import static manifest.ManifestData.loadDataFromManifestFile;
 import static ru.inversion.plshed.utils.LovUtils.convertTableValue;
 
 
@@ -77,15 +75,15 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         dsIKP_TASK_EVENTS.setTaskContext(getTaskContext());
         dsIKP_TASK_EVENTS.setRowClass(PIkpTaskEvents.class);
 
-        DataLinkBuilder.linkDataSet(dsIKP_TASKS,dsIKP_TASK_EVENTS,PIkpTasks::getITASKID,"IEVENTTASKID");
+        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
     }
 
     @Override
     protected void init() throws Exception {
         initTitle();
         initDataSet();
-        initDataSetAdapter(dsIKP_TASKS,IKP_TASKS,IKP_TASKS$MARK);
-        initDataSetAdapter(dsIKP_TASK_EVENTS,IKP_TASK_EVENTS,IKP_TASK_EVENTS$MARK);
+        initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK);
+        initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK);
         initTableAndFilterConverters();
         initToolBar();
         initToolBarAction();
@@ -93,12 +91,16 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     }
 
     private void initTitle() {
-        String version = ManifestData.loadDataFromManifestFile(PLShedMain.APP().getAppID()).get("version");
-        String date = ManifestData.loadDataFromManifestFile(PLShedMain.APP().getAppID()).get("date");
+        String filePath = ViewIkpTasksController.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        String version = loadDataFromManifestFile(ViewIkpTasksController.class).get("version");
+        String date = loadDataFromManifestFile(ViewIkpTasksController.class).get("date");
+
         setTitle(getBundleString("VIEW.TITLE")
                 .concat(" (")
+                .concat(getBundleString("VERSION"))
                 .concat(version)
-                .concat(" )")
+                .concat(") ")
                 .concat(getTaskContext().getConnectionString(ConnectionStringFormatEnum.SQL_SIMPLE)));
     }
 
@@ -107,7 +109,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         doRefreshEvents();
     }
 
-    private <T>  DSFXAdapter<T> initDataSetAdapter(XXIDataSet<T> dataSet, JInvTable<T> table, DSInfoBar dsInfoBar) throws Exception {
+    private <T> DSFXAdapter<T> initDataSetAdapter(XXIDataSet<T> dataSet, JInvTable<T> table, DSInfoBar dsInfoBar) throws Exception {
         DSFXAdapter<T> dsfx = DSFXAdapter.bind(dataSet, table, null, true);
         dsfx.setEnableFilter(true);
         dsInfoBar.init(table.getDataSetAdapter());
@@ -194,7 +196,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
 
     private void doFormResult(JInvFXFormController.FormReturnEnum ok, JInvFXFormController<PIkpTasks> dctl) {
         if (JInvFXFormController.FormReturnEnum.RET_OK == ok) {
-            EditIkpTasksController controller = (EditIkpTasksController)dctl;
+            EditIkpTasksController controller = (EditIkpTasksController) dctl;
             switch (dctl.getFormMode()) {
                 case VM_INS:
                     dsIKP_TASKS.insertRow(dctl.getDataObject(), IDataSet.InsertRowModeEnum.AFTER_CURRENT, true);
@@ -220,11 +222,11 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         switch (mode) {
             case VM_INS:
                 p = new PIkpTaskEvents();
-                if(dsIKP_TASKS.getCurrentRow() != null && dsIKP_TASKS.getCurrentRow().getITASKID() != null){
+                if (dsIKP_TASKS.getCurrentRow() != null && dsIKP_TASKS.getCurrentRow().getITASKID() != null) {
                     p.setIEVENTTASKID(dsIKP_TASKS.getCurrentRow().getITASKID());
                     logger.info("gurrent task id = ".concat(dsIKP_TASKS.getCurrentRow().getITASKID().toString()));
-                } else{
-                    Alerts.error(this,"Ошибка","Не выбрано задание");
+                } else {
+                    Alerts.error(this, "Ошибка", "Не выбрано задание");
                     return;
                 }
 
