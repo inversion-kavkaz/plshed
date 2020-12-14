@@ -80,7 +80,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     @Override
     protected void init() throws Exception {
         initTitle();
-        initDataSet();
+         initDataSet();
         initDataSetAdapter(dsIKP_TASKS,IKP_TASKS,IKP_TASKS$MARK);
         initDataSetAdapter(dsIKP_TASK_EVENTS,IKP_TASK_EVENTS,IKP_TASK_EVENTS$MARK);
         initTableAndFilterConverters();

@@ -1,0 +1,27 @@
+1.	Инициализируем задание, передавая как параметр ID задания
+          ikp_adm.initTask(taskID);
+2.	Запускаем задание (при этом взводится признак что задание выполняется, чтобы в других сессиях не могли запустить).
+          ikp_adm.runTask(taskID);
+3.	Далее циклом по всем действиям в рамках задания с сортировкой по NPP выполняем:
+          for i in (select * from IKP_TASK_EVENTS where iEventTaskid=:taskID order by IEVENTNPP) loop
+  a.	Инициализация действия (передаем номер п/п)
+          res:=ikp_adm.init_event(i.iEventNPP); -- res number, обрабатывать не надо. в случае ошибки вернет -1, но тут вряд ли
+  b.	Если загрузка файла (IEVENTFILEDIR=0) – передаем имя файла для действия в пакет IKP_ADM и загружаем файл во временную таблицу.
+          if i.IEVENTFILEDIR=0 then
+            fn:=i.CEVENTINDIR||'\'||loaded_file_name; -- берем вход.дир-ю и найденный файл
+            -- тут грузим целиком файл в таблицу IKP_TMP_FILE поле lFile (BLOB)
+            <действия по загрузке>
+            -- затем передаем имя загруженного файла в пакет
+            IKP_ADM.SetEventFileName(i.iEventNPP,fn);
+          end if;
+  c.	В любом случае (вне зависимости от i.IEVENTFILEDIR) – выполняем действие
+          res:=ikp_adm.execevent(i.iEventNPP);
+  d.	Если выгрузка файла (IEVENTFILEDIR=1) – берем имя файла для действия из пакета IKP_ADM и выгружаем файл из временной таблицы.
+          if i.IEVENTFILEDIR=1 then
+            -- берем исход.дир-ю и сгенерированное имя файла из пакета
+            fn:=i.CEVENTOUTDIR||'\'||IKP_ADM.GetEventFileName(i.iEventNPP);
+            -- выгружаем файл
+            <действия по выгрузке BLOB поля из таблицы IKP_TMP_FILE в файл с именем fn>
+          end if;
+4.	Финишируем задание (снимается признак выполнения).
+          ikp_adm.finishTask(:tID);
