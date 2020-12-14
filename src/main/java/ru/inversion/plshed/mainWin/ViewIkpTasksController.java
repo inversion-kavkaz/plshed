@@ -1,5 +1,6 @@
 package ru.inversion.plshed.mainWin;
 
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.IDataSet;
@@ -12,9 +13,11 @@ import ru.inversion.fx.form.controls.JInvTableColumn;
 import ru.inversion.fx.form.controls.JInvToolBar;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
+import ru.inversion.plshed.PLShedMain;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
+import ru.inversion.plshed.utils.ManifestData;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import static ru.inversion.plshed.utils.LovUtils.convertTableValue;
@@ -80,7 +83,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     @Override
     protected void init() throws Exception {
         initTitle();
-         initDataSet();
+        initDataSet();
         initDataSetAdapter(dsIKP_TASKS,IKP_TASKS,IKP_TASKS$MARK);
         initDataSetAdapter(dsIKP_TASK_EVENTS,IKP_TASK_EVENTS,IKP_TASK_EVENTS$MARK);
         initTableAndFilterConverters();
@@ -90,8 +93,12 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     }
 
     private void initTitle() {
+        String version = ManifestData.loadDataFromManifestFile(PLShedMain.APP().getAppID()).get("version");
+        String date = ManifestData.loadDataFromManifestFile(PLShedMain.APP().getAppID()).get("date");
         setTitle(getBundleString("VIEW.TITLE")
-                .concat(" ")
+                .concat(" (")
+                .concat(version)
+                .concat(" )")
                 .concat(getTaskContext().getConnectionString(ConnectionStringFormatEnum.SQL_SIMPLE)));
     }
 

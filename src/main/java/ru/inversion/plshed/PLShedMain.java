@@ -27,7 +27,7 @@ public class PLShedMain extends BaseApp
     @Override
     public String getAppID () 
     {
-        return "XXI.PLSHED";
+        return "PLShed";
     }
     
     public static void main (String[] args) 
