@@ -1,4 +1,4 @@
-#####_Приложение для внутренного использования компании Инверсия-кавказ_
+**Приложение для внутренного использования компании Инверсия-кавказ**
 ![inverion_logo](https://inversion-kavkaz.ru/images/logo_1.svg)
 [invesion-kavkaz](https://inversion-kavkaz.ru/)
 
