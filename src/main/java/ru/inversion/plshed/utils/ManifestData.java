@@ -25,6 +25,8 @@ public class ManifestData {
      * version - номер версии третьим параметром идет номер сборки генерится мавеном автоматически
      * date - дата сборки
      * принимает имя приложения
+     *
+     * можно любые данные манифеста достать тут!
      * */
     public static Map<String,String> loadDataFromManifestFile(String appName) {
 
@@ -34,9 +36,9 @@ public class ManifestData {
 
             File pto = new File(ManifestData.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             String a_path = pto.getAbsolutePath();
-            a_path = a_path.substring(0,a_path.lastIndexOf("\\") + 1);
+            a_path = a_path.substring(0,a_path.lastIndexOf("\\") + 1) + appId;
 
-            String s = readManifest(a_path + appId);
+            String s = readManifest(a_path);
             int markedStringAssets = s.indexOf(markedString) + markedString.length();
             String implementationString = s.substring(markedStringAssets + 1 , s.indexOf("\n",markedStringAssets) - 1);
             String[] strings = implementationString.split("/");
