@@ -1,5 +1,5 @@
 **Приложение для внутренного использования компании Инверсия-кавказ**
-![inverion_logo](https://inversion-kavkaz.ru/images/logo_1.svg)
+<img src="https://inversion-kavkaz.ru/images/logo_1.svg" width="200" height="100">
 [invesion-kavkaz](https://inversion-kavkaz.ru/)
 
 #### Рабочее название: Автоматическое выполнение заданий
