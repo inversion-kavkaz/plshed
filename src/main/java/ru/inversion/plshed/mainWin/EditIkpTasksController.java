@@ -43,11 +43,16 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
     protected void init () throws Exception 
     {
         super.init ();
-        initCombobox(getTaskContext(),BTASKRUNNING, PIkpRunningTextValue.class, PIkpRunningTextValue.class);
-        initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class, PIkpRunningSideTextValue.class);
-        initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class, PIkpFrequencyTextValue.class);
-        initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class, PIkpPeriodTextValue.class);
+        initCombobox(getTaskContext(),BTASKRUNNING, PIkpRunningTextValue.class);
+        initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class);
+        initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class);
+        initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class);
 
+//        initCombobox(getTaskContext(),BTASKRUNNING, PIkpRunningTextValue.class, PIkpRunningTextValue.class);
+//        initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class, PIkpRunningSideTextValue.class);
+//        initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class, PIkpFrequencyTextValue.class);
+//        initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class, PIkpPeriodTextValue.class);
+//
     }
 
     @Override

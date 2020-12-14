@@ -31,14 +31,17 @@ public class LovUtils {
      * возвращает - void
      */
     public static <K extends LovInterface, T,C> void convertTableValue(JInvTableColumn<T, C> lovTableColumn,
-                                                                       XXIDataSet<K> lovDataSet,
+                                                                       //XXIDataSet<K> lovDataSet,
                                                                        Class<K> lovClass,
                                                                        TaskContext taskContext,
                                                                        Boolean setFilter
     ) throws DataSetException {
-        lovDataSet.setTaskContext(taskContext);
-        lovDataSet.setRowClass(lovClass);
-        lovDataSet.executeQuery();
+        SQLDataSet<K> lovDataSet = new SQLDataSet<>(taskContext, lovClass);
+        lovDataSet.execute();
+
+//        lovDataSet.setTaskContext(taskContext);
+//        lovDataSet.setRowClass(lovClass);
+//        lovDataSet.executeQuery();
 
         if (setFilter)
             lovTableColumn.setLovClassName(lovDataSet.getRowClass().getCanonicalName());
@@ -51,11 +54,10 @@ public class LovUtils {
     }
 
 
-    public static <T extends LovInterface, K> JInvComboBox initCombobox(ru.inversion.tc.TaskContext taskContext,
+    public static <T extends LovInterface, K> JInvComboBox initCombobox(TaskContext taskContext,
                                                                         JInvComboBox<K, String> comboBox,
-                                                                        Class<T> keyClass, Class<T> entityClass
-    ) throws DataSetException, DataSetException {
-        Class<? extends T> rowClass;
+                                                                        Class<T> entityClass
+    ) throws DataSetException {
         SQLDataSet<T> sqlDataSet = new SQLDataSet<>(taskContext, entityClass);
         sqlDataSet.execute();
         DataSetStringConverter<T, K> sc = new DataSetStringConverter<>(sqlDataSet, t -> (K) t.getKey(), t -> (String) t.getValue());

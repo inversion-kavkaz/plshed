@@ -49,10 +49,14 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     {
         super.init ();
 
-        initCombobox(getTaskContext(),IEVENTTYPE, PIkpEventTypeTextValue.class, PIkpEventTypeTextValue.class);
-        initCombobox(getTaskContext(),IEVENTFILEDIR, PIkpEventFileTypeTextValue.class, PIkpEventFileTypeTextValue.class);
-        initCombobox(getTaskContext(),BEVENTENABLED, PIkpEventEnebledTextValue.class, PIkpEventEnebledTextValue.class);
+        initCombobox(getTaskContext(),IEVENTTYPE,  PIkpEventTypeTextValue.class);
+        initCombobox(getTaskContext(),IEVENTFILEDIR, PIkpEventFileTypeTextValue.class);
+        initCombobox(getTaskContext(),BEVENTENABLED, PIkpEventEnebledTextValue.class);
 
+//        initCombobox(getTaskContext(),IEVENTTYPE, PIkpEventTypeTextValue.class, PIkpEventTypeTextValue.class);
+//        initCombobox(getTaskContext(),IEVENTFILEDIR, PIkpEventFileTypeTextValue.class, PIkpEventFileTypeTextValue.class);
+//        initCombobox(getTaskContext(),BEVENTENABLED, PIkpEventEnebledTextValue.class, PIkpEventEnebledTextValue.class);
+//
 
         setInnerGraphicButton(CEVENTINDIR,FontAwesome.fa_search, event -> chooser(CEVENTINDIR), event -> validate(CEVENTINDIR));
         setInnerGraphicButton(CEVENTOUTDIR,FontAwesome.fa_search, event -> chooser(CEVENTOUTDIR), event -> validate(CEVENTOUTDIR));

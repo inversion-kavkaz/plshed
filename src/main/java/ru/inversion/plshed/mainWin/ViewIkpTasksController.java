@@ -59,13 +59,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
 
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>();
     private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>();
-    private final XXIDataSet<PIkpRunningTextValue> dsIKP_RUNNING_TEXT_VALUE = new XXIDataSet<>();
-    private final XXIDataSet<PIkpRunningSideTextValue> dsIKP_RUNNING_SIDE_TEXT_VALUE = new XXIDataSet<>();
-    private final XXIDataSet<PIkpPeriodTextValue> dsIKP_PERIOD_TEXT_VALUE = new XXIDataSet<>();
-    private final XXIDataSet<PIkpFrequencyTextValue> dsIKP_FREQUENCY_TEXT_VALUE = new XXIDataSet<>();
-    private final XXIDataSet<PIkpEventTypeTextValue> dsIKP_EVENTTYPE_TEXT_VALUE = new XXIDataSet<>();
-    private final XXIDataSet<PIkpEventFileTypeTextValue> dsIKP_EVENTFILETYPE_TEXT_VALUE = new XXIDataSet<>();
-    private final XXIDataSet<PIkpEventEnebledTextValue> dsIKP_EVENTENEBLED_TEXT_VALUE = new XXIDataSet<>();
+
+//    private final XXIDataSet<PIkpRunningTextValue> dsIKP_RUNNING_TEXT_VALUE = new XXIDataSet<>();
+//    private final XXIDataSet<PIkpRunningSideTextValue> dsIKP_RUNNING_SIDE_TEXT_VALUE = new XXIDataSet<>();
+//    private final XXIDataSet<PIkpPeriodTextValue> dsIKP_PERIOD_TEXT_VALUE = new XXIDataSet<>();
+//    private final XXIDataSet<PIkpFrequencyTextValue> dsIKP_FREQUENCY_TEXT_VALUE = new XXIDataSet<>();
+//    private final XXIDataSet<PIkpEventTypeTextValue> dsIKP_EVENTTYPE_TEXT_VALUE = new XXIDataSet<>();
+//    private final XXIDataSet<PIkpEventFileTypeTextValue> dsIKP_EVENTFILETYPE_TEXT_VALUE = new XXIDataSet<>();
+//    private final XXIDataSet<PIkpEventEnebledTextValue> dsIKP_EVENTENEBLED_TEXT_VALUE = new XXIDataSet<>();
 
 
     private void initDataSet() throws Exception {
@@ -135,14 +136,23 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
 
     private void initTableAndFilterConverters() throws ru.inversion.dataset.DataSetException {
         /** Таблица заданий */
-        convertTableValue(BTASKRUNNING, dsIKP_RUNNING_TEXT_VALUE, PIkpRunningTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKPERIOD, dsIKP_PERIOD_TEXT_VALUE, PIkpPeriodTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKSIDE, dsIKP_RUNNING_SIDE_TEXT_VALUE, PIkpRunningSideTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKFREQUENCY, dsIKP_FREQUENCY_TEXT_VALUE, PIkpFrequencyTextValue.class, getTaskContext(), true);
+//        convertTableValue(BTASKRUNNING, dsIKP_RUNNING_TEXT_VALUE, PIkpRunningTextValue.class, getTaskContext(), true);
+//        convertTableValue(ITASKPERIOD, dsIKP_PERIOD_TEXT_VALUE, PIkpPeriodTextValue.class, getTaskContext(), true);
+//        convertTableValue(ITASKSIDE, dsIKP_RUNNING_SIDE_TEXT_VALUE, PIkpRunningSideTextValue.class, getTaskContext(), true);
+//        convertTableValue(ITASKFREQUENCY, dsIKP_FREQUENCY_TEXT_VALUE, PIkpFrequencyTextValue.class, getTaskContext(), true);
+//        /** Таблица событий */
+//        convertTableValue(IEVENTTYPE, dsIKP_EVENTTYPE_TEXT_VALUE, PIkpEventTypeTextValue.class, getTaskContext(), true);
+//        convertTableValue(IEVENTFILEDIR, dsIKP_EVENTFILETYPE_TEXT_VALUE, PIkpEventFileTypeTextValue.class, getTaskContext(), true);
+//        convertTableValue(BEVENTENABLED, dsIKP_EVENTENEBLED_TEXT_VALUE, PIkpEventEnebledTextValue.class, getTaskContext(), true);
+        /** Таблица заданий */
+        convertTableValue(BTASKRUNNING, PIkpRunningTextValue.class, getTaskContext(), true);
+        convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
+        convertTableValue(ITASKSIDE, PIkpRunningSideTextValue.class, getTaskContext(), true);
+        convertTableValue(ITASKFREQUENCY,  PIkpFrequencyTextValue.class, getTaskContext(), true);
         /** Таблица событий */
-        convertTableValue(IEVENTTYPE, dsIKP_EVENTTYPE_TEXT_VALUE, PIkpEventTypeTextValue.class, getTaskContext(), true);
-        convertTableValue(IEVENTFILEDIR, dsIKP_EVENTFILETYPE_TEXT_VALUE, PIkpEventFileTypeTextValue.class, getTaskContext(), true);
-        convertTableValue(BEVENTENABLED, dsIKP_EVENTENEBLED_TEXT_VALUE, PIkpEventEnebledTextValue.class, getTaskContext(), true);
+        convertTableValue(IEVENTTYPE,  PIkpEventTypeTextValue.class, getTaskContext(), true);
+        convertTableValue(IEVENTFILEDIR,  PIkpEventFileTypeTextValue.class, getTaskContext(), true);
+        convertTableValue(BEVENTENABLED,  PIkpEventEnebledTextValue.class, getTaskContext(), true);
     }
 
     private void doRefreshEvents() {
