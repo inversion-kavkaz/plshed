@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import ru.inversion.fx.form.controls.JInvButton?>
+<?import ru.inversion.fx.form.controls.JInvCalendar?>
+<?import ru.inversion.fx.form.controls.JInvComboBox?>
+<?import ru.inversion.fx.form.controls.JInvLabel?>
+<?import ru.inversion.fx.form.controls.JInvLongField?>
+<?import ru.inversion.fx.form.controls.JInvTextField?>
+<?import ru.inversion.fx.form.controls.JInvTimeField?>
+
+<VBox maxHeight="200.0" minHeight="200.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.mainWin.EditIkpTasksController">
+<children>
+<GridPane hgap="5.0" prefHeight="170.0" prefWidth="674.0" vgap="5.0" VBox.vgrow="ALWAYS">
+<children>
+
+<JInvLabel fx:id="lblCTASKNAME" text="%CTASKNAME" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+<JInvTextField fx:id="CTASKNAME" fieldName="CTASKNAME" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+<JInvLabel fx:id="lblITASKPERIOD" text="%ITASKPERIOD" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+      <JInvComboBox fx:id="ITASKPERIOD" fieldName="ITASKPERIOD" maxWidth="-Infinity" />
+      
+      <JInvLabel fx:id="lblITASKFREQUENCY" text="%ITASKFREQUENCY">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+      <JInvComboBox fx:id="ITASKFREQUENCY" fieldName="ITASKFREQUENCY" maxWidth="-Infinity" />
+      
+      <JInvLabel fx:id="lblITASKSIDE" text="%ITASKSIDE">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+      <JInvComboBox fx:id="ITASKSIDE" fieldName="ITASKSIDE" maxWidth="-Infinity" />
+      
+      <JInvLabel fx:id="lblBTASKRUNNING" text="%BTASKRUNNING">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+      <JInvComboBox fx:id="BTASKRUNNING" fieldName="BTASKRUNNING" maxWidth="-Infinity" />
+               </children>
+            </HBox>
+
+<JInvLabel fx:id="lblDTASKFROMDT" text="%DTASKFROMDT" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <children>
+      <JInvCalendar fx:id="DTASKFROMDT" fieldName="DTASKFROMDT" />
+      
+      <JInvLabel fx:id="lblDTASKFROMTM" text="%DTASKFROMTM">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+      <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" />
+      <JInvTextField fx:id="DTASKFROMTM" fieldName="DTASKFROMTM" prefWidth="0" visible="false" />
+      <JInvLabel fx:id="lblITASKINTERVAL" text="%ITASKINTERVAL">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+      <JInvLongField fx:id="ITASKINTERVAL" fieldName="ITASKINTERVAL" prefHeight="25.0" prefWidth="76.0" />
+               </children>
+            </HBox>
+
+
+</children>
+<columnConstraints>
+<ColumnConstraints />
+<ColumnConstraints hgrow="ALWAYS" />
+</columnConstraints>
+<VBox.margin>
+<Insets />
+</VBox.margin>
+<rowConstraints>
+<RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+</rowConstraints>
+</GridPane>
+<ButtonBar buttonMinWidth="80.0">
+<buttons>
+<JInvButton fx:id="btOK" text="%EDIT.OK" />
+<JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
+</buttons>
+</ButtonBar>
+</children>
+<padding>
+<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+</padding>
+</VBox>

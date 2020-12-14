@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.inversion</groupId>
+    <artifactId>plshed</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>PLShed</name>
+
+    <developers>
+        <developer>
+            <organization>Инверсия-кавказ</organization>
+            <organizationUrl>https://inversion-kavkaz.ru</organizationUrl>
+            <name>Хвастунов Дмитрий</name>
+            <email>hvastunov@inversion-kavkaz.ru</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <kotlin.version>1.4.21</kotlin.version>
+    </properties>
+    <dependencies>
+        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.4</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lombok-1.18.4.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>JInvFore_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\JInvFore.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXbicomp_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\FXbicomp.jar</systemPath></dependency>
+        <dependency><groupId>org.slf4j</groupId><version>1.0.0</version><artifactId>slf4j-api</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\slf4j-api.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
+    </dependencies>
+
+    <build>
+        <finalName>PLShed</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.inversion.plshed.PLShedMain</mainClass>
+                            <classpathLayoutType>custom</classpathLayoutType>
+                            <customClasspathLayout>$${artifactId}.$${packaging}</customClasspathLayout>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>JInvFore.jar FXbicomp.jar</Class-Path>
+                            <Codebase>*</Codebase><Permissions>all-permissions</Permissions></manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/source</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/java</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
