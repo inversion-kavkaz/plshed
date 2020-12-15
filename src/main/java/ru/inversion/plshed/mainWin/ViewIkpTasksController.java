@@ -2,6 +2,7 @@ package ru.inversion.plshed.mainWin;
 
 import javafx.fxml.FXML;
 import ru.inversion.dataset.DataLinkBuilder;
+import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.IDataSet;
 import ru.inversion.dataset.XXIDataSet;
 import ru.inversion.dataset.aggr.AggrFuncEnum;
@@ -15,6 +16,7 @@ import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
+import ru.inversion.plshed.interfaces.callFunc;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import static lovUtils.LovUtils.convertTableValue;
@@ -28,7 +30,7 @@ import static manifest.ManifestData.loadDataFromManifestFile;
  */
 
 
-public class ViewIkpTasksController extends JInvFXBrowserController {
+public class ViewIkpTasksController extends JInvFXBrowserController implements callFunc {
     @FXML
     private JInvTable<PIkpTasks> IKP_TASKS;
     @FXML
@@ -60,7 +62,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>();
     private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>();
 
-    private void initDataSet() throws Exception {
+    {
         dsIKP_TASKS.setTaskContext(getTaskContext());
         dsIKP_TASKS.setRowClass(PIkpTasks.class);
 
@@ -68,24 +70,26 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         dsIKP_TASK_EVENTS.setRowClass(PIkpTaskEvents.class);
 
         DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
+
     }
 
     @Override
     protected void init() throws Exception {
         initTitle();
-        initDataSet();
         initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK);
         initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK);
         initTableAndFilterConverters();
-        initToolBar();
-        initToolBarAction();
+        initToolBar(toolBar, toolBarEvents);
+        initToolBarAction(toolBar, IKP_TASKS, dsIKP_TASKS, this::doOperation);
+        initToolBarAction(toolBarEvents, IKP_TASK_EVENTS, dsIKP_TASK_EVENTS, this::doOperationEvents);
+
         doRefreshAllTables();
     }
 
     private void initTitle() {
 
-        String version = loadDataFromManifestFile(ViewIkpTasksController.class,"Implementation-Build").get("version");
-        String date = loadDataFromManifestFile(ViewIkpTasksController.class,"Implementation-Build").get("date");
+        String version = loadDataFromManifestFile(ViewIkpTasksController.class, "Implementation-Build").get("version");
+        String date = loadDataFromManifestFile(ViewIkpTasksController.class, "Implementation-Build").get("date");
 
         setTitle(getBundleString("VIEW.TITLE")
                 .concat(" (")
@@ -96,8 +100,8 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     }
 
     private void doRefreshAllTables() {
-        doRefresh();
-        doRefreshEvents();
+        doRefresh(dsIKP_TASKS);
+        doRefresh(dsIKP_TASK_EVENTS);
     }
 
     private <T> DSFXAdapter<T> initDataSetAdapter(XXIDataSet<T> dataSet, JInvTable<T> table, DSInfoBar dsInfoBar) throws Exception {
@@ -108,20 +112,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         return dsfx;
     }
 
-    private void initToolBarAction() {
-        IKP_TASKS.setToolBar(toolBar);
-        IKP_TASKS.setAction(ActionFactory.ActionTypeEnum.CREATE, (a) -> doOperation(FormModeEnum.VM_INS));
-        IKP_TASKS.setAction(ActionFactory.ActionTypeEnum.VIEW, (a) -> doOperation(FormModeEnum.VM_SHOW));
-        IKP_TASKS.setAction(ActionFactory.ActionTypeEnum.UPDATE, (a) -> doOperation(FormModeEnum.VM_EDIT));
-        IKP_TASKS.setAction(ActionFactory.ActionTypeEnum.DELETE, (a) -> doOperation(FormModeEnum.VM_DEL));
-        IKP_TASKS.setAction(ActionFactory.ActionTypeEnum.REFRESH, (a) -> doRefresh());
-
-        IKP_TASK_EVENTS.setToolBar(toolBarEvents);
-        IKP_TASK_EVENTS.setAction(ActionFactory.ActionTypeEnum.CREATE, (a) -> doOperationEvents(FormModeEnum.VM_INS));
-        IKP_TASK_EVENTS.setAction(ActionFactory.ActionTypeEnum.VIEW, (a) -> doOperationEvents(FormModeEnum.VM_SHOW));
-        IKP_TASK_EVENTS.setAction(ActionFactory.ActionTypeEnum.UPDATE, (a) -> doOperationEvents(FormModeEnum.VM_EDIT));
-        IKP_TASK_EVENTS.setAction(ActionFactory.ActionTypeEnum.DELETE, (a) -> doOperationEvents(FormModeEnum.VM_DEL));
-        IKP_TASK_EVENTS.setAction(ActionFactory.ActionTypeEnum.REFRESH, (a) -> doRefreshEvents());
+    private void initToolBarAction(JInvToolBar lToolBar, JInvTable lTable, XXIDataSet dataSet, callFunc handle) {
+        lTable.setToolBar(lToolBar);
+        lTable.setAction(ActionFactory.ActionTypeEnum.CREATE, (a) -> handle.doOperation(FormModeEnum.VM_INS));
+        lTable.setAction(ActionFactory.ActionTypeEnum.VIEW, (a) -> handle.doOperation(FormModeEnum.VM_SHOW));
+        lTable.setAction(ActionFactory.ActionTypeEnum.UPDATE, (a) -> handle.doOperation(FormModeEnum.VM_EDIT));
+        lTable.setAction(ActionFactory.ActionTypeEnum.DELETE, (a) -> handle.doOperation(FormModeEnum.VM_DEL));
+        lTable.setAction(ActionFactory.ActionTypeEnum.REFRESH, (a) -> doRefresh(dataSet));
     }
 
     private void initTableAndFilterConverters() throws ru.inversion.dataset.DataSetException {
@@ -129,39 +126,33 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         convertTableValue(BTASKRUNNING, PIkpRunningTextValue.class, getTaskContext(), true);
         convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
         convertTableValue(ITASKSIDE, PIkpRunningSideTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKFREQUENCY,  PIkpFrequencyTextValue.class, getTaskContext(), true);
+        convertTableValue(ITASKFREQUENCY, PIkpFrequencyTextValue.class, getTaskContext(), true);
         /** Таблица событий */
-        convertTableValue(IEVENTTYPE,  PIkpEventTypeTextValue.class, getTaskContext(), true);
-        convertTableValue(IEVENTFILEDIR,  PIkpEventFileTypeTextValue.class, getTaskContext(), true);
-        convertTableValue(BEVENTENABLED,  PIkpEventEnebledTextValue.class, getTaskContext(), true);
+        convertTableValue(IEVENTTYPE, PIkpEventTypeTextValue.class, getTaskContext(), true);
+        convertTableValue(IEVENTFILEDIR, PIkpEventFileTypeTextValue.class, getTaskContext(), true);
+        convertTableValue(BEVENTENABLED, PIkpEventEnebledTextValue.class, getTaskContext(), true);
     }
 
-    private void doRefreshEvents() {
-        IKP_TASK_EVENTS.executeQuery();
+    private void doRefresh(XXIDataSet dataSet) {
+        try {
+            dataSet.execute();
+        } catch (DataSetException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void doRefresh() {
-        IKP_TASKS.executeQuery();
-    }
-
-    private void initToolBar() {
-        toolBar.setStandartActions(ActionFactory.ActionTypeEnum.CREATE,
-                ActionFactory.ActionTypeEnum.VIEW,
-                ActionFactory.ActionTypeEnum.UPDATE,
-                ActionFactory.ActionTypeEnum.DELETE,
-                ActionFactory.ActionTypeEnum.REFRESH);
-
-        toolBarEvents.setStandartActions(ActionFactory.ActionTypeEnum.CREATE,
-                ActionFactory.ActionTypeEnum.VIEW,
-                ActionFactory.ActionTypeEnum.UPDATE,
-                ActionFactory.ActionTypeEnum.DELETE,
-                ActionFactory.ActionTypeEnum.REFRESH);
-
-
+    private void initToolBar(JInvToolBar... toolBarList) {
+        for (int i = 0; i < toolBarList.length; i++) {
+            toolBarList[i].setStandartActions(ActionFactory.ActionTypeEnum.CREATE,
+                    ActionFactory.ActionTypeEnum.VIEW,
+                    ActionFactory.ActionTypeEnum.UPDATE,
+                    ActionFactory.ActionTypeEnum.DELETE,
+                    ActionFactory.ActionTypeEnum.REFRESH);
+        }
 //        toolBar.getItems ().add (ActionFactory.createButton(ActionFactory.ActionTypeEnum.SETTINGS, (a) -> JInvMainFrame.showSettingsPane ()));
     }
 
-    private void doOperation(JInvFXFormController.FormModeEnum mode) {
+    public void doOperation(JInvFXFormController.FormModeEnum mode) {
         PIkpTasks p = null;
 
         switch (mode) {
@@ -176,7 +167,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
         }
 
         if (p != null)
-            new FXFormLauncher<PIkpTasks>(getTaskContext(), getViewContext(), EditIkpTasksController.class)
+            new FXFormLauncher<>(getTaskContext(), getViewContext(), EditIkpTasksController.class)
                     .dataObject(p)
                     .dialogMode(mode)
                     .initProperties(getInitProperties())
@@ -187,11 +178,10 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
 
     private void doFormResult(JInvFXFormController.FormReturnEnum ok, JInvFXFormController<PIkpTasks> dctl) {
         if (JInvFXFormController.FormReturnEnum.RET_OK == ok) {
-            EditIkpTasksController controller = (EditIkpTasksController) dctl;
             switch (dctl.getFormMode()) {
                 case VM_INS:
                     dsIKP_TASKS.insertRow(dctl.getDataObject(), IDataSet.InsertRowModeEnum.AFTER_CURRENT, true);
-                    doRefresh();
+                    doRefresh(dsIKP_TASKS);
                     break;
                 case VM_EDIT:
                     dsIKP_TASKS.updateCurrentRow(dctl.getDataObject());

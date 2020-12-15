@@ -51,9 +51,11 @@
                             <customClasspathLayout>$${artifactId}.$${packaging}</customClasspathLayout>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>JInvFore.jar FXbicomp.jar lib\manifest-reader.jar</Class-Path>
+                            <Class-Path>JInvFore.jar FXbicomp.jar lib\manifest-reader.jar lib\lovUtils.jar</Class-Path>
                             <Codebase>*</Codebase><Permissions>all-permissions</Permissions>
                             <Implementation-Build>${buildNumber}</Implementation-Build>
+                            <Project-Version>${project.version}</Project-Version>
+                            <Build-date>${maven.build.timestamp}</Build-date>
                         </manifestEntries>
                     </archive>
                 </configuration>
