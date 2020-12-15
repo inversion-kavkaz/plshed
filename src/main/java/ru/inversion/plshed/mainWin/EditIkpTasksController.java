@@ -11,7 +11,7 @@ import ru.inversion.plshed.entity.lovEntity.PIkpRunningSideTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpRunningTextValue;
 import ru.inversion.plshed.entity.PIkpTasks;
 
-import static ru.inversion.plshed.utils.LovUtils.initCombobox;
+import static lovUtils.LovUtils.initCombobox;
 
 
 /**
@@ -23,9 +23,6 @@ import static ru.inversion.plshed.utils.LovUtils.initCombobox;
 
 public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
 {  
-//
-//
-//
 //    @FXML JInvLongField ITASKID;
 //    @FXML JInvTextField CTASKNAME;
     @FXML JInvComboBox<Long, String> ITASKPERIOD;
@@ -47,12 +44,6 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
         initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class);
         initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class);
         initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class);
-
-//        initCombobox(getTaskContext(),BTASKRUNNING, PIkpRunningTextValue.class, PIkpRunningTextValue.class);
-//        initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class, PIkpRunningSideTextValue.class);
-//        initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class, PIkpFrequencyTextValue.class);
-//        initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class, PIkpPeriodTextValue.class);
-//
     }
 
     @Override

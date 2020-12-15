@@ -1,7 +1,5 @@
 package ru.inversion.plshed.entity.lovEntity;
 
-import ru.inversion.plshed.utils.LovInterface;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,7 +16,7 @@ import java.io.Serializable;
         query = "SELECT * FROM ikp_text_value where parent_alias ='period'"
 )
 
-public class PIkpPeriodTextValue implements Serializable, LovInterface {
+public class PIkpPeriodTextValue implements Serializable, lovUtils.LovInterface {
     private static final long serialVersionUID = 11_12_2020_13_11_17l;
 
     private Long ID;

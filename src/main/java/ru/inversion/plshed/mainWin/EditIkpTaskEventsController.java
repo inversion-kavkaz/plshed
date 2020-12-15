@@ -13,8 +13,9 @@ import ru.inversion.plshed.entity.lovEntity.PIkpEventFileTypeTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventTypeTextValue;
 import java.io.File;
 import java.nio.file.Files;
+
+import static lovUtils.LovUtils.initCombobox;
 import static ru.inversion.plshed.utils.ButtonUtils.setInnerGraphicButton;
-import static ru.inversion.plshed.utils.LovUtils.initCombobox;
 
 
 /**
@@ -25,9 +26,6 @@ import static ru.inversion.plshed.utils.LovUtils.initCombobox;
 
 public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskEvents>
 {  
-//
-//
-//
 //    @FXML JInvLongField IEVENTID;
 //    @FXML JInvLongField IEVENTTASKID;
 //    @FXML JInvLongField IEVENTNPP;
@@ -49,19 +47,21 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     {
         super.init ();
 
+        initComboBox();
+
+        initInnerButton();
+    }
+
+    private void initInnerButton() {
+        setInnerGraphicButton(CEVENTINDIR, FontAwesome.fa_search, event -> chooser(CEVENTINDIR), event -> validate(CEVENTINDIR));
+        setInnerGraphicButton(CEVENTOUTDIR,FontAwesome.fa_search, event -> chooser(CEVENTOUTDIR), event -> validate(CEVENTOUTDIR));
+        setInnerGraphicButton(CEVENTARHDIR,FontAwesome.fa_search, event -> chooser(CEVENTARHDIR), event -> validate(CEVENTARHDIR));
+    }
+
+    private void initComboBox() throws ru.inversion.dataset.DataSetException {
         initCombobox(getTaskContext(),IEVENTTYPE,  PIkpEventTypeTextValue.class);
         initCombobox(getTaskContext(),IEVENTFILEDIR, PIkpEventFileTypeTextValue.class);
         initCombobox(getTaskContext(),BEVENTENABLED, PIkpEventEnebledTextValue.class);
-
-//        initCombobox(getTaskContext(),IEVENTTYPE, PIkpEventTypeTextValue.class, PIkpEventTypeTextValue.class);
-//        initCombobox(getTaskContext(),IEVENTFILEDIR, PIkpEventFileTypeTextValue.class, PIkpEventFileTypeTextValue.class);
-//        initCombobox(getTaskContext(),BEVENTENABLED, PIkpEventEnebledTextValue.class, PIkpEventEnebledTextValue.class);
-//
-
-        setInnerGraphicButton(CEVENTINDIR,FontAwesome.fa_search, event -> chooser(CEVENTINDIR), event -> validate(CEVENTINDIR));
-        setInnerGraphicButton(CEVENTOUTDIR,FontAwesome.fa_search, event -> chooser(CEVENTOUTDIR), event -> validate(CEVENTOUTDIR));
-        setInnerGraphicButton(CEVENTARHDIR,FontAwesome.fa_search, event -> chooser(CEVENTARHDIR), event -> validate(CEVENTARHDIR));
-
     }
 
     private void chooser(JInvTextField field) {

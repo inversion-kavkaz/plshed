@@ -27,18 +27,13 @@
     </properties>
 
     <dependencies>
-        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.4</version><scope>system</scope><systemPath>D:\JAPP_603\lib\lombok-1.18.4.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>JInvFore_jar</artifactId><scope>system</scope><systemPath>D:\JAPP_603\JInvFore.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXbicomp_jar</artifactId><scope>system</scope><systemPath>D:\JAPP_603\FXbicomp.jar</systemPath></dependency>
-        <dependency><groupId>org.slf4j</groupId><version>1.0.0</version><artifactId>slf4j-api</artifactId><scope>system</scope><systemPath>D:\JAPP_603\lib\slf4j-api.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>D:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
-        <dependency>
-            <groupId>ru.inversion-kavkaz</groupId>
-            <artifactId>manifest-reader</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>D:\JAPP_603\lib\manifest-reader.jar</systemPath>
-        </dependency>
+        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.4</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lombok-1.18.4.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>JInvFore_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\JInvFore.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXbicomp_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\FXbicomp.jar</systemPath></dependency>
+        <dependency><groupId>org.slf4j</groupId><version>1.0.0</version><artifactId>slf4j-api</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\slf4j-api.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
     </dependencies>
 
     <build>

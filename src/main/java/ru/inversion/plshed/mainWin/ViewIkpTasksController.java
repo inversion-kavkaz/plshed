@@ -17,8 +17,8 @@ import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
+import static lovUtils.LovUtils.convertTableValue;
 import static manifest.ManifestData.loadDataFromManifestFile;
-import static ru.inversion.plshed.utils.LovUtils.convertTableValue;
 
 
 /**
@@ -60,15 +60,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>();
     private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>();
 
-//    private final XXIDataSet<PIkpRunningTextValue> dsIKP_RUNNING_TEXT_VALUE = new XXIDataSet<>();
-//    private final XXIDataSet<PIkpRunningSideTextValue> dsIKP_RUNNING_SIDE_TEXT_VALUE = new XXIDataSet<>();
-//    private final XXIDataSet<PIkpPeriodTextValue> dsIKP_PERIOD_TEXT_VALUE = new XXIDataSet<>();
-//    private final XXIDataSet<PIkpFrequencyTextValue> dsIKP_FREQUENCY_TEXT_VALUE = new XXIDataSet<>();
-//    private final XXIDataSet<PIkpEventTypeTextValue> dsIKP_EVENTTYPE_TEXT_VALUE = new XXIDataSet<>();
-//    private final XXIDataSet<PIkpEventFileTypeTextValue> dsIKP_EVENTFILETYPE_TEXT_VALUE = new XXIDataSet<>();
-//    private final XXIDataSet<PIkpEventEnebledTextValue> dsIKP_EVENTENEBLED_TEXT_VALUE = new XXIDataSet<>();
-
-
     private void initDataSet() throws Exception {
         dsIKP_TASKS.setTaskContext(getTaskContext());
         dsIKP_TASKS.setRowClass(PIkpTasks.class);
@@ -92,10 +83,9 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     }
 
     private void initTitle() {
-        String filePath = ViewIkpTasksController.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
-        String version = loadDataFromManifestFile(ViewIkpTasksController.class).get("version");
-        String date = loadDataFromManifestFile(ViewIkpTasksController.class).get("date");
+        String version = loadDataFromManifestFile(ViewIkpTasksController.class,"Implementation-Build").get("version");
+        String date = loadDataFromManifestFile(ViewIkpTasksController.class,"Implementation-Build").get("date");
 
         setTitle(getBundleString("VIEW.TITLE")
                 .concat(" (")
@@ -135,15 +125,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController {
     }
 
     private void initTableAndFilterConverters() throws ru.inversion.dataset.DataSetException {
-        /** Таблица заданий */
-//        convertTableValue(BTASKRUNNING, dsIKP_RUNNING_TEXT_VALUE, PIkpRunningTextValue.class, getTaskContext(), true);
-//        convertTableValue(ITASKPERIOD, dsIKP_PERIOD_TEXT_VALUE, PIkpPeriodTextValue.class, getTaskContext(), true);
-//        convertTableValue(ITASKSIDE, dsIKP_RUNNING_SIDE_TEXT_VALUE, PIkpRunningSideTextValue.class, getTaskContext(), true);
-//        convertTableValue(ITASKFREQUENCY, dsIKP_FREQUENCY_TEXT_VALUE, PIkpFrequencyTextValue.class, getTaskContext(), true);
-//        /** Таблица событий */
-//        convertTableValue(IEVENTTYPE, dsIKP_EVENTTYPE_TEXT_VALUE, PIkpEventTypeTextValue.class, getTaskContext(), true);
-//        convertTableValue(IEVENTFILEDIR, dsIKP_EVENTFILETYPE_TEXT_VALUE, PIkpEventFileTypeTextValue.class, getTaskContext(), true);
-//        convertTableValue(BEVENTENABLED, dsIKP_EVENTENEBLED_TEXT_VALUE, PIkpEventEnebledTextValue.class, getTaskContext(), true);
         /** Таблица заданий */
         convertTableValue(BTASKRUNNING, PIkpRunningTextValue.class, getTaskContext(), true);
         convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
