@@ -54,15 +54,14 @@
 <JInvLabel fx:id="lblDTASKFROMDT" text="%DTASKFROMDT" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-      <JInvCalendar fx:id="DTASKFROMDT" fieldName="DTASKFROMDT" />
+      <JInvCalendar fx:id="DTASKFROMDT" fieldName="DTASKFROMDT" required="true"/>
       
       <JInvLabel fx:id="lblDTASKFROMTM" text="%DTASKFROMTM">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
-      <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" />
-      <JInvTextField fx:id="DTASKFROMTM" fieldName="DTASKFROMTM" prefWidth="0" visible="false" />
+      <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" required="true"/>
       <JInvLabel fx:id="lblITASKINTERVAL" text="%ITASKINTERVAL">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

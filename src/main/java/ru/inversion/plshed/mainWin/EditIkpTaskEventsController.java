@@ -30,25 +30,22 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
 //    @FXML JInvLongField IEVENTTASKID;
 //    @FXML JInvLongField IEVENTNPP;
 //    @FXML JInvTextField CEVENTNAME;
-    @FXML JInvComboBox<Long, String> IEVENTTYPE;
 //    @FXML JInvLongField IEVENTPRESETID;
 //    @FXML JInvTextField LEVENTTEXT;
+
+    @FXML JInvComboBox<Long, String> IEVENTTYPE;
     @FXML JInvTextField CEVENTINDIR;
     @FXML JInvTextField CEVENTOUTDIR;
     @FXML JInvTextField CEVENTARHDIR;
     @FXML JInvComboBox<Long, String> BEVENTENABLED;
     @FXML JInvComboBox<Long, String> IEVENTFILEDIR;
 
-//
-// Initializes the controller class.
-//
+
     @Override
     protected void init () throws Exception 
     {
         super.init ();
-
         initComboBox();
-
         initInnerButton();
     }
 

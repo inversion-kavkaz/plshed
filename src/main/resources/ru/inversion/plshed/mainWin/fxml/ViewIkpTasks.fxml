@@ -20,14 +20,15 @@
             <JInvToolBar fx:id="toolBar" />
             <JInvTable fx:id="IKP_TASKS" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
             <columns>
-            <JInvTableColumn fx:id="ITASKID" fieldName="ITASKID" prefWidth="15" text="%ITASKID" alignment="CENTER"/>
+            <JInvTableColumn fx:id="ITASKID" alignment="CENTER" fieldName="ITASKID" prefWidth="15" text="%ITASKID" />
             <JInvTableColumn fx:id="CTASKNAME" fieldName="CTASKNAME" prefWidth="300.0" text="%CTASKNAME" />
-            <JInvTableColumn fx:id="ITASKPERIOD" fieldName="ITASKPERIOD" text="%ITASKPERIOD" alignment="CENTER"/>
-            <JInvTableColumn fx:id="ITASKFREQUENCY" fieldName="ITASKFREQUENCY" text="%ITASKFREQUENCY" alignment="CENTER"/>
-            <JInvTableColumn fx:id="ITASKINTERVAL" fieldName="ITASKINTERVAL" text="%ITASKINTERVAL" alignment="CENTER"/>
-            <JInvTableColumn fx:id="ITASKSIDE" fieldName="ITASKSIDE" text="%ITASKSIDE" alignment="CENTER"/>
-            <JInvTableColumn fx:id="BTASKRUNNING" fieldName="BTASKRUNNING" text="%BTASKRUNNING" alignment="CENTER"/>
-            <JInvTableColumn fx:id="DTASKFROMTM" fieldName="DTASKFROMTM" text="%DTASKFROMTM" alignment="CENTER"/>
+            <JInvTableColumn fx:id="ITASKPERIOD" alignment="CENTER" fieldName="ITASKPERIOD" text="%ITASKPERIOD" />
+            <JInvTableColumn fx:id="ITASKFREQUENCY" alignment="CENTER" fieldName="ITASKFREQUENCY" text="%ITASKFREQUENCY" />
+            <JInvTableColumn fx:id="ITASKINTERVAL" alignment="CENTER" fieldName="ITASKINTERVAL" text="%ITASKINTERVAL" />
+            <JInvTableColumn fx:id="ITASKSIDE" alignment="CENTER" fieldName="ITASKSIDE" text="%ITASKSIDE" />
+            <JInvTableColumn fx:id="BTASKRUNNING" alignment="CENTER" fieldName="BTASKRUNNING" text="%BTASKRUNNING" />
+            <JInvTableColumnDate fx:id="DTASKFROMDT" alignment="CENTER" fieldName="DTASKFROMDT" text="%DTASKFROMDT" />
+            <JInvTableColumn fx:id="DTASKFROMTMV" alignment="BASELINE_RIGHT" fieldName="DTASKFROMTMV" text="%DTASKFROMTM" />
             </columns>
             <VBox.margin>
             <Insets left="5.0" right="5.0" />
@@ -52,11 +53,11 @@
                   <JInvToolBar fx:id="toolBarEvents" />
                   <JInvTable fx:id="IKP_TASK_EVENTS" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
                      <columns>
-                        <JInvTableColumn fx:id="IEVENTNPP" fieldName="IEVENTNPP" text="%IEVENTNPP" prefWidth="15" alignment="CENTER"/>
+                        <JInvTableColumn fx:id="IEVENTNPP" alignment="CENTER" fieldName="IEVENTNPP" prefWidth="15" text="%IEVENTNPP" />
                         <JInvTableColumn fx:id="CEVENTNAME" fieldName="CEVENTNAME" prefWidth="300.0" text="%CEVENTNAME" />
-                        <JInvTableColumn fx:id="IEVENTTYPE" fieldName="IEVENTTYPE" text="%IEVENTTYPE" alignment="CENTER"/>
-                        <JInvTableColumn fx:id="BEVENTENABLED" fieldName="BEVENTENABLED" text="%BEVENTENABLED" alignment="CENTER"/>
-                        <JInvTableColumn fx:id="IEVENTFILEDIR" fieldName="IEVENTFILEDIR" text="%IEVENTFILEDIR" alignment="CENTER"/>
+                        <JInvTableColumn fx:id="IEVENTTYPE" alignment="CENTER" fieldName="IEVENTTYPE" text="%IEVENTTYPE" />
+                        <JInvTableColumn fx:id="BEVENTENABLED" alignment="CENTER" fieldName="BEVENTENABLED" text="%BEVENTENABLED" />
+                        <JInvTableColumn fx:id="IEVENTFILEDIR" alignment="CENTER" fieldName="IEVENTFILEDIR" text="%IEVENTFILEDIR" />
                      </columns>
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" />

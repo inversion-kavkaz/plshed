@@ -1,6 +1,7 @@
 package ru.inversion.plshed.mainWin;
 
 import javafx.fxml.FXML;
+import org.reflections.Reflections;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.IDataSet;
@@ -10,17 +11,21 @@ import ru.inversion.dataset.fx.DSFXAdapter;
 import ru.inversion.fx.form.*;
 import ru.inversion.fx.form.controls.JInvTable;
 import ru.inversion.fx.form.controls.JInvTableColumn;
+import ru.inversion.fx.form.controls.JInvTableColumnDate;
 import ru.inversion.fx.form.controls.JInvToolBar;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
+import ru.inversion.plshed.PLShedMain;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
 import ru.inversion.plshed.interfaces.callFunc;
 import ru.inversion.utils.ConnectionStringFormatEnum;
+import java.util.Comparator;
 
 import static lovUtils.LovUtils.convertTableValue;
 import static manifest.ManifestData.loadDataFromManifestFile;
+import static ru.inversion.plshed.utils.dataSetUtils.dataSetToStream;
 
 
 /**
@@ -31,6 +36,7 @@ import static manifest.ManifestData.loadDataFromManifestFile;
 
 
 public class ViewIkpTasksController extends JInvFXBrowserController implements callFunc {
+
     @FXML
     private JInvTable<PIkpTasks> IKP_TASKS;
     @FXML
@@ -58,19 +64,11 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     @FXML
     private JInvTableColumn<PIkpTasks, Long> BEVENTENABLED;
 
-
-    private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>();
-    private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>();
+    private XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(),PIkpTaskEvents.class);
+    private XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(),PIkpTasks.class);
 
     {
-        dsIKP_TASKS.setTaskContext(getTaskContext());
-        dsIKP_TASKS.setRowClass(PIkpTasks.class);
-
-        dsIKP_TASK_EVENTS.setTaskContext(getTaskContext());
-        dsIKP_TASK_EVENTS.setRowClass(PIkpTaskEvents.class);
-
         DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
-
     }
 
     @Override
@@ -84,6 +82,16 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         initToolBarAction(toolBarEvents, IKP_TASK_EVENTS, dsIKP_TASK_EVENTS, this::doOperationEvents);
 
         doRefreshAllTables();
+
+
+
+        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
+
+//        Class<?> entityClass = Class.forName("ru.inversion.plshed.entity.PIkpTasks");
+//        int i = 0;
+
+        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
+
     }
 
     private void initTitle() {
@@ -203,11 +211,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         switch (mode) {
             case VM_INS:
                 p = new PIkpTaskEvents();
+
                 if (dsIKP_TASKS.getCurrentRow() != null && dsIKP_TASKS.getCurrentRow().getITASKID() != null) {
                     p.setIEVENTTASKID(dsIKP_TASKS.getCurrentRow().getITASKID());
-                    logger.info("gurrent task id = ".concat(dsIKP_TASKS.getCurrentRow().getITASKID().toString()));
+                    p.setIEVENTNPP(getNextPP());
+                    logger.info(String.format("current task id = %d",dsIKP_TASKS.getCurrentRow().getITASKID()));
                 } else {
-                    Alerts.error(this, "Ошибка", "Не выбрано задание");
+                    Alerts.error(this, getBundleString("ERROR.NAME"), getBundleString("ERROR.TEXT"));
                     return;
                 }
 
@@ -215,7 +225,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
             case VM_EDIT:
             case VM_SHOW:
             case VM_DEL:
-                p = dsIKP_TASK_EVENTS.getCurrentRow();
+                p = (PIkpTaskEvents) dsIKP_TASK_EVENTS.getCurrentRow();
                 break;
         }
 
@@ -247,6 +257,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         }
 
         IKP_TASK_EVENTS.requestFocus();
+    }
+
+    private long getNextPP() {
+        return dataSetToStream(dsIKP_TASK_EVENTS)
+                .max(Comparator.comparing(PIkpTaskEvents::getIEVENTNPP))
+                .map(p -> p.getIEVENTNPP())
+                .orElse(0l) + 1;
     }
 
 }

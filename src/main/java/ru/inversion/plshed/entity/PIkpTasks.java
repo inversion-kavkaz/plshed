@@ -1,10 +1,12 @@
 package ru.inversion.plshed.entity;
 
 import ru.inversion.dataset.mark.IDMarkable;
+import ru.inversion.db.entity.ProxyFor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
@@ -20,7 +22,7 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private String CTASKNAME;
     private Long ITASKPERIOD;
     private LocalDate DTASKFROMDT;
-    private String DTASKFROMTM;
+    private LocalDateTime DTASKFROMTM;
     private Long ITASKFREQUENCY;
     private Long ITASKINTERVAL;
     private Long ITASKSIDE;
@@ -62,17 +64,16 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     public LocalDate getDTASKFROMDT() {
         return DTASKFROMDT;
     }
-
     public void setDTASKFROMDT(LocalDate val) {
         DTASKFROMDT = val;
     }
 
     @Column(name = "DTASKFROMTM")
-    public String getDTASKFROMTM() {
+    public LocalDateTime getDTASKFROMTM() {
         return DTASKFROMTM;
     }
 
-    public void setDTASKFROMTM(String val) {
+    public void setDTASKFROMTM(LocalDateTime val) {
         DTASKFROMTM = val;
     }
 
@@ -113,6 +114,12 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     }
 
     @Transient
+    @ProxyFor(columnName = "DTASKFROMTM")
+    public LocalTime getDTASKFROMTMV() {
+        return  DTASKFROMTM == null ? null : DTASKFROMTM.toLocalTime();
+    }
+    public void setDTASKFROMTMV(LocalTime val) {  DTASKFROMTM = LocalDateTime.of(DTASKFROMDT, val);}
+
     @Override
     public Long getMarkLongID() {
         return getITASKID();
@@ -123,12 +130,4 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         return super.isMark();
     }
 
-    @Transient
-    public LocalTime getDTASKFROMTMV() {
-            return (getDTASKFROMTM() != null && !getDTASKFROMTM().isEmpty()) ? LocalTime.parse(getDTASKFROMTM()): null;
-    }
-
-    public void setDTASKFROMTMV(LocalTime DTASKFROMTMV) {
-        this.DTASKFROMTMV = DTASKFROMTMV;
-    }
 }

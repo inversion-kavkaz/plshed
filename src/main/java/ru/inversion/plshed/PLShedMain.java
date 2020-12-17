@@ -2,10 +2,13 @@ package ru.inversion.plshed;
 
 import java.util.Collections;
 import java.util.Map;
+
+import lombok.SneakyThrows;
 import ru.inversion.fx.form.ViewContext;
 import ru.inversion.fx.app.BaseApp;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.plshed.mainWin.ViewIkpTasksController;
+import ru.inversion.plshed.utils.dataSetUtils;
 import ru.inversion.tc.TaskContext;
 
 /**
@@ -17,7 +20,11 @@ import ru.inversion.tc.TaskContext;
 
 public class PLShedMain extends BaseApp
 {
-    
+
+    void run(){
+        System.out.println("asadsdas");
+    }
+
     @Override
     protected void showMainWindow () 
     {
@@ -35,12 +42,14 @@ public class PLShedMain extends BaseApp
         launch (args);
     }
 
-    public static void showViewIkpTasksa (ViewContext vc, TaskContext tc, Map<String, Object> p) 
+    public static void showViewIkpTasksa (ViewContext vc, TaskContext tc, Map<String, Object> p)
     {
-        System.getProperties().setProperty("oracle.jdbc.J2EE13Compliant", "true");
+        dataSetUtils.runDI(tc);
+
         new FXFormLauncher<> (tc, vc, ViewIkpTasksController.class)
             .initProperties (p)
             .show ();
+
     }
     
 }
