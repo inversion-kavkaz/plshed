@@ -6,7 +6,7 @@
 
     <groupId>ru.inversion</groupId>
     <artifactId>PLShed</artifactId>
-    <version>1.0.</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <description>Автоматическое выполнение заданий</description>
     <name>PLShed</name>
@@ -24,6 +24,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>dd.MM.yyyy</maven.build.timestamp.format>
     </properties>
 
     <dependencies>
@@ -59,14 +61,15 @@
                         <manifest>
                             <mainClass>ru.inversion.plshed.PLShedMain</mainClass>
                             <classpathLayoutType>custom</classpathLayoutType>
-                            <customClasspathLayout>$${artifactId}.$${packaging}</customClasspathLayout>
+                            <customClasspathLayout>$${project.artifactId}.$${project.packaging}</customClasspathLayout>
+                            <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>JInvFore.jar FXbicomp.jar lib\manifest-reader.jar lib\lovUtils.jar</Class-Path>
+                            <Class-Path>JInvFore.jar FXbicomp.jar</Class-Path>
                             <Codebase>*</Codebase><Permissions>all-permissions</Permissions>
-                            <Implementation-Build>${buildNumber}</Implementation-Build>
-                            <Project-Version>${project.version}</Project-Version>
-                            <Build-date>${maven.build.timestamp}</Build-date>
+                            <Build>${buildNumber}</Build>
+                            <Version>${project.version}</Version>
+                            <Build-date>${timestamp}</Build-date>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -115,6 +118,10 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.source}</target>
+                </configuration>
             </plugin>
             <!--Автоматическая генерация номера сборки-->
             <plugin>
@@ -131,11 +138,12 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <format>{1}{0,number}/{2,date,dd.MM.yyyy} </format>
+<!--                    <format>{1}{0,number}/{2,date,dd.MM.yyyy} </format>-->
+                    <format>{0,number}</format>
                     <items>
                         <item>buildNumber</item>
-                        <item>${project.version}</item>
-                        <item>timestamp</item>
+<!--                        <item>${project.version}</item>-->
+<!--                        <item>timestamp</item>-->
                     </items>
                     <doCheck>true</doCheck>
                     <doUpdate>true</doUpdate>

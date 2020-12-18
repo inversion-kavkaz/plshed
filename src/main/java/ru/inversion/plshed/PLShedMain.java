@@ -11,6 +11,8 @@ import ru.inversion.plshed.mainWin.ViewIkpTasksController;
 import ru.inversion.plshed.utils.dataSetUtils;
 import ru.inversion.tc.TaskContext;
 
+import static ru.inversion.plshed.utils.dataSetUtils.runDI;
+
 /**
  * @author Dmitry Hvastunov
  * @created 10 Декабрь 2020 - 15:02
@@ -20,10 +22,6 @@ import ru.inversion.tc.TaskContext;
 
 public class PLShedMain extends BaseApp
 {
-
-    void run(){
-        System.out.println("asadsdas");
-    }
 
     @Override
     protected void showMainWindow () 
@@ -44,12 +42,9 @@ public class PLShedMain extends BaseApp
 
     public static void showViewIkpTasksa (ViewContext vc, TaskContext tc, Map<String, Object> p)
     {
-        dataSetUtils.runDI(tc);
-
         new FXFormLauncher<> (tc, vc, ViewIkpTasksController.class)
             .initProperties (p)
             .show ();
-
     }
     
 }

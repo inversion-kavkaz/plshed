@@ -20,15 +20,15 @@
             <JInvToolBar fx:id="toolBar" />
             <JInvTable fx:id="IKP_TASKS" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
             <columns>
-            <JInvTableColumn fx:id="ITASKID" alignment="CENTER" fieldName="ITASKID" prefWidth="15" text="%ITASKID" />
+            <JInvTableColumn fx:id="ITASKID" alignment="CENTER" fieldName="ITASKID" text="%ITASKID" />
             <JInvTableColumn fx:id="CTASKNAME" fieldName="CTASKNAME" prefWidth="300.0" text="%CTASKNAME" />
-            <JInvTableColumn fx:id="ITASKPERIOD" alignment="CENTER" fieldName="ITASKPERIOD" text="%ITASKPERIOD" />
-            <JInvTableColumn fx:id="ITASKFREQUENCY" alignment="CENTER" fieldName="ITASKFREQUENCY" text="%ITASKFREQUENCY" />
-            <JInvTableColumn fx:id="ITASKINTERVAL" alignment="CENTER" fieldName="ITASKINTERVAL" text="%ITASKINTERVAL" />
-            <JInvTableColumn fx:id="ITASKSIDE" alignment="CENTER" fieldName="ITASKSIDE" text="%ITASKSIDE" />
-            <JInvTableColumn fx:id="BTASKRUNNING" alignment="CENTER" fieldName="BTASKRUNNING" text="%BTASKRUNNING" />
+            <JInvTableColumn fx:id="ITASKPERIOD" alignment="CENTER" fieldName="ITASKPERIOD"  text="%ITASKPERIOD" />
+            <JInvTableColumn fx:id="ITASKFREQUENCY" alignment="CENTER" fieldName="ITASKFREQUENCY"  text="%ITASKFREQUENCY" />
+            <JInvTableColumn fx:id="ITASKINTERVAL" alignment="CENTER" fieldName="ITASKINTERVAL"  text="%ITASKINTERVAL" />
+            <JInvTableColumn fx:id="ITASKSIDE" alignment="CENTER" fieldName="ITASKSIDE"  text="%ITASKSIDE" />
+            <JInvTableColumn fx:id="BTASKRUNNING" alignment="CENTER" fieldName="BTASKRUNNING"  text="%BTASKRUNNING" />
             <JInvTableColumnDate fx:id="DTASKFROMDT" alignment="CENTER" fieldName="DTASKFROMDT" text="%DTASKFROMDT" />
-            <JInvTableColumn fx:id="DTASKFROMTMV" alignment="BASELINE_RIGHT" fieldName="DTASKFROMTMV" text="%DTASKFROMTM" />
+            <JInvTableColumn fx:id="DTASKFROMTMV" alignment="BASELINE_RIGHT" fieldName="DTASKFROMTMV" showInFilter="false" text="%DTASKFROMTM" />
             </columns>
             <VBox.margin>
             <Insets left="5.0" right="5.0" />

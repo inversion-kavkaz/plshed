@@ -1,7 +1,6 @@
 package ru.inversion.plshed.mainWin;
 
 import javafx.fxml.FXML;
-import org.reflections.Reflections;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.IDataSet;
@@ -11,20 +10,22 @@ import ru.inversion.dataset.fx.DSFXAdapter;
 import ru.inversion.fx.form.*;
 import ru.inversion.fx.form.controls.JInvTable;
 import ru.inversion.fx.form.controls.JInvTableColumn;
-import ru.inversion.fx.form.controls.JInvTableColumnDate;
 import ru.inversion.fx.form.controls.JInvToolBar;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
-import ru.inversion.plshed.PLShedMain;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
 import ru.inversion.plshed.interfaces.callFunc;
 import ru.inversion.utils.ConnectionStringFormatEnum;
+
+import java.io.IOException;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static lovUtils.LovUtils.convertTableValue;
-import static manifest.ManifestData.loadDataFromManifestFile;
+import static manifest.ManifestData.*;
 import static ru.inversion.plshed.utils.dataSetUtils.dataSetToStream;
 
 
@@ -64,15 +65,21 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     @FXML
     private JInvTableColumn<PIkpTasks, Long> BEVENTENABLED;
 
-    private XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(),PIkpTaskEvents.class);
-    private XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(),PIkpTasks.class);
+    private  XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS;
+    private  XXIDataSet<PIkpTasks> dsIKP_TASKS;
+
+//    private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
+//    private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(), PIkpTasks.class);
 
     {
-        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
+//        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
     }
 
     @Override
     protected void init() throws Exception {
+
+        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
+
         initTitle();
         initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK);
         initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK);
@@ -83,21 +90,28 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
         doRefreshAllTables();
 
+        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
 
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
-
-//        Class<?> entityClass = Class.forName("ru.inversion.plshed.entity.PIkpTasks");
-//        int i = 0;
-
-        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
-
     }
 
     private void initTitle() {
+        String version = "";
+        String buildDate = "";
+        String buildNumber = "";
 
-        String version = loadDataFromManifestFile(ViewIkpTasksController.class, "Implementation-Build").get("version");
-        String date = loadDataFromManifestFile(ViewIkpTasksController.class, "Implementation-Build").get("date");
+        try {
+            loadDataFromManifestFile(ViewIkpTasksController.class);
+        } catch (IOException e) {
+            logger.error(getBundleString("ERROR.MANIFEST_FILE"));
+        }
+        if(isManifestDataLoad()){
+            version = getManifestData("Version");
+            buildDate = getManifestData("Build-date");
+            buildNumber = getManifestData("Build");
+            version = version.substring(0,version.lastIndexOf(".") + 1).concat(buildNumber);
+        }
 
         setTitle(getBundleString("VIEW.TITLE")
                 .concat(" (")
@@ -130,6 +144,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     }
 
     private void initTableAndFilterConverters() throws ru.inversion.dataset.DataSetException {
+
         /** Таблица заданий */
         convertTableValue(BTASKRUNNING, PIkpRunningTextValue.class, getTaskContext(), true);
         convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
@@ -215,7 +230,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
                 if (dsIKP_TASKS.getCurrentRow() != null && dsIKP_TASKS.getCurrentRow().getITASKID() != null) {
                     p.setIEVENTTASKID(dsIKP_TASKS.getCurrentRow().getITASKID());
                     p.setIEVENTNPP(getNextPP());
-                    logger.info(String.format("current task id = %d",dsIKP_TASKS.getCurrentRow().getITASKID()));
+                    logger.info(String.format("current task id = %d", dsIKP_TASKS.getCurrentRow().getITASKID()));
                 } else {
                     Alerts.error(this, getBundleString("ERROR.NAME"), getBundleString("ERROR.TEXT"));
                     return;
