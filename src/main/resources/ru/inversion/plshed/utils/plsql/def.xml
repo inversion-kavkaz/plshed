@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql_expr_list>
+    <!-- Инициализация запуска процесса -->
+    <expression name="initTask" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              :result:= XXI.IKP_ADM.initTask(:taskID);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="result" mode="OUT" sqlType="BIGINT" javaType="Long" />
+        </parameters>
+    </expression>
+
+    <!-- Запуска процесса -->
+    <expression name="runTask" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              :result:= XXI.IKP_ADM.runTask(:taskID);
+            end;
+        ]]></script>
+    </expression>
+
+</sql_expr_list>

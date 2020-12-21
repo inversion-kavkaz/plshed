@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import ru.inversion.fx.form.controls.JInvCalendarTime?>
+<?import ru.inversion.fx.form.controls.JInvComboBox?>
+<?import ru.inversion.fx.form.controls.JInvTable?>
+<?import ru.inversion.fx.form.controls.JInvTableColumn?>
+<?import ru.inversion.fx.form.controls.JInvTableColumnDate?>
+<?import ru.inversion.fx.form.controls.JInvToolBar?>
+<?import ru.inversion.fx.form.controls.dsbar.DSInfoBar?>
+
+<SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.ViewIkpTasksController">
+  <items>
+    <AnchorPane>
+         <children>
+            <VBox prefHeight="96.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+            <JInvToolBar fx:id="toolBar" />
+                  <StackPane alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <HBox fx:id="SHEDINFOBOX">
+                           <children>
+                              <Label text="%LOGLEVEL">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <JInvComboBox fx:id="LOGLEVEL" fieldName="LOGLEVEL" prefWidth="150.0">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin></JInvComboBox>
+                              <Label text="%STARTDATETIME">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <JInvCalendarTime fx:id="STARTDATETIME" editable="false" fieldName="DTASKFROMTM">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin></JInvCalendarTime>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </StackPane>
+            <JInvTable fx:id="IKP_TASKS" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+            <columns>
+            <JInvTableColumn fx:id="ITASKID" alignment="CENTER" fieldName="ITASKID" text="%ITASKID" />
+            <JInvTableColumn fx:id="CTASKNAME" fieldName="CTASKNAME" prefWidth="300.0" text="%CTASKNAME" />
+            <JInvTableColumn fx:id="ITASKPERIOD" alignment="CENTER" fieldName="ITASKPERIOD" text="%ITASKPERIOD" />
+            <JInvTableColumn fx:id="ITASKFREQUENCY" alignment="CENTER" fieldName="ITASKFREQUENCY" text="%ITASKFREQUENCY" />
+            <JInvTableColumn fx:id="ITASKINTERVAL" alignment="CENTER" fieldName="ITASKINTERVAL" text="%ITASKINTERVAL" />
+            <JInvTableColumn fx:id="ITASKSIDE" alignment="CENTER" fieldName="ITASKSIDE" text="%ITASKSIDE" />
+            <JInvTableColumn fx:id="BTASKRUNNING" alignment="CENTER" fieldName="BTASKRUNNING" text="%BTASKRUNNING" />
+            <JInvTableColumnDate fx:id="DTASKFROMDT" alignment="CENTER" fieldName="DTASKFROMDT" text="%DTASKFROMDT" />
+            <JInvTableColumn fx:id="DTASKFROMTMV" alignment="BASELINE_RIGHT" fieldName="DTASKFROMTMV" showInFilter="false" text="%DTASKFROMTM" />
+            </columns>
+            <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+            </VBox.margin>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+            </JInvTable>
+            <DSInfoBar fx:id="IKP_TASKS$MARK">
+            <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" />
+            </VBox.margin>
+            </DSInfoBar>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <TabPane prefHeight="296.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <tabs>
+                <Tab text="%TASKEVENTS">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <JInvToolBar fx:id="toolBarEvents" />
+                                    <JInvTable fx:id="IKP_TASK_EVENTS" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+                                       <columns>
+                                          <JInvTableColumn fx:id="IEVENTNPP" alignment="CENTER" fieldName="IEVENTNPP" prefWidth="15" text="%IEVENTNPP" />
+                                          <JInvTableColumn fx:id="CEVENTNAME" fieldName="CEVENTNAME" prefWidth="300.0" text="%CEVENTNAME" />
+                                          <JInvTableColumn fx:id="IEVENTTYPE" alignment="CENTER" fieldName="IEVENTTYPE" text="%IEVENTTYPE" />
+                                          <JInvTableColumn fx:id="BEVENTENABLED" alignment="CENTER" fieldName="BEVENTENABLED" text="%BEVENTENABLED" />
+                                          <JInvTableColumn fx:id="IEVENTFILEDIR" alignment="CENTER" fieldName="IEVENTFILEDIR" text="%IEVENTFILEDIR" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets left="5.0" right="5.0" />
+                                       </VBox.margin>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </JInvTable>
+                                    <DSInfoBar fx:id="IKP_TASK_EVENTS$MARK">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" />
+                                       </VBox.margin>
+                                    </DSInfoBar>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="%TASKLOG">
+                  <content>
+                    <AnchorPane>
+                        <children>
+                            <JInvTable fx:id="IKP_LOG" prefHeight="267.0" prefWidth="798.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <JInvTableColumn fx:id="SESSID" fieldName="SESSID" text="%SESSID" />
+                                    <JInvTableColumn fx:id="STRNO" fieldName="STRNO" text="%STRNO" />
+                                    <JInvTableColumn fx:id="STRTYPE" fieldName="STRTYPE" text="%STRTYPE" />
+                                    <JInvTableColumn fx:id="MSGTXT" fieldName="MSGTXT" prefWidth="300.0" text="%MSGTXT" />
+                                    <JInvTableColumnDate fx:id="DT" fieldName="DT" text="%DT" />
+                                    <JInvTableColumn fx:id="LOGNAME" fieldName="LOGNAME" text="%LOGNAME" />
+                                </columns>
+                                <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" />
+                                </VBox.margin>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                            </JInvTable>
+                        </children>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+  </items>
+</SplitPane>

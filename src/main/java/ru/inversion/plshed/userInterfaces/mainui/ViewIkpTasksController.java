@@ -1,6 +1,7 @@
-package ru.inversion.plshed.mainWin;
+package ru.inversion.plshed.userInterfaces.mainui;
 
 import javafx.fxml.FXML;
+import javafx.scene.layout.HBox;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.IDataSet;
@@ -8,24 +9,27 @@ import ru.inversion.dataset.XXIDataSet;
 import ru.inversion.dataset.aggr.AggrFuncEnum;
 import ru.inversion.dataset.fx.DSFXAdapter;
 import ru.inversion.fx.form.*;
-import ru.inversion.fx.form.controls.JInvTable;
-import ru.inversion.fx.form.controls.JInvTableColumn;
-import ru.inversion.fx.form.controls.JInvToolBar;
+import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
+import ru.inversion.icons.enums.FontAwesome;
+import ru.inversion.plshed.entity.PIkpLog;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
+import ru.inversion.plshed.interfaces.TaskCallBack;
 import ru.inversion.plshed.interfaces.callFunc;
+import ru.inversion.plshed.model.TasksContainer;
+import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static lovUtils.LovUtils.convertTableValue;
+import static lovUtils.LovUtils.initCombobox;
 import static manifest.ManifestData.*;
+import static ru.inversion.plshed.utils.TrayUtils.initTray;
 import static ru.inversion.plshed.utils.dataSetUtils.dataSetToStream;
 
 
@@ -36,7 +40,7 @@ import static ru.inversion.plshed.utils.dataSetUtils.dataSetToStream;
  */
 
 
-public class ViewIkpTasksController extends JInvFXBrowserController implements callFunc {
+public class ViewIkpTasksController extends JInvFXBrowserController implements callFunc, TaskCallBack {
 
     @FXML
     private JInvTable<PIkpTasks> IKP_TASKS;
@@ -50,6 +54,9 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private JInvToolBar toolBarEvents;
     @FXML
     private DSInfoBar IKP_TASK_EVENTS$MARK;
+
+    @FXML private JInvTable<PIkpLog> IKP_LOG;
+
     @FXML
     private JInvTableColumn<PIkpTasks, Long> BTASKRUNNING;
     @FXML
@@ -64,36 +71,74 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private JInvTableColumn<PIkpTasks, Long> IEVENTFILEDIR;
     @FXML
     private JInvTableColumn<PIkpTasks, Long> BEVENTENABLED;
+    @FXML
+    private JInvComboBox<Long, String> LOGLEVEL;
+    @FXML
+    private JInvCalendarTime STARTDATETIME;
+    @FXML
+    private HBox SHEDINFOBOX;
 
-    private  XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS;
-    private  XXIDataSet<PIkpTasks> dsIKP_TASKS;
 
-//    private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
-//    private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(), PIkpTasks.class);
+    private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
+    private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(), PIkpTasks.class);
+    private final XXIDataSet<PIkpLog> dsIKP_LOG = new XXIDataSet<> (getTaskContext(),PIkpLog.class);
+
 
     {
-//        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
+        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
+        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_LOG, PIkpTasks::getITASKID, "TASKID");
     }
+
+    private TasksContainer tasksContainer = new TasksContainer(logger,getTaskContext(),this);
 
     @Override
     protected void init() throws Exception {
 
-        DataLinkBuilder.linkDataSet(dsIKP_TASKS, dsIKP_TASK_EVENTS, PIkpTasks::getITASKID, "IEVENTTASKID");
 
         initTitle();
-        initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK);
-        initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK);
+        DSFXAdapter<PIkpTasks> pIkpTasksDSFXAdapter = initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK, true);
+        initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK, true);
+        initDataSetAdapter(dsIKP_LOG, IKP_LOG, null, true);
+        initTray(getViewContext(), this);
         initTableAndFilterConverters();
         initToolBar(toolBar, toolBarEvents);
         initToolBarAction(toolBar, IKP_TASKS, dsIKP_TASKS, this::doOperation);
         initToolBarAction(toolBarEvents, IKP_TASK_EVENTS, dsIKP_TASK_EVENTS, this::doOperationEvents);
-
+        initCustomButtons();
         doRefreshAllTables();
+        initTasks();
+        initComboBinding(pIkpTasksDSFXAdapter);
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
-
-
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
+    }
+
+    private void initComboBinding(DSFXAdapter<PIkpTasks> pIkpTasksDSFXAdapter) throws DataSetException {
+        pIkpTasksDSFXAdapter.bindControl(LOGLEVEL);
+        initCombobox(getTaskContext(),LOGLEVEL, PIkpLogLevelTextValue.class).setOnAction(event -> {
+            dsIKP_TASKS.getCurrentRow().setLOGLEVEL((Long) ((JInvComboBox)event.getTarget()).getValue());
+        });
+        pIkpTasksDSFXAdapter.bindControl(STARTDATETIME);
+    }
+
+    private void initTasks() throws DataSetException {
+        if(dsIKP_TASKS.getRows().size() < 1)
+            dsIKP_TASKS.execute();
+        dsIKP_TASKS.getRows().stream().forEach(p -> {
+            tasksContainer.initTask(p);
+        });
+    }
+
+    private void startTask(Long taskID) {
+        tasksContainer.startTask(taskID);
+    }
+
+    private void initCustomButtons() {
+        SHEDINFOBOX.getChildren().add(
+                ButtonUtils.addCustomButton(FontAwesome.fa_hourglass_start,
+                getBundleString("START"),
+                getBundleString("START.TOOLTIP"),
+                (a) -> startTask(dsIKP_TASKS.getCurrentRow().getITASKID())));
     }
 
     private void initTitle() {
@@ -106,11 +151,11 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         } catch (IOException e) {
             logger.error(getBundleString("ERROR.MANIFEST_FILE"));
         }
-        if(isManifestDataLoad()){
+        if (isManifestDataLoad()) {
             version = getManifestData("Version");
             buildDate = getManifestData("Build-date");
             buildNumber = getManifestData("Build");
-            version = version.substring(0,version.lastIndexOf(".") + 1).concat(buildNumber);
+            version = version.substring(0, version.lastIndexOf(".") + 1).concat(buildNumber);
         }
 
         setTitle(getBundleString("VIEW.TITLE")
@@ -126,11 +171,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         doRefresh(dsIKP_TASK_EVENTS);
     }
 
-    private <T> DSFXAdapter<T> initDataSetAdapter(XXIDataSet<T> dataSet, JInvTable<T> table, DSInfoBar dsInfoBar) throws Exception {
+    private <T> DSFXAdapter<T> initDataSetAdapter(XXIDataSet<T> dataSet, JInvTable<T> table, DSInfoBar dsInfoBar, Boolean isFilter) throws Exception {
         DSFXAdapter<T> dsfx = DSFXAdapter.bind(dataSet, table, null, true);
-        dsfx.setEnableFilter(true);
-        dsInfoBar.init(table.getDataSetAdapter());
-        dsInfoBar.addAggregator("1", AggrFuncEnum.COUNT, AggregatorType.MARK, null, null);
+        dsfx.setEnableFilter(isFilter);
+        if(dsInfoBar != null) {
+            dsInfoBar.init(table.getDataSetAdapter());
+            dsInfoBar.addAggregator("1", AggrFuncEnum.COUNT, AggregatorType.MARK, null, null);
+        }
         return dsfx;
     }
 
@@ -205,11 +252,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
                 case VM_INS:
                     dsIKP_TASKS.insertRow(dctl.getDataObject(), IDataSet.InsertRowModeEnum.AFTER_CURRENT, true);
                     doRefresh(dsIKP_TASKS);
+                    tasksContainer.initTask(dctl.getDataObject());
                     break;
                 case VM_EDIT:
                     dsIKP_TASKS.updateCurrentRow(dctl.getDataObject());
+                    tasksContainer.updateTask(dctl.getDataObject());
                     break;
                 case VM_DEL:
+                    tasksContainer.deleteTask(dsIKP_TASKS.getCurrentRow().getITASKID());
                     dsIKP_TASKS.removeCurrentRow();
                     break;
                 default:
@@ -259,12 +309,15 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
             switch (dctl.getFormMode()) {
                 case VM_INS:
                     dsIKP_TASK_EVENTS.insertRow(dctl.getDataObject(), IDataSet.InsertRowModeEnum.AFTER_CURRENT, true);
+                    tasksContainer.initTask(dsIKP_TASKS.getCurrentRow());
                     break;
                 case VM_EDIT:
                     dsIKP_TASK_EVENTS.updateCurrentRow(dctl.getDataObject());
+                    tasksContainer.updateTask(dsIKP_TASKS.getCurrentRow());
                     break;
                 case VM_DEL:
                     dsIKP_TASK_EVENTS.removeCurrentRow();
+                    tasksContainer.updateTask(dsIKP_TASKS.getCurrentRow());
                     break;
                 default:
                     break;
@@ -281,5 +334,15 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
                 .orElse(0l) + 1;
     }
 
+
+    @Override
+    public void onTaskFinish(Long code) {
+        doRefresh(dsIKP_LOG);
+    }
+
+    @Override
+    public void onEventFinish(Long enentID) {
+
+    }
 }
 

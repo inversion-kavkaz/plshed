@@ -1,4 +1,4 @@
-package ru.inversion.plshed.mainWin;
+package ru.inversion.plshed.userInterfaces.mainui;
 
 import javafx.fxml.FXML;
 import ru.inversion.fx.form.JInvFXFormController;

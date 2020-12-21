@@ -1,9 +1,8 @@
-package ru.inversion.plshed.mainWin;
+package ru.inversion.plshed.userInterfaces.mainui;
 
 import javafx.fxml.FXML;
 import ru.inversion.fx.form.JInvFXFormController;
 import ru.inversion.fx.form.controls.JInvComboBox;
-import ru.inversion.fx.form.controls.JInvTextField;
 import ru.inversion.fx.form.controls.JInvTimeField;
 import ru.inversion.plshed.entity.lovEntity.PIkpFrequencyTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpPeriodTextValue;

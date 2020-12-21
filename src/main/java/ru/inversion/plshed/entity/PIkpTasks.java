@@ -28,6 +28,7 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private Long ITASKSIDE;
     private Long BTASKRUNNING;
     private LocalTime DTASKFROMTMV;
+    private Long LOGLEVEL;
 
     public PIkpTasks() {
     }
@@ -119,6 +120,9 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         return  DTASKFROMTM == null ? null : DTASKFROMTM.toLocalTime();
     }
     public void setDTASKFROMTMV(LocalTime val) {  DTASKFROMTM = LocalDateTime.of(DTASKFROMDT, val);}
+
+    public Long getLOGLEVEL() {return LOGLEVEL;}
+    public void setLOGLEVEL(Long LOGLEVEL) {this.LOGLEVEL = LOGLEVEL;}
 
     @Override
     public Long getMarkLongID() {

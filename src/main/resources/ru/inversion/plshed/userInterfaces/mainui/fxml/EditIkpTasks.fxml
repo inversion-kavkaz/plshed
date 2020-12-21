@@ -15,7 +15,7 @@
 <?import ru.inversion.fx.form.controls.JInvTextField?>
 <?import ru.inversion.fx.form.controls.JInvTimeField?>
 
-<VBox maxHeight="200.0" minHeight="200.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.mainWin.EditIkpTasksController">
+<VBox maxHeight="200.0" minHeight="200.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTasksController">
 <children>
 <GridPane hgap="5.0" prefHeight="170.0" prefWidth="674.0" vgap="5.0" VBox.vgrow="ALWAYS">
 <children>

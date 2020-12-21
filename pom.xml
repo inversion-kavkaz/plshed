@@ -38,13 +38,11 @@
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
 
 <!--        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/-->
-
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.12</version>
         </dependency>
-
 <!--        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/-->
 
     </dependencies>
@@ -62,10 +60,9 @@
                             <mainClass>ru.inversion.plshed.PLShedMain</mainClass>
                             <classpathLayoutType>custom</classpathLayoutType>
                             <customClasspathLayout>$${project.artifactId}.$${project.packaging}</customClasspathLayout>
-                            <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>JInvFore.jar FXbicomp.jar</Class-Path>
+                            <Class-Path>JInvFore.jar FXbicomp.jar lib/manifest-reader.jar lib/lovUtils.jar</Class-Path>
                             <Codebase>*</Codebase><Permissions>all-permissions</Permissions>
                             <Build>${buildNumber}</Build>
                             <Version>${project.version}</Version>
