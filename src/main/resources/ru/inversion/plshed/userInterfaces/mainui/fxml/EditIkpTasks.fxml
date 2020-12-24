@@ -15,7 +15,7 @@
 <?import ru.inversion.fx.form.controls.JInvTextField?>
 <?import ru.inversion.fx.form.controls.JInvTimeField?>
 
-<VBox maxHeight="200.0" minHeight="200.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTasksController">
+<VBox maxHeight="200.0" minHeight="200.0" prefHeight="200.0" prefWidth="800.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTasksController">
 <children>
 <GridPane hgap="5.0" prefHeight="170.0" prefWidth="674.0" vgap="5.0" VBox.vgrow="ALWAYS">
 <children>
@@ -54,20 +54,26 @@
 <JInvLabel fx:id="lblDTASKFROMDT" text="%DTASKFROMDT" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-      <JInvCalendar fx:id="DTASKFROMDT" fieldName="DTASKFROMDT" required="true"/>
+      <JInvCalendar fx:id="DTASKFROMDT" fieldName="DTASKFROMDT" required="true" />
       
       <JInvLabel fx:id="lblDTASKFROMTM" text="%DTASKFROMTM">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
-      <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" required="true"/>
+      <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" required="true" />
       <JInvLabel fx:id="lblITASKINTERVAL" text="%ITASKINTERVAL">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
       <JInvLongField fx:id="ITASKINTERVAL" fieldName="ITASKINTERVAL" prefHeight="25.0" prefWidth="76.0" />
+                  <JInvLabel fx:id="lblRUNNINGEVENT" text="%RUNNINGEVENT">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+                  <JInvComboBox fx:id="RUNNINGEVENT" fieldName="RUNNINGEVENT" maxWidth="-Infinity" />
                </children>
             </HBox>
 

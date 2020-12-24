@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 import ru.inversion.fx.form.AbstractBaseController;
 import ru.inversion.fx.form.ViewContext;
+import ru.inversion.plshed.userInterfaces.mainui.ViewIkpTasksController;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -26,7 +27,7 @@ public class TrayUtils {
     private static PopupMenu popup;
 
 
-    public static void  initTray(ViewContext vc, AbstractBaseController controller) {
+    public static void initTray(ViewContext vc, AbstractBaseController controller) {
         URL url = System.class.getResource("/ru/inversion/plshed/image/trayLogo.png");
         Image image = Toolkit.getDefaultToolkit().getImage(url);
         trayIcon = new TrayIcon(image);
@@ -39,7 +40,10 @@ public class TrayUtils {
         trayIcon.setPopupMenu(popup);
         exit.addActionListener(a -> {
             tray.remove(trayIcon);
-            Platform.exit();
+            Platform.runLater(() -> {
+                ((ViewIkpTasksController) controller).exit();
+            });
+
         });
 
         trayIcon.addMouseListener(new MouseListener() {
@@ -48,17 +52,28 @@ public class TrayUtils {
                 int countClick = e.getClickCount();
                 if (countClick == 2) {
                     Platform.runLater(() -> {
-                    controller.getViewContext().getStage().show();
+                        controller.getViewContext().getStage().show();
                         vc.getStage().show();
                         tray.remove(trayIcon);
                     });
                 }
             }
 
-            @Override  public void mousePressed(MouseEvent e) {}
-            @Override  public void mouseReleased(MouseEvent e) {}
-            @Override  public void mouseEntered(MouseEvent e) {}
-            @Override public void mouseExited(MouseEvent e) {}
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
         });
 
         vc.getStage().setOnCloseRequest(new EventHandler<WindowEvent>() {

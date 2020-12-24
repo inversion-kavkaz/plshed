@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import ru.inversion.fx.form.JInvFXFormController;
 import ru.inversion.fx.form.controls.JInvComboBox;
 import ru.inversion.fx.form.controls.JInvTimeField;
-import ru.inversion.plshed.entity.lovEntity.PIkpFrequencyTextValue;
-import ru.inversion.plshed.entity.lovEntity.PIkpPeriodTextValue;
-import ru.inversion.plshed.entity.lovEntity.PIkpRunningSideTextValue;
-import ru.inversion.plshed.entity.lovEntity.PIkpRunningTextValue;
+import ru.inversion.plshed.entity.lovEntity.*;
 import ru.inversion.plshed.entity.PIkpTasks;
 
 import static lovUtils.LovUtils.initCombobox;
@@ -33,6 +30,7 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
     @FXML JInvComboBox<Long, String> ITASKFREQUENCY;
     @FXML JInvComboBox<Long, String> ITASKSIDE;
     @FXML JInvComboBox<Long, String> BTASKRUNNING;
+    @FXML JInvComboBox<Long, String> RUNNINGEVENT;
 
 
     @Override
@@ -47,6 +45,8 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
         initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class);
         initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class);
         initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class);
+        initCombobox(getTaskContext(),RUNNINGEVENT, PIkpRunningEventTextValue.class);
+
     }
 
 }

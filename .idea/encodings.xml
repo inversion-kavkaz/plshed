@@ -3,8 +3,6 @@
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Documents/алгоритм.txt" charset="windows-1251" />
-    <file url="file://$PROJECT_DIR$/src/main/java/ru/inversion/plshed/utils/LovInterface.java" charset="windows-1251" />
-    <file url="file://$PROJECT_DIR$/src/main/java/ru/inversion/plshed/utils/LovUtils.java" charset="windows-1251" />
-    <file url="PROJECT" charset="windows-1251" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

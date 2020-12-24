@@ -27,8 +27,12 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private Long ITASKINTERVAL;
     private Long ITASKSIDE;
     private Long BTASKRUNNING;
+    private Long RUNNINGEVENT;
+
+    /**Это транзиентные поля*/
     private LocalTime DTASKFROMTMV;
     private Long LOGLEVEL;
+    LocalDateTime DTASKFROMTMMV;
 
     public PIkpTasks() {
     }
@@ -114,12 +118,26 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         BTASKRUNNING = val;
     }
 
+    @Column(name = "RUNNINGEVENT", nullable = false, length = 1)
+    public Long getRUNNINGEVENT() {
+        return RUNNINGEVENT;
+    }
+
+    public void setRUNNINGEVENT(Long RUNNINGEVENT) {
+        this.RUNNINGEVENT = RUNNINGEVENT;
+    }
+
     @Transient
     @ProxyFor(columnName = "DTASKFROMTM")
     public LocalTime getDTASKFROMTMV() {
         return  DTASKFROMTM == null ? null : DTASKFROMTM.toLocalTime();
     }
     public void setDTASKFROMTMV(LocalTime val) {  DTASKFROMTM = LocalDateTime.of(DTASKFROMDT, val);}
+
+    public LocalDateTime getDTASKFROMTMMV() {return  DTASKFROMTMMV == null ? DTASKFROMTM : DTASKFROMTMMV; }
+    public void setDTASKFROMTMMV(LocalDateTime val) {  DTASKFROMTMMV = val;}
+
+
 
     public Long getLOGLEVEL() {return LOGLEVEL;}
     public void setLOGLEVEL(Long LOGLEVEL) {this.LOGLEVEL = LOGLEVEL;}

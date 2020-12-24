@@ -4,7 +4,7 @@ import ru.inversion.dataset.mark.IDMarkable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
 @author  XDWeloper
@@ -20,7 +20,7 @@ public class PIkpLog extends IDMarkable implements Serializable
     private Long STRNO;
     private String STRTYPE;
     private String MSGTXT;
-    private LocalDate DT;
+    private LocalDateTime DT;
     private String LOGNAME;
     private Long TASKID;
 
@@ -59,10 +59,10 @@ public class PIkpLog extends IDMarkable implements Serializable
     }
     @Id 
     @Column(name="DT",nullable = false)
-    public LocalDate getDT() {
+    public LocalDateTime getDT() {
         return DT;
     }
-    public void setDT(LocalDate val) {
+    public void setDT(LocalDateTime val) {
         DT = val; 
     }
     @Column(name="LOGNAME",length = 30)

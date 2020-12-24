@@ -6,7 +6,7 @@
         <script><![CDATA[
             declare
             begin
-              :result:= XXI.IKP_ADM.initTask(:taskID);
+              :result := XXI.IKP_ADM.initTask(:taskID);
             end;
         ]]></script>
         <parameters>
@@ -24,4 +24,93 @@
         ]]></script>
     </expression>
 
+    <!-- Инициализация запуска события -->
+    <expression name="initEvent" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              :result:= XXI.IKP_ADM.init_event(:eventPP);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="result" mode="OUT" sqlType="BIGINT" javaType="Long" />
+        </parameters>
+    </expression>
+
+    <!-- Запуск события -->
+    <expression name="execEvent" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              :result:= XXI.IKP_ADM.execevent(:eventPP);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="result" mode="OUT" sqlType="BIGINT" javaType="Long" />
+        </parameters>
+    </expression>
+
+    <!-- Финишируем задание -->
+    <expression name="finishTask" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              XXI.IKP_ADM.finishTask(:taskID);
+            end;
+        ]]></script>
+    </expression>
+
+    <!-- Сохраняем файл в таблицу -->
+    <expression name="fileSave" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              insert into XXI.IKP_TMP_FILE (lfile) values(:lFile);
+            end;
+        ]]></script>
+    </expression>
+
+    <!-- передаем имя загруженного файла в пакет -->
+    <expression name="SetEventFileName" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              IKP_ADM.SetEventFileName(:eventPP,:fileName);
+            end;
+        ]]></script>
+    </expression>
+
+    <!-- Получаем имя файла для выгрузки -->
+    <expression name="FileName" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+              :result := IKP_ADM.GetEventFileName(:eventPP);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="result" mode="OUT" sqlType="VARCHAR" javaType="String" />
+        </parameters>
+    </expression>
+
+
+
+    <!-- получаем выгружаемый файл  -->
+    <expression name="GetFile" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            file_row XXI.IKP_TMP_FILE%rowtype;
+            begin
+                select * into file_row from XXI.IKP_TMP_FILE   where rownum = 1;
+                :result :=  file_row.LFILE;
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="result" mode="OUT" sqlType="BLOB" javaType="Blob" />
+        </parameters>
+    </expression>
+
+
 </sql_expr_list>
+
+

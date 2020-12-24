@@ -1,6 +1,8 @@
 package ru.inversion.plshed;
 
 import javafx.application.Platform;
+import org.jutils.jprocesses.JProcesses;
+import org.jutils.jprocesses.model.ProcessInfo;
 import ru.inversion.fx.app.BaseApp;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.ViewContext;
@@ -8,6 +10,7 @@ import ru.inversion.plshed.userInterfaces.mainui.ViewIkpTasksController;
 import ru.inversion.tc.TaskContext;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 
@@ -20,8 +23,18 @@ import java.util.Map;
 
 public class PLShedMain extends BaseApp {
 
+    public static List<ProcessInfo> processesList;
+    public static boolean isRunning = false;
+
     @Override
     protected void showMainWindow() {
+
+        Long startTime = System.currentTimeMillis();
+        processesList = JProcesses.getProcessList();
+        isRunning = processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).count() > 1;
+        Long endTime = System.currentTimeMillis();
+        System.out.println("Processed time = " + (endTime - startTime));
+
         Platform.setImplicitExit(false);
         showViewIkpTasksa(getPrimaryViewContext(), new TaskContext(), Collections.emptyMap());
     }
@@ -40,6 +53,7 @@ public class PLShedMain extends BaseApp {
                 .initProperties(p)
                 .show();
     }
+
 
 }
 
