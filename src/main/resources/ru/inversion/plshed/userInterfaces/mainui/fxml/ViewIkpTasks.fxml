@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import ru.inversion.fx.form.controls.JInvCalendar?>
+<?import ru.inversion.fx.form.controls.JInvCalendarTime?>
+<?import ru.inversion.fx.form.controls.JInvComboBox?>
+<?import ru.inversion.fx.form.controls.JInvLabel?>
+<?import ru.inversion.fx.form.controls.JInvTable?>
+<?import ru.inversion.fx.form.controls.JInvTableColumn?>
+<?import ru.inversion.fx.form.controls.JInvTableColumnDate?>
+<?import ru.inversion.fx.form.controls.JInvTextField?>
+<?import ru.inversion.fx.form.controls.JInvToolBar?>
 <?import ru.inversion.fx.form.controls.dsbar.DSInfoBar?>
-<?import ru.inversion.fx.form.controls.*?>
+
 <SplitPane dividerPositions="0.5, 0.5" orientation="VERTICAL" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.ViewIkpTasksController">
   <items>
     <AnchorPane>
@@ -51,8 +69,8 @@
             <JInvTableColumn fx:id="ITASKSIDE" alignment="CENTER" fieldName="ITASKSIDE" text="%ITASKSIDE" />
             <JInvTableColumn fx:id="BTASKRUNNING" alignment="CENTER" fieldName="BTASKRUNNING" text="%BTASKRUNNING" />
             <JInvTableColumnDate fx:id="DTASKFROMDT" alignment="CENTER" fieldName="DTASKFROMDT" text="%DTASKFROMDT" />
-            <JInvTableColumn fx:id="DTASKFROMTMV" alignment="CENTER" fieldName="DTASKFROMTMV" showInFilter="false" text="%DTASKFROMTM" />
-            <JInvTableColumn fx:id="RUNNINGEVENT" alignment="CENTER" fieldName="RUNNINGEVENT" showInFilter="false" text="%RUNNINGEVENT" />
+            <JInvTableColumn fx:id="RUNNINGEVENT" alignment="CENTER" fieldName="RUNNINGEVENT" text="%RUNNINGEVENT" />
+            <JInvTableColumn fx:id="DTASKFROMTMV" alignment="CENTER" fieldName="DTASKFROMTMV" showInFilter="false" text="%DTASKFROMTM" transientColumn="true" />
             </columns>
             <VBox.margin>
             <Insets left="5.0" right="5.0" />

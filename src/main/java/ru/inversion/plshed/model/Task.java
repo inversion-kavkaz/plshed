@@ -46,7 +46,7 @@ public class Task {
     private XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS;
 
 
-    public static enum StartType {Forced, Timer}
+    public enum StartType {Forced, Timer}
 
     public static Task taskFactory(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext, TaskCallBack taskCallBack) {
         return new Task(pIkpTasks, logger, taskContext, taskCallBack);
@@ -106,13 +106,14 @@ public class Task {
                     initEvent(event.getIEVENTNPP(), localTaskContext);
                     switch (event.getIEVENTFILEDIR().intValue()) {
                         case 0:
-                            loadToDBFromFile(event, localTaskContext);
+                            loadFromFileToDB(event, localTaskContext);
+                            execEvent(event.getIEVENTNPP(), localTaskContext);
                             break;
                         case 1:
+                            execEvent(event.getIEVENTNPP(), localTaskContext);
                             LoadFromDBToFile(event, localTaskContext);
                             break;
                     }
-                    execEvent(event.getIEVENTNPP(), localTaskContext);
                 });
                 finishTask(pIkpTasks.getITASKID(), localTaskContext);
             }
@@ -125,7 +126,7 @@ public class Task {
         return this;
     }
 
-    private void loadToDBFromFile(PIkpTaskEvents event, TaskContext localTaskContext) {
+    private void loadFromFileToDB(PIkpTaskEvents event, TaskContext localTaskContext) {
         String loadFileDir = (event.getCEVENTINDIR() != null && !event.getCEVENTINDIR().isEmpty()) ? event.getCEVENTINDIR() : "";
         String loadFileArhDir = (event.getCEVENTARHDIR() != null && !event.getCEVENTARHDIR().isEmpty()) ? event.getCEVENTARHDIR() : "";
 

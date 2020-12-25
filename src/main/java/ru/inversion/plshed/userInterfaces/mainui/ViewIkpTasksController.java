@@ -5,13 +5,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.IDataSet;
 import ru.inversion.dataset.XXIDataSet;
 import ru.inversion.dataset.aggr.AggrFuncEnum;
 import ru.inversion.dataset.fx.DSFXAdapter;
+import ru.inversion.fx.app.BaseApp;
 import ru.inversion.fx.form.*;
 import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
@@ -43,7 +45,8 @@ import static ru.inversion.plshed.utils.dataSetUtils.dataSetToStream;
  * @created 10 Декабрь 2020 - 15:02
  * @project plshed
  */
-@Data
+@Getter
+@Setter
 public class ViewIkpTasksController extends JInvFXBrowserController implements callFunc, TaskCallBack {
 
     @FXML
@@ -132,6 +135,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     }
 
     private void checkRunning() {
+
+        PLShedMain.processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).forEach(c -> {
+            logger.info(String.format("\n----------------------------------------------" +
+                                    "\n process command: %s \n process name: %s \n process user: %s \n process ID: %s" +
+                                    "\n--------------------------------------------------\n"
+                    ,c.getCommand(),c.getName(),c.getUser(), c.getPid()));
+        });
 
         if(PLShedMain.isRunning) {
             Alerts.error(this, getBundleString("RUNNINGTEXT"));

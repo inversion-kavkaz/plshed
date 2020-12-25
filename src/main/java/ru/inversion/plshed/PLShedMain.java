@@ -33,8 +33,7 @@ public class PLShedMain extends BaseApp {
         processesList = JProcesses.getProcessList();
         isRunning = processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).count() > 1;
         Long endTime = System.currentTimeMillis();
-        System.out.println("Processed time = " + (endTime - startTime));
-
+        appLog.info(String.format("Processed time = %d",(endTime - startTime)));
         Platform.setImplicitExit(false);
         showViewIkpTasksa(getPrimaryViewContext(), new TaskContext(), Collections.emptyMap());
     }
