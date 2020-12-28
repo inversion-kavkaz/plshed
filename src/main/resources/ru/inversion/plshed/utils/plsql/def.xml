@@ -110,6 +110,17 @@
         </parameters>
     </expression>
 
+    <!-- получаем выгружаемый файл  -->
+    <expression name="SetEventNPP" lang="PL/SQL">
+        <script><![CDATA[
+            declare
+            begin
+            update XXI.IKP_TASK_EVENTS set IEVENTNPP = :newNPP where IEVENTID = :eventID;
+            commit;
+            end;
+        ]]></script>
+    </expression>
+
 
 </sql_expr_list>
 

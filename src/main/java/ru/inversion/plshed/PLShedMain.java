@@ -1,7 +1,6 @@
 package ru.inversion.plshed;
 
 import javafx.application.Platform;
-import org.jutils.jprocesses.JProcesses;
 import org.jutils.jprocesses.model.ProcessInfo;
 import ru.inversion.fx.app.BaseApp;
 import ru.inversion.fx.form.FXFormLauncher;
@@ -29,11 +28,16 @@ public class PLShedMain extends BaseApp {
     @Override
     protected void showMainWindow() {
 
-        Long startTime = System.currentTimeMillis();
-        processesList = JProcesses.getProcessList();
-        isRunning = processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).count() > 1;
-        Long endTime = System.currentTimeMillis();
-        appLog.info(String.format("Processed time = %d",(endTime - startTime)));
+/**Это читает все процессы в памяти и исключает повторный запуск модуля
+ * решили отказаться на терминалке не вариант
+ * код оставлю здесь вдруг понядобится
+ * */
+//        Long startTime = System.currentTimeMillis();
+//        processesList = JProcesses.getProcessList("PLShed.jar");
+//        isRunning = processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).count() > 1;
+//        Long endTime = System.currentTimeMillis();
+//        appLog.info(String.format("Processed time = %d",(endTime - startTime)));
+
         Platform.setImplicitExit(false);
         showViewIkpTasksa(getPrimaryViewContext(), new TaskContext(), Collections.emptyMap());
     }

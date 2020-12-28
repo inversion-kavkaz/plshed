@@ -113,7 +113,6 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     public Long getBTASKRUNNING() {
         return BTASKRUNNING;
     }
-
     public void setBTASKRUNNING(Long val) {
         BTASKRUNNING = val;
     }
@@ -122,10 +121,10 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     public Long getRUNNINGEVENT() {
         return RUNNINGEVENT;
     }
-
     public void setRUNNINGEVENT(Long RUNNINGEVENT) {
         this.RUNNINGEVENT = RUNNINGEVENT;
     }
+
 
     @Transient
     @ProxyFor(columnName = "DTASKFROMTM")
@@ -136,7 +135,6 @@ public class PIkpTasks extends IDMarkable implements Serializable {
 
     public LocalDateTime getDTASKFROMTMMV() {return  DTASKFROMTMMV == null ? DTASKFROMTM : DTASKFROMTMMV; }
     public void setDTASKFROMTMMV(LocalDateTime val) {  DTASKFROMTMMV = val;}
-
 
 
     public Long getLOGLEVEL() {return LOGLEVEL;}

@@ -36,6 +36,8 @@
         <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
+<!--        <dependency><groupId>org.jprocesses</groupId><artifactId>jProcesses</artifactId><version>1.6.5</version><scope>compile</scope></dependency>-->
+<!--        <dependency><groupId>com.profesorfalken</groupId><artifactId>WMI4Java</artifactId><version>1.6.3</version><scope>compile</scope></dependency>-->
         <dependency><groupId>org.jprocesses</groupId><artifactId>jProcesses</artifactId><version>1.6.5</version><scope>system</scope><systemPath>C:\JAPP_603\lib\jProcesses-1.6.5.jar</systemPath></dependency>
         <dependency><groupId>com.profesorfalken</groupId><artifactId>WMI4Java</artifactId><version>1.6.3</version><scope>system</scope><systemPath>C:\JAPP_603\lib\WMI4Java-1.6.3.jar</systemPath></dependency>
 

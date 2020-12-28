@@ -133,4 +133,17 @@ public class SqlUtils extends AbstractBaseController {
         return (Blob) p.getParam("result");
     }
 
+    public static void SetEventNPP(TaskContext taskContext, Long eventID, Long newNPP) {
+        ParamMap p;
+        try {
+            p = new ParamMap()
+                    .add("eventID", eventID)
+                    .add("newNPP", newNPP)
+                    .exec(taskContext, location,"SetEventNPP");
+        } catch (SQLExpressionException ex) {
+            logger.error(ex.getContentText());
+            return ;
+        }
+    }
+
 }

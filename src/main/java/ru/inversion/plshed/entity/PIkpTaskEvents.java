@@ -1,12 +1,9 @@
 package ru.inversion.plshed.entity;
 
-import java.math.BigDecimal;
-import java.sql.*;
-import java.time.*;
-import java.io.Serializable;
+import ru.inversion.dataset.mark.IDMarkable;
+
 import javax.persistence.*;
-import ru.inversion.dataset.mark.*;
-import ru.inversion.db.entity.ProxyFor;
+import java.io.Serializable;
 
 /**
 @author  XDWeloper
@@ -48,7 +45,7 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
     public void setIEVENTTASKID(Long val) {
         IEVENTTASKID = val; 
     }
-    @Id 
+    @Id
     @Column(name="IEVENTNPP",nullable = false,length = 100)
     public Long getIEVENTNPP() {
         return IEVENTNPP;

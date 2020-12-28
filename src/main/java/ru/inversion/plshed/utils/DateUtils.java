@@ -13,20 +13,6 @@ public class DateUtils {
     public static LocalDateTime getNextDate(LocalDateTime dateTime, Long period, Long interval) {
         interval = (interval != null || interval == 0) ? interval : 1;
         LocalDateTime nextStart = dateTime;
-//
-//        if (nextStart.isBefore(LocalDateTime.now())){
-//            switch (period.intValue()) {
-//                case 0:
-//                    nextStart = LocalDateTime.now().minusDays(2 * interval);
-//                    break;
-//                case 1:
-//                    nextStart = LocalDateTime.now().minusHours(2 * interval);
-//                    break;
-//                case 2:
-//                    nextStart = LocalDateTime.now().minusMinutes(2 * interval);
-//                    break;
-//            }
-//        }
 
         while (nextStart.isBefore(LocalDateTime.now())) {
             switch (period.intValue()) {

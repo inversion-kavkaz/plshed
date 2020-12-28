@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +34,12 @@ import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static lovUtils.LovUtils.convertTableValue;
 import static lovUtils.LovUtils.initCombobox;
 import static manifest.ManifestData.*;
+import static ru.inversion.plshed.utils.SqlUtils.SetEventNPP;
 import static ru.inversion.plshed.utils.TrayUtils.initTray;
 import static ru.inversion.plshed.utils.dataSetUtils.dataSetToStream;
 
@@ -97,6 +101,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private SimpleStringProperty sessionString = new SimpleStringProperty("");
     private long sessionFilterTimer = 0;
     private final int SESSION_FILTER_WITE = 1000;
+    private Boolean isEventMoved = false;
 
 
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
@@ -114,7 +119,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
     @Override
     protected void init() throws Exception {
-        checkRunning();
+        //checkRunning();
         initTitle();
         DSFXAdapter<PIkpTasks> pIkpTasksDSFXAdapter = initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK, true);
         initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK, true);
@@ -131,8 +136,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         initLogFilterBinding();
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
-
-
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
     }
 
@@ -150,7 +153,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
             stopApp();
         }
     }
-
 
     private void initLogFilterBinding() {
         SESSIONID.textProperty().bindBidirectional(sessionString);
@@ -412,11 +414,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     public void onTaskFinish(Long code) {
         Platform.runLater(() -> {
             doRefresh(dsIKP_LOG);
-            try {
-                dsIKP_TASKS.refreshCurrentRowFromDB();
-            } catch (DataSetException e) {
-                e.printStackTrace();
-            }
         });
     }
 
@@ -446,6 +443,55 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         doRefresh(dsIKP_LOG);
     }
 
+    public void onKeyPressed(KeyEvent keyEvent) {
+        if(keyEvent.isShiftDown()){
+            if(keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.DOWN){
+                int rowSize = dsIKP_TASK_EVENTS.getRows().size();
+                int currentRowNum = dsIKP_TASK_EVENTS.getCurrentRowNum();
+                int preRowNum = currentRowNum > 1 ? currentRowNum - 1: 0;
+                int postRowNum =  currentRowNum < (rowSize -1) ? currentRowNum + 1: rowSize - 1;
 
+                PIkpTaskEvents currentRow = dsIKP_TASK_EVENTS.getCurrentRow();
+                PIkpTaskEvents preCurRow = dsIKP_TASK_EVENTS.getRow(preRowNum);
+                PIkpTaskEvents postCurRow = dsIKP_TASK_EVENTS.getRow(postRowNum);
+                Long savedEventPP = currentRow.getIEVENTNPP();
+
+
+                if(keyEvent.getCode() == KeyCode.UP){
+                    changeRows(preRowNum, currentRow, preCurRow, savedEventPP);
+                }
+                if(keyEvent.getCode() == KeyCode.DOWN){
+                    changeRows(postRowNum, currentRow, postCurRow, savedEventPP);
+                }
+                isEventMoved = true;
+            }
+        }
+    }
+
+    private void changeRows(int preRowNum, PIkpTaskEvents currentRow, PIkpTaskEvents distRow, Long savedEventPP) {
+        currentRow.setIEVENTNPP(distRow.getIEVENTNPP());
+        distRow.setIEVENTNPP(savedEventPP);
+        dsIKP_TASK_EVENTS.updateCurrentRow(distRow);
+        dsIKP_TASK_EVENTS.setCurrentRowNum(preRowNum);
+        dsIKP_TASK_EVENTS.updateCurrentRow(currentRow);
+    }
+
+    public void onKeyReleased(KeyEvent keyEvent) {
+        System.out.println("key released = " + keyEvent.getCode());
+        if(keyEvent.getCode() == KeyCode.SHIFT && isEventMoved){
+            isEventMoved = false;
+
+            if(Alerts.yesNo(this, getBundleString("SAVED.CAHNGED"))){
+                AtomicReference<Long> eventPPNValue = new AtomicReference<>(256987456321L);
+                dsIKP_TASK_EVENTS.getRows().forEach(event -> {
+                    SetEventNPP(getTaskContext(),event.getIEVENTID(), eventPPNValue.getAndSet(eventPPNValue.get() + 1));
+                });
+                dsIKP_TASK_EVENTS.getRows().forEach(event -> {
+                    SetEventNPP(getTaskContext(),event.getIEVENTID(), event.getIEVENTNPP());
+                });
+            }
+        doRefresh(dsIKP_TASK_EVENTS);
+        }
+    }
 }
 

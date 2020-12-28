@@ -50,6 +50,7 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
         initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class);
         initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class).setOnAction(event -> {
             ITASKINTERVAL.setDisable((((JInvComboBox) event.getSource()).getValue() == DISABLED_INTERVAL_FIELD));
+            ITASKINTERVAL.setRequired((((JInvComboBox) event.getSource()).getValue() != DISABLED_INTERVAL_FIELD));
         });
         initCombobox(getTaskContext(),RUNNINGEVENT, PIkpRunningEventTextValue.class).setOnAction(event -> {
             DTASKFROMTMV.setDisable((((JInvComboBox) event.getSource()).getValue() == DISABLED_TIME_FIELD));
