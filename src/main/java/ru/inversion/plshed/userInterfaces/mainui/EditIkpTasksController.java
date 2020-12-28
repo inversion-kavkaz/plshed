@@ -2,7 +2,9 @@ package ru.inversion.plshed.userInterfaces.mainui;
 
 import javafx.fxml.FXML;
 import ru.inversion.fx.form.JInvFXFormController;
+import ru.inversion.fx.form.controls.JInvCalendar;
 import ru.inversion.fx.form.controls.JInvComboBox;
+import ru.inversion.fx.form.controls.JInvLongField;
 import ru.inversion.fx.form.controls.JInvTimeField;
 import ru.inversion.plshed.entity.lovEntity.*;
 import ru.inversion.plshed.entity.PIkpTasks;
@@ -21,9 +23,9 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
 {  
 //    @FXML JInvLongField ITASKID;
 //    @FXML JInvTextField CTASKNAME;
-//    @FXML JInvTextField DTASKFROMDT;
+    @FXML JInvCalendar DTASKFROMDT;
 //    @FXML JInvTextField DTASKFROMTM;
-//    @FXML JInvComboBox<Long, String> ITASKINTERVAL;
+    @FXML  JInvLongField ITASKINTERVAL;
 
     @FXML JInvComboBox<Long, String> ITASKPERIOD;
     @FXML JInvTimeField DTASKFROMTMV;
@@ -32,6 +34,8 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
     @FXML JInvComboBox<Long, String> BTASKRUNNING;
     @FXML JInvComboBox<Long, String> RUNNINGEVENT;
 
+    private final Long DISABLED_INTERVAL_FIELD = 0l;
+    private final Long DISABLED_TIME_FIELD = 1l;
 
     @Override
     protected void init () throws Exception 
@@ -44,8 +48,13 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>
         initCombobox(getTaskContext(),BTASKRUNNING, PIkpRunningTextValue.class);
         initCombobox(getTaskContext(),ITASKSIDE, PIkpRunningSideTextValue.class);
         initCombobox(getTaskContext(),ITASKFREQUENCY, PIkpFrequencyTextValue.class);
-        initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class);
-        initCombobox(getTaskContext(),RUNNINGEVENT, PIkpRunningEventTextValue.class);
+        initCombobox(getTaskContext(),ITASKPERIOD, PIkpPeriodTextValue.class).setOnAction(event -> {
+            ITASKINTERVAL.setDisable((((JInvComboBox) event.getSource()).getValue() == DISABLED_INTERVAL_FIELD));
+        });
+        initCombobox(getTaskContext(),RUNNINGEVENT, PIkpRunningEventTextValue.class).setOnAction(event -> {
+            DTASKFROMTMV.setDisable((((JInvComboBox) event.getSource()).getValue() == DISABLED_TIME_FIELD));
+            DTASKFROMDT.setDisable((((JInvComboBox) event.getSource()).getValue() == DISABLED_TIME_FIELD));
+        });;
 
     }
 

@@ -95,6 +95,8 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private int dateFilter;
     private int sessionFilter;
     private SimpleStringProperty sessionString = new SimpleStringProperty("");
+    private long sessionFilterTimer = 0;
+    private final int SESSION_FILTER_WITE = 1000;
 
 
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
@@ -138,22 +140,25 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
         PLShedMain.processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).forEach(c -> {
             logger.info(String.format("\n----------------------------------------------" +
-                                    "\n process command: %s \n process name: %s \n process user: %s \n process ID: %s" +
-                                    "\n--------------------------------------------------\n"
-                    ,c.getCommand(),c.getName(),c.getUser(), c.getPid()));
+                            "\n process command: %s \n process name: %s \n process user: %s \n process ID: %s" +
+                            "\n--------------------------------------------------\n"
+                    , c.getCommand(), c.getName(), c.getUser(), c.getPid()));
         });
 
-        if(PLShedMain.isRunning) {
+        if (PLShedMain.isRunning) {
             Alerts.error(this, getBundleString("RUNNINGTEXT"));
             stopApp();
         }
     }
 
+
     private void initLogFilterBinding() {
         SESSIONID.textProperty().bindBidirectional(sessionString);
         sessionString.addListener((observable, oldValue, newValue) -> {
-            if(newValue.length() == 9 || newValue.length() == 0)
+            if ((System.currentTimeMillis() - sessionFilterTimer) > SESSION_FILTER_WITE) {
+                sessionFilterTimer = System.currentTimeMillis();
                 setCustomFilter();
+            }
         });
     }
 
@@ -268,6 +273,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
     private void doRefresh(XXIDataSet dataSet) {
         try {
+
             dataSet.execute();
         } catch (DataSetException e) {
             e.printStackTrace();
@@ -404,7 +410,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
     @Override
     public void onTaskFinish(Long code) {
-        doRefresh(dsIKP_LOG);
+        Platform.runLater(() -> {
+            doRefresh(dsIKP_LOG);
+            try {
+                dsIKP_TASKS.refreshCurrentRowFromDB();
+            } catch (DataSetException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -420,14 +433,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     }
 
     @FXML
-    private void setCustomFilter(){
-        if(DATEFILTER.getValue() != null) {
+    private void setCustomFilter() {
+        if (DATEFILTER.getValue() != null) {
             dsIKP_LOG.removeFilter(dateFilter);
             dateFilter = dsIKP_LOG.setFilter(String.format("trunc(DT) = to_date('%s','yyyy-MM-dd')", DATEFILTER.getValue().toString()), false, true);
         }
-        if(SESSIONID.getText() != null){
+        if (SESSIONID.getText() != null) {
             dsIKP_LOG.removeFilter(sessionFilter);
-            sessionFilter =dsIKP_LOG.setFilter(String.format("SESSID like '%s%%'", SESSIONID.getText()), false, true);
+            sessionFilter = dsIKP_LOG.setFilter(String.format("SESSID like '%s%%'", SESSIONID.getText()), false, true);
         }
 
         doRefresh(dsIKP_LOG);

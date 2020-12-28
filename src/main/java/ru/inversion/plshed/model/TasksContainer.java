@@ -77,7 +77,7 @@ public class TasksContainer {
                         System.out.println(String.format("task id: %d next start: %s ",id,nextDate));
                         if(nowDate.equals(nextDate)){
                             System.out.println(String.format("Start Task %d", id));
-                            task.startTask(Task.StartType.Forced);
+                            task.startTask(Task.StartType.Timer);
                         }
                     }
                 });

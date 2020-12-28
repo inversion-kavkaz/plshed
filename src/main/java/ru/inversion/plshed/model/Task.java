@@ -62,14 +62,15 @@ public class Task {
         this.isLaunch = pIkpTasks.getBTASKRUNNING() == 1;
         pIkpTasks.setLOGLEVEL(START_LOG_LEVEL);
         initDataSet(pIkpTasks, taskContext);
-
-        if (isLaunch && isPeriod)
+        if (isLaunch && isPeriod) {
+            nextStart = pIkpTasks.getDTASKFROMTM();
             setNextStartDate();
+        }
 
     }
 
     private void setNextStartDate() {
-        nextStart = getNextDate(pIkpTasks.getDTASKFROMTM(), pIkpTasks.getITASKFREQUENCY(), pIkpTasks.getITASKINTERVAL());
+        nextStart = getNextDate(nextStart, pIkpTasks.getITASKFREQUENCY(), pIkpTasks.getITASKINTERVAL());
         pIkpTasks.setDTASKFROMTMMV(nextStart);
     }
 
@@ -102,7 +103,11 @@ public class Task {
                 /**Запуск процесса*/
                 runTask(pIkpTasks.getITASKID(), localTaskContext);
                 /**Запускаем работу с событиями*/
-                dsIKP_TASK_EVENTS.getRows().forEach(event -> {
+                dsIKP_TASK_EVENTS
+                        .getRows()
+                        .stream()
+                        .filter(e -> e.getBEVENTENABLED() == 1)
+                        .forEach(event -> {
                     initEvent(event.getIEVENTNPP(), localTaskContext);
                     switch (event.getIEVENTFILEDIR().intValue()) {
                         case 0:

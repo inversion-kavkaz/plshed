@@ -81,7 +81,7 @@
     </expression>
 
     <!-- Получаем имя файла для выгрузки -->
-    <expression name="FileName" lang="PL/SQL">
+    <expression name="GetFileName" lang="PL/SQL">
         <script><![CDATA[
             declare
             begin
