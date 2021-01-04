@@ -23,9 +23,9 @@ public class TasksContainer {
     private Logger logger;
     TaskContext taskContext;
     TaskCallBack taskCallBack;
-    private Boolean isSchedulerRun = true;
+    Thread taskSheduler = null;
 
-    public TasksContainer(Logger logger,TaskContext taskContext,TaskCallBack taskCallBac) {
+    public TasksContainer(Logger logger, TaskContext taskContext, TaskCallBack taskCallBac) {
         this.logger = logger;
         this.taskContext = taskContext;
         this.taskCallBack = taskCallBac;
@@ -33,66 +33,63 @@ public class TasksContainer {
     }
 
     public void initTask(PIkpTasks pIkpTasks) {
-        if(tasksList.containsKey(pIkpTasks.getITASKID()))
+        if (tasksList.containsKey(pIkpTasks.getITASKID()))
             return;
 
-        tasksList.put(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks,logger,taskContext, taskCallBack));
+        tasksList.put(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks, logger, taskContext, taskCallBack));
     }
 
-    public Task startTask(Long taskId){
+    public Task startTask(Long taskId) {
         return tasksList.get(taskId).startTask(Task.StartType.Timer);
     }
 
     public void updateTask(PIkpTasks pIkpTasks) {
-        if(tasksList.containsKey(pIkpTasks.getITASKID())) {
-            tasksList.replace(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks,logger,taskContext,taskCallBack));
+        if (tasksList.containsKey(pIkpTasks.getITASKID())) {
+            tasksList.replace(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks, logger, taskContext, taskCallBack));
         } else
             initTask(pIkpTasks);
     }
 
 
-
-    public void deleteTask(Long taskId){
+    public void deleteTask(Long taskId) {
         tasksList.remove(taskId);
     }
 
-    public void stopScheduler(){
+    public void stopScheduler() {
         logger.info(String.format("Sheduler is stoped"));
-        isSchedulerRun = false;
+        taskSheduler.interrupt();
     }
 
     public void initTaskScheduler() {
-        new Thread(() -> {
+        taskSheduler = new Thread(() -> {
             logger.info("Start scheduler");
-            while (isSchedulerRun){
+            while (!Thread.currentThread().isInterrupted()) {
                 threadWait(WAIT_SECOND);
                 LocalDateTime now = LocalDateTime.now();
                 logger.info("search task for run");
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
                 String nowDate = now.format(formatter);
-                System.out.println(String.format("now: %s",nowDate));
-                tasksList.forEach((id,task) -> {
-                    if(task.getNextStart() != null){
+                logger.info(String.format("now: %s", nowDate));
+                tasksList.forEach((id, task) -> {
+                    if (task.getNextStart() != null) {
                         String nextDate = task.getNextStart().format(formatter);
-                        System.out.println(String.format("task id: %d next start: %s ",id,nextDate));
-                        if(nowDate.equals(nextDate)){
-                            System.out.println(String.format("Start Task %d", id));
+                        logger.info(String.format("task id: %d next start: %s ", id, nextDate));
+                        if (nowDate.equals(nextDate)) {
+                            logger.info(String.format("Start Task %d", id));
                             task.startTask(Task.StartType.Timer);
                         }
                     }
                 });
             }
-        }).start();
+        });
+        taskSheduler.start();
     }
 
-    private void threadWait(int waitCounter) {
+    private void threadWait(int waitTimeSecond){
         try {
-            int counter = waitCounter;
-            while(counter-- > 0 && isSchedulerRun) {
-                Thread.sleep(1000);
-            }
+            Thread.sleep(waitTimeSecond * 1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

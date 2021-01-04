@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import ru.inversion.fx.form.controls.JInvButton?>
+<?import ru.inversion.fx.form.controls.JInvTextArea?>
+<?import ru.inversion.fx.form.controls.JInvToolBar?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.HelpWindowController">
+   <children>
+      <JInvTextArea fx:id="HELPTEXTAREA" editable="false" layoutX="83.0" layoutY="85.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></JInvTextArea>
+      <JInvToolBar layoutX="73.0" layoutY="304.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <items>
+          <JInvButton fx:id="btOK" mnemonicParsing="false" text="OK" />
+        </items>
+      </JInvToolBar>
+   </children>
+</AnchorPane>

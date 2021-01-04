@@ -33,10 +33,11 @@ public class PLShedMain extends BaseApp {
  * код оставлю здесь вдруг понядобится
  * */
 //        Long startTime = System.currentTimeMillis();
-//        processesList = JProcesses.getProcessList("PLShed.jar");
+//        processesList = JProcesses.getProcessList("java.exe");
 //        isRunning = processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).count() > 1;
 //        Long endTime = System.currentTimeMillis();
 //        appLog.info(String.format("Processed time = %d",(endTime - startTime)));
+
 
         Platform.setImplicitExit(false);
         showViewIkpTasksa(getPrimaryViewContext(), new TaskContext(), Collections.emptyMap());
@@ -52,6 +53,9 @@ public class PLShedMain extends BaseApp {
     }
 
     public static void showViewIkpTasksa(ViewContext vc, TaskContext tc, Map<String, Object> p) {
+//        TestClass.connection = tc.getConnection();
+//        TestClass.CustomClass.CustomFunction("555");
+
         new FXFormLauncher(tc, vc, ViewIkpTasksController.class)
                 .initProperties(p)
                 .show();

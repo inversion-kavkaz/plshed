@@ -68,12 +68,12 @@
                      </HBox.margin>
                   </JInvLabel>
       <JInvLongField fx:id="ITASKINTERVAL" fieldName="ITASKINTERVAL" prefHeight="25.0" prefWidth="76.0" />
-                  <JInvLabel fx:id="lblRUNNINGEVENT" text="%RUNNINGEVENT">
+                  <JInvLabel fx:id="lblRUNNINGEVENT" disable="true" text="%RUNNINGEVENT">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
-                  <JInvComboBox fx:id="RUNNINGEVENT" fieldName="RUNNINGEVENT" maxWidth="-Infinity" />
+                  <JInvComboBox fx:id="RUNNINGEVENT" disable="true" fieldName="RUNNINGEVENT" maxWidth="-Infinity" />
                </children>
             </HBox>
 

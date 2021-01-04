@@ -33,6 +33,7 @@ import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import java.io.IOException;
+import java.sql.Statement;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -136,6 +137,11 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         initLogFilterBinding();
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
+            Statement st = getTaskContext().getConnection().createStatement();
+
+
+
+
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
     }
 

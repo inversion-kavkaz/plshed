@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static ru.inversion.plshed.utils.DateUtils.getNextDate;
 import static ru.inversion.plshed.utils.SqlUtils.*;
@@ -42,6 +43,7 @@ public class Task {
     private TaskCallBack taskCallBack;
     private Boolean isPeriod;
     private LocalDateTime nextStart = null;
+    private Thread taskThread = null;
 
     private XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS;
 
@@ -51,7 +53,6 @@ public class Task {
     public static Task taskFactory(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext, TaskCallBack taskCallBack) {
         return new Task(pIkpTasks, logger, taskContext, taskCallBack);
     }
-
 
     private Task(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext, TaskCallBack taskCallBack) {
         this.pIkpTasks = pIkpTasks;
@@ -86,10 +87,10 @@ public class Task {
         }
     }
 
-
     public Task startTask(StartType startType) {
         isWork = true;
-        new Thread(() -> {
+        taskThread = new Thread(() -> {
+            AtomicReference<Object> eventResult = null;
             localTaskContext = new TaskContext();
             logger.info(String.format("Start new thread task id: %d sessionID: %d", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
 
@@ -108,18 +109,25 @@ public class Task {
                         .stream()
                         .filter(e -> e.getBEVENTENABLED() == 1)
                         .forEach(event -> {
-                    initEvent(event.getIEVENTNPP(), localTaskContext);
-                    switch (event.getIEVENTFILEDIR().intValue()) {
-                        case 0:
-                            loadFromFileToDB(event, localTaskContext);
-                            execEvent(event.getIEVENTNPP(), localTaskContext);
-                            break;
-                        case 1:
-                            execEvent(event.getIEVENTNPP(), localTaskContext);
-                            LoadFromDBToFile(event, localTaskContext);
-                            break;
-                    }
-                });
+                            initEvent(event.getIEVENTNPP(), localTaskContext);
+                            /**Если это наш скритп запускаем обработку*/
+                            if (event.getIEVENTTYPE() == 2)
+                                eventResult.set(runEventScript(event, eventResult));
+
+                            switch (event.getIEVENTFILEDIR().intValue()) {
+                                case 0:
+                                    loadFromFileToDB(event, localTaskContext);
+                                    execEvent(event.getIEVENTNPP(), localTaskContext);
+                                    break;
+                                case 1:
+                                    execEvent(event.getIEVENTNPP(), localTaskContext);
+                                    LoadFromDBToFile(event, localTaskContext);
+                                    break;
+                                default:
+                                    execEvent(event.getIEVENTNPP(), localTaskContext);
+                            }
+                            taskCallBack.onEventFinish(event.getIEVENTID());
+                        });
                 finishTask(pIkpTasks.getITASKID(), localTaskContext);
             }
             taskCallBack.onTaskFinish(initResult);
@@ -127,9 +135,17 @@ public class Task {
             localTaskContext.close();
             if (startType == StartType.Timer)
                 setNextStartDate();
-        }).start();
+            isWork = false;
+        });
+        taskThread.start();
         return this;
     }
+
+    private Object runEventScript(PIkpTaskEvents event, Object preEventResult) {
+        ScriptRunner scriptRunner = new ScriptRunner(logger, event.getLEVENTTEXT(), event, preEventResult, localTaskContext.getConnection());
+        return scriptRunner.startScript();
+    }
+
 
     private void loadFromFileToDB(PIkpTaskEvents event, TaskContext localTaskContext) {
         String loadFileDir = (event.getCEVENTINDIR() != null && !event.getCEVENTINDIR().isEmpty()) ? event.getCEVENTINDIR() : "";
