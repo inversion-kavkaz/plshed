@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static ru.inversion.plshed.utils.DateUtils.getNextDate;
 import static ru.inversion.plshed.utils.SqlUtils.*;
@@ -33,6 +32,9 @@ import static ru.inversion.plshed.utils.SqlUtils.*;
 @Data
 public class Task {
     private final Long START_LOG_LEVEL = 3L;
+    private final Long EVENT_ENEBLED = 1L;
+    private final Long EVENT_TYPE = 2L;
+
 
     private PIkpTasks pIkpTasks;
     private Boolean isLaunch;
@@ -90,7 +92,7 @@ public class Task {
     public Task startTask(StartType startType) {
         isWork = true;
         taskThread = new Thread(() -> {
-            AtomicReference<Object> eventResult = null;
+            Object eventResult = null;
             localTaskContext = new TaskContext();
             logger.info(String.format("Start new thread task id: %d sessionID: %d", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
 
@@ -104,30 +106,31 @@ public class Task {
                 /**Запуск процесса*/
                 runTask(pIkpTasks.getITASKID(), localTaskContext);
                 /**Запускаем работу с событиями*/
-                dsIKP_TASK_EVENTS
-                        .getRows()
-                        .stream()
-                        .filter(e -> e.getBEVENTENABLED() == 1)
-                        .forEach(event -> {
-                            initEvent(event.getIEVENTNPP(), localTaskContext);
-                            /**Если это наш скритп запускаем обработку*/
-                            if (event.getIEVENTTYPE() == 2)
-                                eventResult.set(runEventScript(event, eventResult));
+                for(PIkpTaskEvents event: dsIKP_TASK_EVENTS.getRows()){
+                    if(event.getBEVENTENABLED() != EVENT_ENEBLED) continue;
+                    initEvent(event.getIEVENTNPP(), localTaskContext);
+                    /**Если это наш скритп запускаем обработку*/
+                    if (event.getIEVENTTYPE() == EVENT_TYPE)
+                        eventResult = runEventScript(event, eventResult);
 
-                            switch (event.getIEVENTFILEDIR().intValue()) {
-                                case 0:
-                                    loadFromFileToDB(event, localTaskContext);
-                                    execEvent(event.getIEVENTNPP(), localTaskContext);
-                                    break;
-                                case 1:
-                                    execEvent(event.getIEVENTNPP(), localTaskContext);
-                                    LoadFromDBToFile(event, localTaskContext);
-                                    break;
-                                default:
-                                    execEvent(event.getIEVENTNPP(), localTaskContext);
-                            }
-                            taskCallBack.onEventFinish(event.getIEVENTID());
-                        });
+                    /**Если вернули строку остановить задание*/
+                    if(eventResult != null && String.valueOf(eventResult) == "StopTask")
+                        break;
+
+                    switch (event.getIEVENTFILEDIR().intValue()) {
+                        case 0:
+                            loadFromFileToDB(event, localTaskContext);
+                            execEvent(event.getIEVENTNPP(), localTaskContext);
+                            break;
+                        case 1:
+                            execEvent(event.getIEVENTNPP(), localTaskContext);
+                            LoadFromDBToFile(event, localTaskContext);
+                            break;
+                        default:
+                            execEvent(event.getIEVENTNPP(), localTaskContext);
+                    }
+                    taskCallBack.onEventFinish(event.getIEVENTID());
+                }
                 finishTask(pIkpTasks.getITASKID(), localTaskContext);
             }
             taskCallBack.onTaskFinish(initResult);
