@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.JInvFXFormController;
@@ -24,6 +25,7 @@ import ru.inversion.plshed.entity.lovEntity.PIkpEventFileTypeTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventTypeTextValue;
 import ru.inversion.plshed.model.ScriptRunner;
 import ru.inversion.plshed.utils.ButtonUtils;
+import ru.inversion.plshed.utils.JavaKeywords;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -75,6 +77,8 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     JInvComboBox<Long, String> BEVENTENABLED;
     @FXML
     JInvComboBox<Long, String> IEVENTFILEDIR;
+    @FXML
+    AnchorPane TEXTANCHORPANE;
 
     private Boolean isDebugOpen = false;
     private final Long ENABLED_SCRIPT = 2L;
@@ -86,6 +90,16 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
         initComboBox();
         initInnerButton();
         initCustomButtons();
+        initRichText();
+    }
+
+    private void initRichText() {
+        StackPane pane = JavaKeywords.getCodeArea(getDataObject().getLEVENTTEXT());
+        AnchorPane.setTopAnchor(pane,0d);
+        AnchorPane.setRightAnchor(pane,0d);
+        AnchorPane.setBottomAnchor(pane,0d);
+        AnchorPane.setLeftAnchor(pane,0d);
+        TEXTANCHORPANE.getChildren().add(pane);
     }
 
     private void initCustomButtons() {
@@ -143,12 +157,13 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
         TESTAREA.clear();
         Object result = null;
         String compileText = "";
-        if (!LEVENTTEXT.getText().isEmpty()) {
+        String codeText = JavaKeywords.getCodeText();
+        if (!codeText.isEmpty()) {
             ScriptRunner scriptRunner = new ScriptRunner(
                     logger,
-                    LEVENTTEXT.getText(),
+                    codeText,
                     getDataObject(),
-                    !EVENTRESULT.getText().isEmpty() ? EVENTRESULT.getText() : null,
+                    !codeText.isEmpty() ? codeText : null,
                     getTaskContext().getConnection()
             );
 
@@ -161,6 +176,13 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
 
     public void onTabSelect(Event event) {
         isDebugOpen = isDebugOpen ? !isDebugOpen : isDebugOpen;
+    }
+
+    @Override
+    protected boolean onOK() {
+        if(JavaKeywords.isCodeChange())
+            getDataObject().setLEVENTTEXT(JavaKeywords.getCodeText());
+        return super.onOK();
     }
 
     @FXML

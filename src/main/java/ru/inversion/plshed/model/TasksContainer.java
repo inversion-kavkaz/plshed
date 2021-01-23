@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class TasksContainer {
     private final int WAIT_SECOND = 60;
+    private final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm";
 
     private Map<Long, Task> tasksList = new HashMap<>();
     private Logger logger;
@@ -55,33 +56,25 @@ public class TasksContainer {
         tasksList.remove(taskId);
     }
 
-    public void stopScheduler() {
-        logger.info(String.format("Sheduler is stoped"));
-        taskSheduler.interrupt();
-    }
-
     public void initTaskScheduler() {
         taskSheduler = new Thread(() -> {
             logger.info("Start scheduler");
             while (!Thread.currentThread().isInterrupted()) {
                 threadWait(WAIT_SECOND);
                 LocalDateTime now = LocalDateTime.now();
-                logger.info("search task for run");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
                 String nowDate = now.format(formatter);
-                logger.info(String.format("now: %s", nowDate));
                 tasksList.forEach((id, task) -> {
                     if (task.getNextStart() != null) {
                         String nextDate = task.getNextStart().format(formatter);
-                        logger.info(String.format("task id: %d next start: %s ", id, nextDate));
                         if (nowDate.equals(nextDate)) {
-                            logger.info(String.format("Start Task %d", id));
                             task.startTask(Task.StartType.Timer);
                         }
                     }
                 });
             }
         });
+        taskSheduler.setDaemon(true);
         taskSheduler.start();
     }
 

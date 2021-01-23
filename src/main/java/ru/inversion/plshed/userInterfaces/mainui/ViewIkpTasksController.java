@@ -15,13 +15,11 @@ import ru.inversion.dataset.IDataSet;
 import ru.inversion.dataset.XXIDataSet;
 import ru.inversion.dataset.aggr.AggrFuncEnum;
 import ru.inversion.dataset.fx.DSFXAdapter;
-import ru.inversion.fx.app.BaseApp;
 import ru.inversion.fx.form.*;
 import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
 import ru.inversion.icons.enums.FontAwesome;
-import ru.inversion.plshed.PLShedMain;
 import ru.inversion.plshed.entity.PIkpLog;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
@@ -33,7 +31,6 @@ import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import java.io.IOException;
-import java.sql.Statement;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -137,27 +134,23 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         initLogFilterBinding();
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
-            Statement st = getTaskContext().getConnection().createStatement();
-
-
-
-
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
     }
 
+    /**Проверка запуска второго экземпляра приложения пока отказались */
     private void checkRunning() {
 
-        PLShedMain.processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).forEach(c -> {
-            logger.info(String.format("\n----------------------------------------------" +
-                            "\n process command: %s \n process name: %s \n process user: %s \n process ID: %s" +
-                            "\n--------------------------------------------------\n"
-                    , c.getCommand(), c.getName(), c.getUser(), c.getPid()));
-        });
-
-        if (PLShedMain.isRunning) {
-            Alerts.error(this, getBundleString("RUNNINGTEXT"));
-            stopApp();
-        }
+//        PLShedMain.processesList.stream().filter(p -> p.getCommand().contains(BaseApp.APP().getAppID())).forEach(c -> {
+//            logger.info(String.format("\n----------------------------------------------" +
+//                            "\n process command: %s \n process name: %s \n process user: %s \n process ID: %s" +
+//                            "\n--------------------------------------------------\n"
+//                    , c.getCommand(), c.getName(), c.getUser(), c.getPid()));
+//        });
+//
+//        if (PLShedMain.isRunning) {
+//            Alerts.error(this, getBundleString("RUNNINGTEXT"));
+//            stopApp();
+//        }
     }
 
     private void initLogFilterBinding() {
@@ -412,7 +405,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     }
 
     private void stopApp() {
-        tasksContainer.stopScheduler();
         Platform.exit();
     }
 

@@ -55,14 +55,12 @@ public class CompileSourceInMemory {
 
         boolean success = task.call();
         for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
-            checkCodeResult += diagnostic;
-            logger.error(String.valueOf(diagnostic));
+            checkCodeResult += diagnostic + "\n";
         }
-        if(success) {
+        if(success)
             checkCodeResult = "Success: " + success;
-            logger.info("Success: " + success);
-        }
 
+        logger.error(checkCodeResult);
         return success;
     }
 
@@ -97,7 +95,7 @@ public class CompileSourceInMemory {
 
         public Class getClassFromFile(File f) {
             byte[] raw = new byte[(int) f.length()];
-            System.out.println(f.length());
+            logger.info(String.valueOf(f.length()));
             InputStream in = null;
             try {
                 in = new FileInputStream(f);

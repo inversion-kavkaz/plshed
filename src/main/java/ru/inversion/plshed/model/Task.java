@@ -96,50 +96,54 @@ public class Task {
             localTaskContext = new TaskContext();
             logger.info(String.format("Start new thread task id: %d sessionID: %d", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
 
-            /**Инициализация процесса*/
-            Long initResult = initTask(pIkpTasks.getITASKID(), localTaskContext);
-            if (initResult == -1) {
-                logger.info("Task already running");
-            } else if (initResult == -100) {
-                logger.info("init task error");
-            } else if (initResult == 0) {
-                /**Запуск процесса*/
-                runTask(pIkpTasks.getITASKID(), localTaskContext);
-                /**Запускаем работу с событиями*/
-                for(PIkpTaskEvents event: dsIKP_TASK_EVENTS.getRows()){
-                    if(event.getBEVENTENABLED() != EVENT_ENEBLED) continue;
-                    initEvent(event.getIEVENTNPP(), localTaskContext);
-                    /**Если это наш скритп запускаем обработку*/
-                    if (event.getIEVENTTYPE() == EVENT_TYPE)
-                        eventResult = runEventScript(event, eventResult);
+            try {
+                /**Инициализация процесса*/
+                Long initResult = initTask(pIkpTasks.getITASKID(), localTaskContext);
+                if (initResult == -1) {
+                    logger.info("Task already running");
+                } else if (initResult == -100) {
+                    logger.info("init task error");
+                } else if (initResult == 0) {
+                    /**Запуск процесса*/
+                    runTask(pIkpTasks.getITASKID(), localTaskContext);
+                    /**Запускаем работу с событиями*/
+                    for (PIkpTaskEvents event : dsIKP_TASK_EVENTS.getRows()) {
+                        if (event.getBEVENTENABLED() != EVENT_ENEBLED) continue;
+                        initEvent(event.getIEVENTNPP(), localTaskContext);
+                        /**Если это наш скритп запускаем обработку*/
+                        if (event.getIEVENTTYPE() == EVENT_TYPE)
+                            eventResult = runEventScript(event, eventResult);
 
-                    /**Если вернули строку остановить задание*/
-                    if(eventResult != null && String.valueOf(eventResult) == "StopTask")
-                        break;
+                        /**Если вернули строку остановить задание*/
+                        if (eventResult != null && String.valueOf(eventResult) == "StopTask")
+                            break;
 
-                    switch (event.getIEVENTFILEDIR().intValue()) {
-                        case 0:
-                            loadFromFileToDB(event, localTaskContext);
-                            execEvent(event.getIEVENTNPP(), localTaskContext);
-                            break;
-                        case 1:
-                            execEvent(event.getIEVENTNPP(), localTaskContext);
-                            LoadFromDBToFile(event, localTaskContext);
-                            break;
-                        default:
-                            execEvent(event.getIEVENTNPP(), localTaskContext);
+                        switch (event.getIEVENTFILEDIR().intValue()) {
+                            case 0:
+                                loadFromFileToDB(event, localTaskContext);
+                                execEvent(event.getIEVENTNPP(), localTaskContext);
+                                break;
+                            case 1:
+                                execEvent(event.getIEVENTNPP(), localTaskContext);
+                                LoadFromDBToFile(event, localTaskContext);
+                                break;
+                            default:
+                                execEvent(event.getIEVENTNPP(), localTaskContext);
+                        }
+                        taskCallBack.onEventFinish(event.getIEVENTID());
                     }
-                    taskCallBack.onEventFinish(event.getIEVENTID());
+                    finishTask(pIkpTasks.getITASKID(), localTaskContext);
                 }
-                finishTask(pIkpTasks.getITASKID(), localTaskContext);
+                taskCallBack.onTaskFinish(initResult);
+                if (startType == StartType.Timer)
+                    setNextStartDate();
+                isWork = false;
+            } finally {
+                localTaskContext.close();
+                logger.info(String.format("Stop thread is end task id: %d sessionID: %d is closed", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
             }
-            taskCallBack.onTaskFinish(initResult);
-            logger.info(String.format("Stop thread is end task id: %d sessionID: %d is closed", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
-            localTaskContext.close();
-            if (startType == StartType.Timer)
-                setNextStartDate();
-            isWork = false;
         });
+        taskThread.setDaemon(true);
         taskThread.start();
         return this;
     }
