@@ -22,9 +22,9 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JavaKeywords  {
+public class JavaKeywords {
 
-    private static final String[] KEYWORDS = new String[] {
+    private static final String[] KEYWORDS = new String[]{
             "abstract", "assert", "boolean", "break", "byte",
             "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else",
@@ -34,10 +34,10 @@ public class JavaKeywords  {
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while","String"
+            "transient", "try", "void", "volatile", "while", "String"
     };
-    private static final String[] FUNCTIONS = new String[] {
-            "CallSqlFunc","wait","isFileExist"
+    private static final String[] FUNCTIONS = new String[]{
+            "CallSqlFunc", "wait", "isFileExist"
     };
 
 
@@ -49,44 +49,44 @@ public class JavaKeywords  {
     private static final String SEMICOLON_PATTERN = "\\;";
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/"   // for whole text processing (text blocks)
-    		                          + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";  // for visible paragraph processing (line by line)
+            + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";  // for visible paragraph processing (line by line)
 
 
     private static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-            + "|(?<FUNCTION>" + FUNCTION_PATTERN + ")"
-            + "|(?<PAREN>" + PAREN_PATTERN + ")"
-            + "|(?<BRACE>" + BRACE_PATTERN + ")"
-            + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-            + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-            + "|(?<STRING>" + STRING_PATTERN + ")"
-            + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+                    + "|(?<FUNCTION>" + FUNCTION_PATTERN + ")"
+                    + "|(?<PAREN>" + PAREN_PATTERN + ")"
+                    + "|(?<BRACE>" + BRACE_PATTERN + ")"
+                    + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
+                    + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+                    + "|(?<STRING>" + STRING_PATTERN + ")"
+                    + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
 
     private static CodeArea codeArea;
     private static Boolean isCodeChange;
 
-     public static StackPane getCodeArea(String sampleCode) {
-         isCodeChange = false;
+    public static StackPane getCodeArea(String sampleCode) {
+        isCodeChange = false;
         codeArea = new CodeArea();
 
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-        codeArea.setContextMenu( new DefaultContextMenu() );
+        codeArea.setContextMenu(new DefaultContextMenu());
         codeArea.getVisibleParagraphs().addModificationObserver
-        (
-            new VisibleParagraphStyler<>( codeArea, JavaKeywords::computeHighlighting )
-        );
+                (
+                        new VisibleParagraphStyler<>(codeArea, JavaKeywords::computeHighlighting)
+                );
 
-        final Pattern whiteSpace = Pattern.compile( "^\\s+" );
-        codeArea.addEventHandler( KeyEvent.KEY_PRESSED, KE ->
+        final Pattern whiteSpace = Pattern.compile("^\\s+");
+        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, KE ->
         {
             isCodeChange = true;
-            if ( KE.getCode() == KeyCode.ENTER ) {
-            	int caretPosition = codeArea.getCaretPosition();
-            	int currentParagraph = codeArea.getCurrentParagraph();
-                Matcher m0 = whiteSpace.matcher( codeArea.getParagraph( currentParagraph-1 ).getSegments().get( 0 ) );
-                if ( m0.find() ) Platform.runLater( () -> codeArea.insertText( caretPosition, m0.group() ) );
+            if (KE.getCode() == KeyCode.ENTER) {
+                int caretPosition = codeArea.getCaretPosition();
+                int currentParagraph = codeArea.getCurrentParagraph();
+                Matcher m0 = whiteSpace.matcher(codeArea.getParagraph(currentParagraph - 1).getSegments().get(0));
+                if (m0.find()) Platform.runLater(() -> codeArea.insertText(caretPosition, m0.group()));
             }
         });
 
@@ -96,12 +96,12 @@ public class JavaKeywords  {
         return stackPane;
     }
 
-    public static String getCodeText(){
-         return codeArea.getText();
+    public static String getCodeText() {
+        return codeArea.getText();
     }
 
-    public static Boolean isCodeChange(){
-         return isCodeChange;
+    public static Boolean isCodeChange() {
+        return isCodeChange;
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
@@ -109,17 +109,18 @@ public class JavaKeywords  {
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
                 = new StyleSpansBuilder<>();
-        while(matcher.find()) {
+        while (matcher.find()) {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
-                    matcher.group("FUNCTION") != null ? "function" :
-                    matcher.group("PAREN") != null ? "paren" :
-                    matcher.group("BRACE") != null ? "brace" :
-                    matcher.group("BRACKET") != null ? "bracket" :
-                    matcher.group("SEMICOLON") != null ? "semicolon" :
-                    matcher.group("STRING") != null ? "string" :
-                    matcher.group("COMMENT") != null ? "comment" :
-                    null; /* never happens */ assert styleClass != null;
+                            matcher.group("FUNCTION") != null ? "function" :
+                                    matcher.group("PAREN") != null ? "paren" :
+                                            matcher.group("BRACE") != null ? "brace" :
+                                                    matcher.group("BRACKET") != null ? "bracket" :
+                                                            matcher.group("SEMICOLON") != null ? "semicolon" :
+                                                                    matcher.group("STRING") != null ? "string" :
+                                                                            matcher.group("COMMENT") != null ? "comment" :
+                                                                                    null; /* never happens */
+            assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();
@@ -128,53 +129,55 @@ public class JavaKeywords  {
         return spansBuilder.create();
     }
 
-    private static class VisibleParagraphStyler<PS, SEG, S> implements Consumer<ListModification<? extends Paragraph<PS, SEG, S>>>
-    {
+    private static class VisibleParagraphStyler<PS, SEG, S> implements Consumer<ListModification<? extends Paragraph<PS, SEG, S>>> {
         private final GenericStyledArea<PS, SEG, S> area;
-        private final Function<String,StyleSpans<S>> computeStyles;
+        private final Function<String, StyleSpans<S>> computeStyles;
         private int prevParagraph, prevTextLength;
 
-        public VisibleParagraphStyler( GenericStyledArea<PS, SEG, S> area, Function<String,StyleSpans<S>> computeStyles )
-        {
+        public VisibleParagraphStyler(GenericStyledArea<PS, SEG, S> area, Function<String, StyleSpans<S>> computeStyles) {
             this.computeStyles = computeStyles;
             this.area = area;
         }
 
         @Override
-        public void accept( ListModification<? extends Paragraph<PS, SEG, S>> lm )
-        {
-            if ( lm.getAddedSize() > 0 )
-            {
-                int paragraph = Math.min( area.firstVisibleParToAllParIndex() + lm.getFrom(), area.getParagraphs().size()-1 );
-                String text = area.getText( paragraph, 0, paragraph, area.getParagraphLength( paragraph ) );
+        public void accept(ListModification<? extends Paragraph<PS, SEG, S>> lm) {
+            if (lm.getAddedSize() > 0) {
+                int paragraph = Math.min(area.firstVisibleParToAllParIndex() + lm.getFrom(), area.getParagraphs().size() - 1);
+                String text = area.getText(paragraph, 0, paragraph, area.getParagraphLength(paragraph));
 
-        	    if ( paragraph != prevParagraph || text.length() != prevTextLength )
-        	    {
-                    int startPos = area.getAbsolutePosition( paragraph, 0 );
-                    Platform.runLater( () -> area.setStyleSpans( startPos, computeStyles.apply( text ) ) );
+                if (paragraph != prevParagraph || text.length() != prevTextLength) {
+                    int startPos = area.getAbsolutePosition(paragraph, 0);
+                    Platform.runLater(() -> area.setStyleSpans(startPos, computeStyles.apply(text)));
                     prevTextLength = text.length();
                     prevParagraph = paragraph;
-        	    }
-        	}
+                }
+            }
         }
     }
 
-    private static class DefaultContextMenu extends ContextMenu
-    {
+    private static class DefaultContextMenu extends ContextMenu {
         private static MenuItem fold, unfold, print;
 
-        public DefaultContextMenu()
-        {
-            fold = new MenuItem( "Fold selected text" );
-            fold.setOnAction( AE -> { hide(); fold(); } );
+        public DefaultContextMenu() {
+            fold = new MenuItem("Fold selected text");
+            fold.setOnAction(AE -> {
+                hide();
+                fold();
+            });
 
-            unfold = new MenuItem( "Unfold from cursor" );
-            unfold.setOnAction( AE -> { hide(); unfold(); } );
+            unfold = new MenuItem("Unfold from cursor");
+            unfold.setOnAction(AE -> {
+                hide();
+                unfold();
+            });
 
-            print = new MenuItem( "Print" );
-            print.setOnAction( AE -> { hide(); print(); } );
+            print = new MenuItem("Print");
+            print.setOnAction(AE -> {
+                hide();
+                print();
+            });
 
-            getItems().addAll( fold, unfold, print );
+            getItems().addAll(fold, unfold, print);
         }
 
         /**
@@ -193,7 +196,7 @@ public class JavaKeywords  {
         }
 
         private void print() {
-            System.out.println( ((CodeArea) getOwnerNode()).getText());
+            System.out.println(((CodeArea) getOwnerNode()).getText());
         }
 
     }
