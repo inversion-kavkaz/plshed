@@ -3,8 +3,8 @@ package ru.inversion.plshed.utils;
 
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -30,7 +30,28 @@ public class DateUtilsTest {
   intStream1.flatMap(a -> Stream.of(a,((int)a + 50))).forEach(System.out::println);
 
   System.out.println(String.join("|", "erwer", "rweterer", "645464"));
-
  }
+
+ @Test
+ public void stringTest(){
+  List<String> list = new ArrayList<String>(){{
+   add("1");add("2");add("3");add("4");add("5");add("6");add("7");add("8");
+  }};
+
+  list.forEach(System.out::print);
+ System.out.println("");
+ System.out.println(String.format("========================================================="));
+ System.out.println(String.format("joining: %s",list.stream().collect(Collectors.joining(",","(",")"))));
+ System.out.println(String.format("========================================================="));
+ System.out.println(String.format("count: %s",list.stream().mapToInt(Integer::valueOf).count()));
+ System.out.println(String.format("========================================================="));
+ System.out.println(String.format("average: %s",list.stream().mapToInt(Integer::valueOf).average()));
+ System.out.println(String.format("========================================================="));
+
+ list.forEach(System.out::println);
+ }
+
+
+
 
  }

@@ -1,5 +1,6 @@
 package ru.inversion.plshed.userInterfaces.mainui;
 
+import io.reactivex.rxjava3.subjects.PublishSubject;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -7,8 +8,10 @@ import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
+import ru.inversion.bicomp.action.JInvButtonPrint;
 import ru.inversion.dataset.DataLinkBuilder;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.IDataSet;
@@ -18,6 +21,7 @@ import ru.inversion.dataset.fx.DSFXAdapter;
 import ru.inversion.fx.form.*;
 import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
+import ru.inversion.fx.form.controls.renderer.Colorizer;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
 import ru.inversion.icons.enums.FontAwesome;
 import ru.inversion.plshed.entity.PIkpLog;
@@ -28,10 +32,12 @@ import ru.inversion.plshed.interfaces.TaskCallBack;
 import ru.inversion.plshed.interfaces.callFunc;
 import ru.inversion.plshed.model.TasksContainer;
 import ru.inversion.plshed.utils.ButtonUtils;
+import ru.inversion.plshed.utils.dataSetUtils;
 import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static lovUtils.LovUtils.convertTableValue;
@@ -100,11 +106,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private long sessionFilterTimer = 0;
     private final int SESSION_FILTER_WITE = 1000;
     private Boolean isEventMoved = false;
+    private final int reportTypeId = 1310001;
 
 
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
     private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(), PIkpTasks.class);
     private final XXIDataSet<PIkpLog> dsIKP_LOG = new XXIDataSet<>(getTaskContext(), PIkpLog.class);
+    private final PublishSubject sessionSubject = PublishSubject.create();
+
 
 
     {
@@ -119,12 +128,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     protected void init() throws Exception {
         //checkRunning();
         initTitle();
+        initTableColorized();
         DSFXAdapter<PIkpTasks> pIkpTasksDSFXAdapter = initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK, true);
         initDataSetAdapter(dsIKP_TASK_EVENTS, IKP_TASK_EVENTS, IKP_TASK_EVENTS$MARK, true);
         initDataSetAdapter(dsIKP_LOG, IKP_LOG, null, true);
         initTray(getViewContext(), this);
         initTableAndFilterConverters();
         initToolBar(toolBar, toolBarEvents);
+        initAltPrint();
         initToolBarAction(toolBar, IKP_TASKS, dsIKP_TASKS, this::doOperation);
         initToolBarAction(toolBarEvents, IKP_TASK_EVENTS, dsIKP_TASK_EVENTS, this::doOperationEvents);
         initCustomButtons();
@@ -135,6 +146,29 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
+    }
+
+    private void initTableColorized() {
+        IKP_TASKS.addColor(cell -> {
+            PIkpTasks pojo = cell.getPojo();
+            if (pojo != null && pojo.getFTASKRUN() == 1)
+                return new Colorizer(null, Color.DARKGREEN, Colorizer.TextStyle.BOLD);
+            else
+                return null;
+        });
+    }
+
+    private void initAltPrint() {
+        JInvButtonPrint btPRINT_AP = new JInvButtonPrint();
+        btPRINT_AP.getAction().setActionPreCallback(apReport -> {
+            apReport.setTypeID(Long.valueOf(reportTypeId));
+            apReport.setParam(
+                    dsIKP_TASKS.getMarkerID() != null ? dsIKP_TASKS.getMarkerID().toString(): "",
+                    dsIKP_TASKS.getCurrentRow() != null ? dsIKP_TASKS.getCurrentRow().getITASKID().toString(): ""
+            );
+        });
+
+        toolBar.getItems().add(btPRINT_AP);
     }
 
     /**Проверка запуска второго экземпляра приложения пока отказались */
@@ -154,12 +188,10 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     }
 
     private void initLogFilterBinding() {
+        sessionSubject.filter((a) -> a != null).debounce(1, TimeUnit.SECONDS).subscribe((a) -> setCustomFilter());
         SESSIONID.textProperty().bindBidirectional(sessionString);
         sessionString.addListener((observable, oldValue, newValue) -> {
-            if ((System.currentTimeMillis() - sessionFilterTimer) > SESSION_FILTER_WITE) {
-                sessionFilterTimer = System.currentTimeMillis();
-                setCustomFilter();
-            }
+            sessionSubject.onNext(newValue);
         });
     }
 
@@ -260,11 +292,11 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private void initTableAndFilterConverters() throws ru.inversion.dataset.DataSetException {
 
         /** Таблица заданий */
-        convertTableValue(BTASKRUNNING, PIkpRunningTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKSIDE, PIkpRunningSideTextValue.class, getTaskContext(), true);
-        convertTableValue(ITASKFREQUENCY, PIkpFrequencyTextValue.class, getTaskContext(), true);
-        convertTableValue(RUNNINGEVENT, PIkpRunningEventTextValue.class, getTaskContext(), true);
+        dataSetUtils.convertTableValue(BTASKRUNNING, PIkpRunningTextValue.class, getTaskContext(), true);
+        dataSetUtils.convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
+        dataSetUtils.convertTableValue(ITASKSIDE, PIkpRunningSideTextValue.class, getTaskContext(), true);
+        dataSetUtils.convertTableValue(ITASKFREQUENCY, PIkpFrequencyTextValue.class, getTaskContext(), true);
+        dataSetUtils.convertTableValue(RUNNINGEVENT, PIkpRunningEventTextValue.class, getTaskContext(), true);
 
         /** Таблица событий */
         convertTableValue(IEVENTTYPE, PIkpEventTypeTextValue.class, getTaskContext(), true);
@@ -409,15 +441,36 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     }
 
     @Override
-    public void onTaskFinish(Long code) {
-        Platform.runLater(() -> {
-            doRefresh(dsIKP_LOG);
-        });
+    public void onTaskStart(Long taskId) {
+        markedRunningRow(taskId, 1L);
+    }
+
+    private void markedRunningRow(Long taskId, long l) {
+        PIkpTasks sellectedRow = dsIKP_TASKS.getCurrentRow();
+        dsIKP_TASKS.setCurrentRow(dataSetToStream(dsIKP_TASKS).filter(p -> p.getITASKID() == taskId).findFirst().get());
+        PIkpTasks tasks = dsIKP_TASKS.getCurrentRow();
+        tasks.setFTASKRUN(l);
+        dsIKP_TASKS.updateCurrentRow(tasks);
+        dsIKP_TASKS.setCurrentRow(sellectedRow);
+    }
+
+
+    @Override
+    public void onTaskFinish(Long taskId,Long code) {
+        markedRunningRow(taskId, 0L);
+    }
+
+    @Override
+    public void onEventStart(Long enentID) {
+        if(dataSetToStream(dsIKP_TASK_EVENTS).anyMatch(p -> p.getIEVENTTASKID() == enentID))
+            dsIKP_TASK_EVENTS.setCurrentRow(dataSetToStream(dsIKP_TASK_EVENTS).filter(p -> p.getIEVENTID() == enentID).findFirst().get());
     }
 
     @Override
     public void onEventFinish(Long enentID) {
-
+        Platform.runLater(() -> {
+            doRefresh(dsIKP_LOG);
+        });
     }
 
     @FXML
@@ -429,6 +482,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
 
     @FXML
     private void setCustomFilter() {
+        System.out.println(String.format("setCustomFilter "));
         if (DATEFILTER.getValue() != null) {
             dsIKP_LOG.removeFilter(dateFilter);
             dateFilter = dsIKP_LOG.setFilter(String.format("trunc(DT) = to_date('%s','yyyy-MM-dd')", DATEFILTER.getValue().toString()), false, true);

@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import ru.inversion.fx.form.controls.JInvButton?>
-<?import ru.inversion.fx.form.controls.JInvComboBox?>
-<?import ru.inversion.fx.form.controls.JInvLabel?>
-<?import ru.inversion.fx.form.controls.JInvLongField?>
-<?import ru.inversion.fx.form.controls.JInvTextField?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import ru.inversion.fx.form.controls.*?>
 <AnchorPane prefHeight="626.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTaskEventsController">
     <children>
         <GridPane hgap="5.0" layoutX="5.0" layoutY="5.0" vgap="5.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
@@ -59,7 +44,10 @@
                         </HBox>
                         <SplitPane fx:id="SCRIPTSPLIT" dividerPositions="0.9014925373134328" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
                             <items>
-                        <AnchorPane fx:id="TEXTANCHORPANE" />
+                        <AnchorPane fx:id="TEXTANCHORPANE">
+                           <children>
+                              <JInvTextArea fx:id="LEVENTTEXT" fieldName="LEVENTTEXT" opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
+                           </children></AnchorPane>
                                 <TabPane onMouseClicked="#openCloseDebugWin" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                                     <tabs>
                                         <Tab onSelectionChanged="#onTabSelect" text="Компиляция">

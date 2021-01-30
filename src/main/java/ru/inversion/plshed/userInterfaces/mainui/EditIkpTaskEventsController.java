@@ -94,7 +94,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     }
 
     private void initRichText() {
-        StackPane pane = JavaKeywords.getCodeArea(getDataObject().getLEVENTTEXT());
+        StackPane pane = JavaKeywords.getCodeArea(getDataObject().getLEVENTTEXT() != null ? getDataObject().getLEVENTTEXT() : "");
         AnchorPane.setTopAnchor(pane,0d);
         AnchorPane.setRightAnchor(pane,0d);
         AnchorPane.setBottomAnchor(pane,0d);
@@ -181,7 +181,9 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     @Override
     protected boolean onOK() {
         if(JavaKeywords.isCodeChange())
-            getDataObject().setLEVENTTEXT(JavaKeywords.getCodeText());
+            LEVENTTEXT.setText(JavaKeywords.getCodeText());
+//            //getFXEntity().getBaseEntity().setLEVENTTEXT(JavaKeywords.getCodeText());
+//            //getDataObject().setLEVENTTEXT(JavaKeywords.getCodeText());
         return super.onOK();
     }
 

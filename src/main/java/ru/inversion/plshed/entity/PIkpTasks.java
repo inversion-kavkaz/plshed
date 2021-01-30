@@ -28,6 +28,7 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private Long ITASKSIDE;
     private Long BTASKRUNNING;
     private Long RUNNINGEVENT;
+    private Long FTASKRUN;
 
     /**Это транзиентные поля*/
     private LocalTime DTASKFROMTMV;
@@ -125,6 +126,9 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         this.RUNNINGEVENT = RUNNINGEVENT;
     }
 
+    @Column(name = "FTASKRUN", length = 0)
+    public Long getFTASKRUN() {return FTASKRUN == null ? 0L : FTASKRUN;}
+    public void setFTASKRUN(Long FTASKRUN) {this.FTASKRUN = FTASKRUN == null ? 0L : FTASKRUN;}
 
     @Transient
     @ProxyFor(columnName = "DTASKFROMTM")

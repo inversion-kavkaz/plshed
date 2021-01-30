@@ -104,12 +104,18 @@ public class Task {
                 } else if (initResult == -100) {
                     logger.info("init task error");
                 } else if (initResult == 0) {
+
                     /**Запуск процесса*/
                     runTask(pIkpTasks.getITASKID(), localTaskContext);
+
+                    /**Обновить строку*/
+                    taskCallBack.onTaskStart(pIkpTasks.getITASKID());
+
                     /**Запускаем работу с событиями*/
                     for (PIkpTaskEvents event : dsIKP_TASK_EVENTS.getRows()) {
                         if (event.getBEVENTENABLED() != EVENT_ENEBLED) continue;
                         initEvent(event.getIEVENTNPP(), localTaskContext);
+                        taskCallBack.onEventStart(event.getIEVENTID());
                         /**Если это наш скритп запускаем обработку*/
                         if (event.getIEVENTTYPE() == EVENT_TYPE)
                             eventResult = runEventScript(event, eventResult);
@@ -134,11 +140,13 @@ public class Task {
                     }
                     finishTask(pIkpTasks.getITASKID(), localTaskContext);
                 }
-                taskCallBack.onTaskFinish(initResult);
+                taskCallBack.onTaskFinish(pIkpTasks.getITASKID(),initResult);
+                logger.info(String.format("Task result %d", initResult));
                 if (startType == StartType.Timer)
                     setNextStartDate();
                 isWork = false;
             } finally {
+                finishTask(pIkpTasks.getITASKID(), localTaskContext);
                 localTaskContext.close();
                 logger.info(String.format("Stop thread is end task id: %d sessionID: %d is closed", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
             }

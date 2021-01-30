@@ -17,7 +17,7 @@ import java.util.Map;
  */
 
 public class TasksContainer {
-    private final int WAIT_SECOND = 60;
+    private final int WAIT_SECOND = 30;
     private final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm";
 
     private Map<Long, Task> tasksList = new HashMap<>();
@@ -41,7 +41,7 @@ public class TasksContainer {
     }
 
     public Task startTask(Long taskId) {
-        return tasksList.get(taskId).startTask(Task.StartType.Timer);
+        return tasksList.get(taskId).startTask(Task.StartType.Forced);
     }
 
     public void updateTask(PIkpTasks pIkpTasks) {
@@ -68,6 +68,7 @@ public class TasksContainer {
                     if (task.getNextStart() != null) {
                         String nextDate = task.getNextStart().format(formatter);
                         if (nowDate.equals(nextDate)) {
+                            logger.info(String.format("Start task %d",task.getPIkpTasks().getITASKID()));
                             task.startTask(Task.StartType.Timer);
                         }
                     }

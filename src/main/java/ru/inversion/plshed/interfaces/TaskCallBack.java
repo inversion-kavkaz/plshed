@@ -8,6 +8,8 @@ package ru.inversion.plshed.interfaces;
 
 
 public interface TaskCallBack {
-    void onTaskFinish(Long code);
+    void onTaskStart(Long taskId);
+    void onTaskFinish(Long taskId,Long code);
+    void onEventStart(Long enentID);
     void onEventFinish(Long enentID);
 }
