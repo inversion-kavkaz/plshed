@@ -128,7 +128,7 @@
                   <content>
                     <AnchorPane>
                         <children>
-                              <VBox prefHeight="221.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <StackPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0">
                                        <children>
@@ -158,7 +158,7 @@
                                           </HBox>
                                        </children>
                                     </StackPane>
-                                  <JInvTable fx:id="IKP_LOG" prefHeight="267.0" prefWidth="798.0" tableMenuButtonVisible="true">
+                                  <JInvTable fx:id="IKP_LOG" tableMenuButtonVisible="true">
                                       <columns>
                                           <JInvTableColumn fx:id="SESSID" fieldName="SESSID" text="%SESSID" />
                                           <JInvTableColumn fx:id="STRNO" fieldName="STRNO" text="%STRNO" />

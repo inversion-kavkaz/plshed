@@ -31,7 +31,8 @@ import static ru.inversion.plshed.utils.SqlUtils.*;
 
 @Data
 public class Task {
-    private final Long START_LOG_LEVEL = 3L;
+    /**ALL 1, DEBUG 2, INFO 3,ERROR 4*/
+    private final Long START_LOG_LEVEL = 4L;
     private final Long EVENT_ENEBLED = 1L;
     private final Long EVENT_TYPE = 2L;
 

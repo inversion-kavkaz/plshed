@@ -22,6 +22,7 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private String CTASKNAME;
     private Long ITASKPERIOD;
     private LocalDate DTASKFROMDT;
+    private LocalDate DTASKTODT;
     private LocalDateTime DTASKFROMTM;
     private Long ITASKFREQUENCY;
     private Long ITASKINTERVAL;
@@ -29,6 +30,7 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private Long BTASKRUNNING;
     private Long RUNNINGEVENT;
     private Long FTASKRUN;
+    private String EXCEPTDAY;
 
     /**Это транзиентные поля*/
     private LocalTime DTASKFROMTMV;
@@ -73,6 +75,10 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     public void setDTASKFROMDT(LocalDate val) {
         DTASKFROMDT = val;
     }
+
+    @Column(name = "DTASKTODT")
+    public LocalDate getDTASKTODT() {return DTASKTODT;}
+    public void setDTASKTODT(LocalDate val) {DTASKTODT = val;}
 
     @Column(name = "DTASKFROMTM")
     public LocalDateTime getDTASKFROMTM() {
@@ -129,6 +135,10 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     @Column(name = "FTASKRUN", length = 0)
     public Long getFTASKRUN() {return FTASKRUN == null ? 0L : FTASKRUN;}
     public void setFTASKRUN(Long FTASKRUN) {this.FTASKRUN = FTASKRUN == null ? 0L : FTASKRUN;}
+
+    @Column(name = "EXCEPTDAY")
+    public String getEXCEPTDAY() {return EXCEPTDAY != null ? EXCEPTDAY : "" ;}
+    public void setEXCEPTDAY(String EXCEPTDAY) {this.EXCEPTDAY = EXCEPTDAY;}
 
     @Transient
     @ProxyFor(columnName = "DTASKFROMTM")
