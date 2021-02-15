@@ -2,11 +2,18 @@ package ru.inversion.plshed.userInterfaces.mainui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.HBox;
 import ru.inversion.fx.app.AppException;
 import ru.inversion.fx.form.JInvFXFormController;
-import ru.inversion.fx.form.controls.*;
+import ru.inversion.fx.form.controls.JInvCalendar;
+import ru.inversion.fx.form.controls.JInvComboBox;
+import ru.inversion.fx.form.controls.JInvLongField;
+import ru.inversion.fx.form.controls.JInvTimeField;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.entity.lovEntity.*;
+
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import static lovUtils.LovUtils.initCombobox;
 
@@ -27,7 +34,7 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>{
     @FXML CheckBox FRI;
     @FXML CheckBox SAT;
     @FXML CheckBox SUN;
-    @FXML JInvTextField EXCEPTDAY;
+    @FXML HBox DAYCHECK;
     @FXML JInvCalendar DTASKFROMDT;
     @FXML  JInvLongField ITASKINTERVAL;
     @FXML JInvComboBox<Long, String> ITASKPERIOD;
@@ -50,14 +57,11 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>{
     @Override
     protected void afterInit() throws AppException {
         super.afterInit();
-        String str = EXCEPTDAY.getText();
-        if(str.contains("1")) MON.setSelected(true);
-        if(str.contains("2")) TUE.setSelected(true);
-        if(str.contains("3")) WED.setSelected(true);
-        if(str.contains("4")) THU.setSelected(true);
-        if(str.contains("5")) FRI.setSelected(true);
-        if(str.contains("6")) SAT.setSelected(true);
-        if(str.contains("7")) SUN.setSelected(true);
+        Arrays.asList(getFXEntity().getValue("EXCEPTDAY").toString().split(""))
+                .forEach(a -> {
+                    if(!a.isEmpty())
+                        ((CheckBox)DAYCHECK.getChildren().get(Integer.valueOf(a) - 1)).setSelected(true);
+                });
     }
 
     private void initComboBox() throws ru.inversion.dataset.DataSetException {
@@ -79,14 +83,12 @@ public class EditIkpTasksController extends JInvFXFormController <PIkpTasks>{
     @Override
     protected boolean onOK() {
         StringBuilder resultDayString = new StringBuilder();
-        if(MON.isSelected()) resultDayString.append(1);
-        if(TUE.isSelected()) resultDayString.append(2);
-        if(WED.isSelected()) resultDayString.append(3);
-        if(THU.isSelected()) resultDayString.append(4);
-        if(FRI.isSelected()) resultDayString.append(5);
-        if(SAT.isSelected()) resultDayString.append(6);
-        if(SUN.isSelected()) resultDayString.append(7);
-        EXCEPTDAY.setText(resultDayString.toString());
+        IntStream.range(0,7)
+                .forEach(p -> {
+                    if(((CheckBox)DAYCHECK.getChildren().get(p)).isSelected())
+                        resultDayString.append(p + 1);
+                });
+        getFXEntity().setValue("EXCEPTDAY",resultDayString.toString());
         return super.onOK();
     }
 }

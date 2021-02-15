@@ -34,27 +34,34 @@ public class JavaKeywords {
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while", "String"
+            "transient", "try", "void", "volatile", "while", "String",
+            "varchar2","number","boolean"
     };
     private static final String[] FUNCTIONS = new String[]{
             "CallSqlFunc", "wait", "isFileExist"
     };
 
+    private static final String[] PLSQL_FUNCTIONS = new String[]{
+            "select", "update", "delete", "from"
+    };
+
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
     private static final String FUNCTION_PATTERN = "\\b(" + String.join("|", FUNCTIONS) + ")\\b";
-    private static final String PAREN_PATTERN = "\\(|\\)";
+    private static final String PLSQL_FUNCTION_PATTERN = "\\b(" + String.join("|", PLSQL_FUNCTIONS) + ")\\b";
+    private static final String PAREN_PATTERN = "\\(|\\)" + "|" + "\\*";
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";
     private static final String SEMICOLON_PATTERN = "\\;";
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/"   // for whole text processing (text blocks)
-            + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";  // for visible paragraph processing (line by line)
+            + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)" + "|" + "--[^\n]*";  // for visible paragraph processing (line by line)
 
 
     private static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
                     + "|(?<FUNCTION>" + FUNCTION_PATTERN + ")"
+                    + "|(?<PLSQLFUNCTION>" + PLSQL_FUNCTION_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
                     + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
@@ -113,6 +120,7 @@ public class JavaKeywords {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
                             matcher.group("FUNCTION") != null ? "function" :
+                                matcher.group("PLSQLFUNCTION") != null ? "plsql_function" :
                                     matcher.group("PAREN") != null ? "paren" :
                                             matcher.group("BRACE") != null ? "brace" :
                                                     matcher.group("BRACKET") != null ? "bracket" :

@@ -55,7 +55,14 @@
                      </HBox.margin>
                   </JInvLabel>
       <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" required="true" />
-                  <JInvLabel fx:id="lblSTOPEDEVENT" text="%STOPEDEVENT">
+
+                   <JInvLabel fx:id="lblDTASKTOTM" layoutX="122.0" layoutY="15.0" text="%DTASKTOTM">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></JInvLabel>
+                  <JInvTimeField fx:id="DTASKTOTMV" fieldName="DTASKTOTMV" layoutX="223.0" layoutY="10.0"/>
+
+                   <JInvLabel fx:id="lblSTOPEDEVENT" text="%STOPEDEVENT">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -65,7 +72,7 @@
                   <JInvLabel fx:id="lblRUNNINGEVENT1" disable="true" layoutX="562.0" layoutY="10.0" text="%RUNNINGEVENT" visible="false" />
                </children>
             </HBox>
-            <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <HBox fx:id="DAYCHECK" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
                   <CheckBox fx:id="MON" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Пн." textOverrun="CLIP">
                      <HBox.margin>
@@ -87,15 +94,14 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></CheckBox>
-                  <CheckBox fx:id="SAT" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="138.0" layoutY="10.0" mnemonicParsing="false" text="Сб.">
+                  <CheckBox fx:id="SAT" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="138.0" layoutY="10.0" mnemonicParsing="false" text="Сб." textFill="#9d0208">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></CheckBox>
-                  <CheckBox fx:id="SUN" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="202.0" layoutY="10.0" mnemonicParsing="false" text="Вс.">
+                  <CheckBox fx:id="SUN" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="202.0" layoutY="10.0" mnemonicParsing="false" text="Вс." textFill="#9d0208">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin></CheckBox>
-                  <JInvTextField fx:id="EXCEPTDAY" fieldName="EXCEPTDAY" visible="false" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

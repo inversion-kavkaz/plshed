@@ -67,7 +67,12 @@ public class TasksContainer {
                 tasksList.forEach((id, task) -> {
                     if (task.getNextStart() != null) {
                         String nextDate = task.getNextStart().format(formatter);
-                        if (nowDate.equals(nextDate)) {
+//                        logger.info(String.format("nextDate: %s nowDate: %s exceptday: %s nowDay: %s",nextDate,nowDate,
+//                                task.getPIkpTasks().getEXCEPTDAY(),String.valueOf(now.getDayOfWeek().getValue())));
+                        if (nowDate.equals(nextDate)
+                                && !task.getPIkpTasks().getEXCEPTDAY().contains(String.valueOf(now.getDayOfWeek().getValue()))
+                                && (task.getPIkpTasks().getDTASKTODT() == null
+                                || task.getPIkpTasks().getDTASKTODT().isAfter(now.toLocalDate()))) {
                             logger.info(String.format("Start task %d",task.getPIkpTasks().getITASKID()));
                             task.startTask(Task.StartType.Timer);
                         }

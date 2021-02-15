@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.JInvFXFormController;
 import ru.inversion.fx.form.controls.JInvButton;
@@ -18,6 +19,8 @@ import ru.inversion.fx.form.controls.JInvTextArea;
 import ru.inversion.fx.form.controls.JInvTextField;
 import ru.inversion.fx.form.lov.JInvDirectoryChooserLov;
 import ru.inversion.fx.form.valid.Validator;
+import ru.inversion.fxn3d.action.ActionCheckSQL;
+import ru.inversion.fxn3d.action.PSQL;
 import ru.inversion.icons.enums.FontAwesome;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventEnebledTextValue;
@@ -81,7 +84,12 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     AnchorPane TEXTANCHORPANE;
 
     private Boolean isDebugOpen = false;
-    private final Long ENABLED_SCRIPT = 2L;
+    private final Long JAVA_SCRIPT = 2L;
+    private final Long PLSQL_SCRIPT = 1L;
+    private final double OPEN_DEBUG = 0.5d;
+    private final double CLOSE_DEBUG = 0.9225d;
+
+    
 
 
     @Override
@@ -91,6 +99,14 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
         initInnerButton();
         initCustomButtons();
         initRichText();
+        initDeviderPosition();
+    }
+
+    private void initDeviderPosition() {
+        SCRIPTSPLIT.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
+            SCRIPTSPLIT.getDividers().get(0).setPosition(isDebugOpen ? OPEN_DEBUG: CLOSE_DEBUG) ;
+           //System.out.println(String.format("observable: %s  oldValue: %s  newValue: %s",observable.getValue(),oldValue,newValue));
+        });
     }
 
     private void initRichText() {
@@ -127,8 +143,8 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     }
 
     private void initComboBox() throws ru.inversion.dataset.DataSetException {
-        initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event ->
-                TESTBUTTON.setDisable(!(((JInvComboBox) event.getSource()).getValue() == ENABLED_SCRIPT))
+        initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event ->{}
+                //TESTBUTTON.setDisable(!(((JInvComboBox) event.getSource()).getValue() == JAVA_SCRIPT))
         );
         initCombobox(getTaskContext(), IEVENTFILEDIR, PIkpEventFileTypeTextValue.class);
         initCombobox(getTaskContext(), BEVENTENABLED, PIkpEventEnebledTextValue.class);
@@ -155,6 +171,21 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
 
     public void testCode(ActionEvent actionEvent) {
         TESTAREA.clear();
+        if(IEVENTTYPE.getValue() == JAVA_SCRIPT)
+            javaCodeTest();
+        if(IEVENTTYPE.getValue() == PLSQL_SCRIPT)
+        plsqlCodeTest();
+        
+
+    }
+
+    private void plsqlCodeTest() {
+        ActionCheckSQL checkSQL = new ActionCheckSQL(this::preSQL);
+        checkSQL.setActionContext(getViewContext(), getTaskContext());
+        checkSQL.handle();
+    }
+
+    private void javaCodeTest() {
         Object result = null;
         String compileText = "";
         String codeText = JavaKeywords.getCodeText();
@@ -171,7 +202,6 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
             compileText = "Compile:\n" + scriptRunner.checkCodeResult + "\n";
             TESTAREA.setText(compileText.concat(String.valueOf(result)));
         }
-
     }
 
     public void onTabSelect(Event event) {
@@ -182,15 +212,21 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     protected boolean onOK() {
         if(JavaKeywords.isCodeChange())
             LEVENTTEXT.setText(JavaKeywords.getCodeText());
-//            //getFXEntity().getBaseEntity().setLEVENTTEXT(JavaKeywords.getCodeText());
-//            //getDataObject().setLEVENTTEXT(JavaKeywords.getCodeText());
         return super.onOK();
     }
 
     @FXML
     private void openCloseDebugWin() {
-        SCRIPTSPLIT.setDividerPositions(isDebugOpen ? 0.9225d : 0.5d);
+        SCRIPTSPLIT.setDividerPositions(isDebugOpen ? CLOSE_DEBUG : OPEN_DEBUG);
         isDebugOpen = !isDebugOpen;
+    }
+
+    private void preSQL(PSQL p) {
+        String codeText = JavaKeywords.getCodeText();
+        if (codeText.isEmpty()) throw new StopExecuteActionBiCompException();
+        p.setName("PL/SQL CODE");
+        p.setStatement(codeText);
+        p.setType(PSQL.TypeEnum.PLSQL);
     }
 
 }

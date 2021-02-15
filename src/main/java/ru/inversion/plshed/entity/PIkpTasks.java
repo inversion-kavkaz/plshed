@@ -24,6 +24,8 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private LocalDate DTASKFROMDT;
     private LocalDate DTASKTODT;
     private LocalDateTime DTASKFROMTM;
+    private LocalDateTime DTASKTOTM;
+
     private Long ITASKFREQUENCY;
     private Long ITASKINTERVAL;
     private Long ITASKSIDE;
@@ -33,7 +35,6 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private String EXCEPTDAY;
 
     /**Это транзиентные поля*/
-    private LocalTime DTASKFROMTMV;
     private Long LOGLEVEL;
     LocalDateTime DTASKFROMTMMV;
 
@@ -84,10 +85,13 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     public LocalDateTime getDTASKFROMTM() {
         return DTASKFROMTM;
     }
-
     public void setDTASKFROMTM(LocalDateTime val) {
         DTASKFROMTM = val;
     }
+
+    @Column(name = "DTASKTOTM")
+    public LocalDateTime getDTASKTOTM() {return DTASKTOTM;}
+    public void setDTASKTOTM(LocalDateTime val) {DTASKTOTM = val;}
 
     @Column(name = "ITASKFREQUENCY", length = 0)
     public Long getITASKFREQUENCY() {
@@ -146,6 +150,10 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         return  DTASKFROMTM == null ? null : DTASKFROMTM.toLocalTime();
     }
     public void setDTASKFROMTMV(LocalTime val) {  DTASKFROMTM = LocalDateTime.of(DTASKFROMDT, val);}
+
+    @ProxyFor(columnName = "DTASKTOTM")
+    public LocalTime getDTASKTOTMV() {return  DTASKTOTM == null ? null : DTASKTOTM.toLocalTime();}
+    public void setDTASKTOTMV(LocalTime val) {DTASKTOTM = val != null ? LocalDateTime.of(DTASKFROMDT, val) : null;}
 
     public LocalDateTime getDTASKFROMTMMV() {return  DTASKFROMTMMV == null ? DTASKFROMTM : DTASKFROMTMMV; }
     public void setDTASKFROMTMMV(LocalDateTime val) {  DTASKFROMTMMV = val;}

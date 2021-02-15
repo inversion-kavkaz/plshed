@@ -36,7 +36,7 @@
         <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
-
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXN3D_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\FXN3D.jar</systemPath></dependency>
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>
@@ -73,6 +73,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
+                    <finalName>${project.name}</finalName>
                     <archive>
                         <manifest>
                             <mainClass>ru.inversion.plshed.PLShedMain</mainClass>
@@ -90,6 +91,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
