@@ -81,7 +81,7 @@
                             <customClasspathLayout>$${project.artifactId}.$${project.packaging}</customClasspathLayout>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>JInvFore.jar FXbicomp.jar lib\manifest-reader.jar lib\lovUtils.jar lib\tools.jar</Class-Path>
+                            <Class-Path>JInvFore.jar FXbicomp.jar FXN3D.jar lib\manifest-reader.jar lib\lovUtils.jar lib\tools.jar</Class-Path>
                             <Codebase>*</Codebase><Permissions>all-permissions</Permissions>
                             <Build>${buildNumber}</Build>
                             <Version>${project.version}</Version>

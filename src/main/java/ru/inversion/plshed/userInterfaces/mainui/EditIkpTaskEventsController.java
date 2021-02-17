@@ -1,22 +1,17 @@
 package ru.inversion.plshed.userInterfaces.mainui;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.JInvFXFormController;
-import ru.inversion.fx.form.controls.JInvButton;
-import ru.inversion.fx.form.controls.JInvComboBox;
-import ru.inversion.fx.form.controls.JInvTextArea;
-import ru.inversion.fx.form.controls.JInvTextField;
+import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.lov.JInvDirectoryChooserLov;
 import ru.inversion.fx.form.valid.Validator;
 import ru.inversion.fxn3d.action.ActionCheckSQL;
@@ -43,12 +38,26 @@ import static ru.inversion.plshed.utils.ButtonUtils.setInnerGraphicButton;
  * @project plshed
  */
 
-public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskEvents> {
-//    @FXML JInvLongField IEVENTID;
+public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEvents> {
+    //    @FXML JInvLongField IEVENTID;
 //    @FXML JInvLongField IEVENTTASKID;
 //    @FXML JInvLongField IEVENTNPP;
 //    @FXML JInvTextField CEVENTNAME;
-//    @FXML JInvLongField IEVENTPRESETID;
+    @FXML
+    GridPane MAINGRID;
+    @FXML
+    JInvLabel lblIEVENTPRESETID;
+    @FXML
+    JInvLongField IEVENTPRESETID;
+    @FXML
+    JInvLabel lblCEVENTINDIR;
+    @FXML
+    JInvLabel lblCEVENTOUTDIR;
+    @FXML
+    JInvLabel lblCEVENTARHDIR;
+    @FXML
+    JInvLabel lblLEVENTTEXT;
+
 
     @FXML
     private TextArea TESTAREA;
@@ -84,12 +93,17 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     AnchorPane TEXTANCHORPANE;
 
     private Boolean isDebugOpen = false;
+    private final Long PRESET = 0L;
     private final Long JAVA_SCRIPT = 2L;
     private final Long PLSQL_SCRIPT = 1L;
     private final double OPEN_DEBUG = 0.5d;
     private final double CLOSE_DEBUG = 0.9225d;
+    private final Long FILE_UPLOAD = 1L;
+    private final Long FILE_DOWNLOAD = 0L;
+    private final Long FILE_NONE = -1L;
+    private final SimpleBooleanProperty isPrest = new SimpleBooleanProperty();
 
-    
+
 
 
     @Override
@@ -100,21 +114,35 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
         initCustomButtons();
         initRichText();
         initDeviderPosition();
+        initBinding();
+    }
+
+    private void initBinding() {
+        lblCEVENTINDIR.visibleProperty().bind(CEVENTINDIR.visibleProperty());
+        lblCEVENTOUTDIR.visibleProperty().bind(CEVENTOUTDIR.visibleProperty());
+        lblCEVENTARHDIR.visibleProperty().bind(CEVENTARHDIR.visibleProperty());
+        lblIEVENTPRESETID.visibleProperty().bind(IEVENTPRESETID.visibleProperty());
+
+        IEVENTFILEDIR.disableProperty().bind(isPrest);
+        IEVENTPRESETID.visibleProperty().bind(isPrest);
+        COMMANDBAR.visibleProperty().bind(isPrest.not());
+        SCRIPTSPLIT.visibleProperty().bind(isPrest.not());
+
     }
 
     private void initDeviderPosition() {
         SCRIPTSPLIT.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
-            SCRIPTSPLIT.getDividers().get(0).setPosition(isDebugOpen ? OPEN_DEBUG: CLOSE_DEBUG) ;
-           //System.out.println(String.format("observable: %s  oldValue: %s  newValue: %s",observable.getValue(),oldValue,newValue));
+            SCRIPTSPLIT.getDividers().get(0).setPosition(isDebugOpen ? OPEN_DEBUG : CLOSE_DEBUG);
+            //System.out.println(String.format("observable: %s  oldValue: %s  newValue: %s",observable.getValue(),oldValue,newValue));
         });
     }
 
     private void initRichText() {
         StackPane pane = JavaKeywords.getCodeArea(getDataObject().getLEVENTTEXT() != null ? getDataObject().getLEVENTTEXT() : "");
-        AnchorPane.setTopAnchor(pane,0d);
-        AnchorPane.setRightAnchor(pane,0d);
-        AnchorPane.setBottomAnchor(pane,0d);
-        AnchorPane.setLeftAnchor(pane,0d);
+        AnchorPane.setTopAnchor(pane, 0d);
+        AnchorPane.setRightAnchor(pane, 0d);
+        AnchorPane.setBottomAnchor(pane, 0d);
+        AnchorPane.setLeftAnchor(pane, 0d);
         TEXTANCHORPANE.getChildren().add(pane);
     }
 
@@ -143,10 +171,18 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
     }
 
     private void initComboBox() throws ru.inversion.dataset.DataSetException {
-        initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event ->{}
-                //TESTBUTTON.setDisable(!(((JInvComboBox) event.getSource()).getValue() == JAVA_SCRIPT))
+        initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event -> {
+            isPrest.setValue(((JInvComboBox) event.getSource()).getValue() == PRESET);
+            if(isPrest.get()) IEVENTFILEDIR.setValue(-1L);
+            COMMANDBARANCHOR.setStyle(isPrest.get() ? "-fx-border-color: GREEN" : "-fx-border-color: NONE");
+            lblLEVENTTEXT.setText(isPrest.get() ? getBundleString("LEVENTTEXT2"): getBundleString("LEVENTTEXT"));
+            }
         );
-        initCombobox(getTaskContext(), IEVENTFILEDIR, PIkpEventFileTypeTextValue.class);
+        initCombobox(getTaskContext(), IEVENTFILEDIR, PIkpEventFileTypeTextValue.class).setOnAction(event -> {
+            CEVENTOUTDIR.setVisible((((JInvComboBox) event.getSource()).getValue() == FILE_UPLOAD));
+            CEVENTINDIR.setVisible((((JInvComboBox) event.getSource()).getValue() == FILE_DOWNLOAD));
+            CEVENTARHDIR.setVisible((((JInvComboBox) event.getSource()).getValue() == FILE_DOWNLOAD));
+        });
         initCombobox(getTaskContext(), BEVENTENABLED, PIkpEventEnebledTextValue.class);
     }
 
@@ -171,12 +207,10 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
 
     public void testCode(ActionEvent actionEvent) {
         TESTAREA.clear();
-        if(IEVENTTYPE.getValue() == JAVA_SCRIPT)
+        if (IEVENTTYPE.getValue() == JAVA_SCRIPT)
             javaCodeTest();
-        if(IEVENTTYPE.getValue() == PLSQL_SCRIPT)
-        plsqlCodeTest();
-        
-
+        if (IEVENTTYPE.getValue() == PLSQL_SCRIPT)
+            plsqlCodeTest();
     }
 
     private void plsqlCodeTest() {
@@ -210,7 +244,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController <PIkpTaskE
 
     @Override
     protected boolean onOK() {
-        if(JavaKeywords.isCodeChange())
+        if (JavaKeywords.isCodeChange())
             LEVENTTEXT.setText(JavaKeywords.getCodeText());
         return super.onOK();
     }

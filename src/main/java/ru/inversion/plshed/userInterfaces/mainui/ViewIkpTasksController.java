@@ -296,7 +296,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         dataSetUtils.convertTableValue(ITASKPERIOD, PIkpPeriodTextValue.class, getTaskContext(), true);
         dataSetUtils.convertTableValue(ITASKSIDE, PIkpRunningSideTextValue.class, getTaskContext(), true);
         dataSetUtils.convertTableValue(ITASKFREQUENCY, PIkpFrequencyTextValue.class, getTaskContext(), true);
-        dataSetUtils.convertTableValue(RUNNINGEVENT, PIkpRunningEventTextValue.class, getTaskContext(), true);
+//        dataSetUtils.convertTableValue(RUNNINGEVENT, PIkpRunningEventTextValue.class, getTaskContext(), true);
 
         /** Таблица событий */
         convertTableValue(IEVENTTYPE, PIkpEventTypeTextValue.class, getTaskContext(), true);
