@@ -1,0 +1,649 @@
+Index: plshed.iml
+===================================================================
+--- plshed.iml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ plshed.iml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
+@@ -1,13 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="JAVA_MODULE" version="4">
+-  <component name="AutoImportedSourceRoots">
+-    <option name="directories">
+-      <list>
+-        <option value="D:\InvModules\plshed/src/main/java" />
+-        <option value="D:\InvModules\plshed/src/main/kotlin" />
+-        <option value="D:\InvModules\plshed/src/test/java" />
+-        <option value="D:\InvModules\plshed/src/test/kotlin" />
+-      </list>
+-    </option>
+-  </component>
+-</module>
+\ No newline at end of file
+Index: buildNumber.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>NATIVE_TO_ASCII_windows-1251
+===================================================================
+--- buildNumber.properties	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ buildNumber.properties	(date 1613117370811)
+@@ -1,3 +1,3 @@
+ #maven.buildNumber.plugin properties file
+-#Thu Jan 28 15:24:38 MSK 2021
+-buildNumber=106
++#Fri Feb 12 11:09:30 MSK 2021
++buildNumber=111
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ .idea/misc.xml	(date 1613370455776)
+@@ -11,7 +11,7 @@
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_9" default="false" project-jdk-name="1.8 (3)" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_9" default="false" project-jdk-name="1.8.0_251" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/main/resources/styles/java-keywords.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/styles/java-keywords.css	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/resources/styles/java-keywords.css	(date 1612949325587)
+@@ -2,6 +2,10 @@
+     -fx-fill: green;
+     -fx-font-weight: bold;
+ }
++.plsql_function {
++    -fx-fill: darkblue;
++    -fx-font-weight: bold;
++}
+ .keyword {
+     -fx-fill: purple;
+     -fx-font-weight: bold;
+@@ -29,6 +33,6 @@
+ 	-fx-fill: cadetblue;
+ }
+ 
+-.paragraph-box:has-caret {
++.paragraph-box {
+     -fx-background-color: #f2f9fc;
+ }
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ .idea/compiler.xml	(date 1613374006969)
+@@ -8,6 +8,7 @@
+         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+         <outputRelativeToContentRoot value="true" />
+         <module name="plshed" />
++        <module name="PLShed" />
+       </profile>
+     </annotationProcessing>
+   </component>
+Index: src/main/java/ru/inversion/plshed/entity/PIkpTasks.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/inversion/plshed/entity/PIkpTasks.java	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/java/ru/inversion/plshed/entity/PIkpTasks.java	(date 1612944133813)
+@@ -24,6 +24,8 @@
+     private LocalDate DTASKFROMDT;
+     private LocalDate DTASKTODT;
+     private LocalDateTime DTASKFROMTM;
++    private LocalDateTime DTASKTOTM;
++
+     private Long ITASKFREQUENCY;
+     private Long ITASKINTERVAL;
+     private Long ITASKSIDE;
+@@ -33,7 +35,6 @@
+     private String EXCEPTDAY;
+ 
+     /**Это транзиентные поля*/
+-    private LocalTime DTASKFROMTMV;
+     private Long LOGLEVEL;
+     LocalDateTime DTASKFROMTMMV;
+ 
+@@ -84,11 +85,14 @@
+     public LocalDateTime getDTASKFROMTM() {
+         return DTASKFROMTM;
+     }
+-
+     public void setDTASKFROMTM(LocalDateTime val) {
+         DTASKFROMTM = val;
+     }
+ 
++    @Column(name = "DTASKTOTM")
++    public LocalDateTime getDTASKTOTM() {return DTASKTOTM;}
++    public void setDTASKTOTM(LocalDateTime val) {DTASKTOTM = val;}
++
+     @Column(name = "ITASKFREQUENCY", length = 0)
+     public Long getITASKFREQUENCY() {
+         return ITASKFREQUENCY;
+@@ -147,6 +151,10 @@
+     }
+     public void setDTASKFROMTMV(LocalTime val) {  DTASKFROMTM = LocalDateTime.of(DTASKFROMDT, val);}
+ 
++    @ProxyFor(columnName = "DTASKTOTM")
++    public LocalTime getDTASKTOTMV() {return  DTASKTOTM == null ? null : DTASKTOTM.toLocalTime();}
++    public void setDTASKTOTMV(LocalTime val) {DTASKTOTM = val != null ? LocalDateTime.of(DTASKFROMDT, val) : null;}
++
+     public LocalDateTime getDTASKFROMTMMV() {return  DTASKFROMTMMV == null ? DTASKFROMTM : DTASKFROMTMMV; }
+     public void setDTASKFROMTMMV(LocalDateTime val) {  DTASKFROMTMMV = val;}
+ 
+Index: src/main/java/ru/inversion/plshed/utils/JavaKeywords.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/inversion/plshed/utils/JavaKeywords.java	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/java/ru/inversion/plshed/utils/JavaKeywords.java	(date 1612949500005)
+@@ -34,27 +34,34 @@
+             "new", "package", "private", "protected", "public",
+             "return", "short", "static", "strictfp", "super",
+             "switch", "synchronized", "this", "throw", "throws",
+-            "transient", "try", "void", "volatile", "while", "String"
++            "transient", "try", "void", "volatile", "while", "String",
++            "varchar2","number","boolean"
+     };
+     private static final String[] FUNCTIONS = new String[]{
+             "CallSqlFunc", "wait", "isFileExist"
+     };
+ 
++    private static final String[] PLSQL_FUNCTIONS = new String[]{
++            "select", "update", "delete", "from"
++    };
++
+ 
+     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+     private static final String FUNCTION_PATTERN = "\\b(" + String.join("|", FUNCTIONS) + ")\\b";
+-    private static final String PAREN_PATTERN = "\\(|\\)";
++    private static final String PLSQL_FUNCTION_PATTERN = "\\b(" + String.join("|", PLSQL_FUNCTIONS) + ")\\b";
++    private static final String PAREN_PATTERN = "\\(|\\)" + "|" + "\\*";
+     private static final String BRACE_PATTERN = "\\{|\\}";
+     private static final String BRACKET_PATTERN = "\\[|\\]";
+     private static final String SEMICOLON_PATTERN = "\\;";
+     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/"   // for whole text processing (text blocks)
+-            + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";  // for visible paragraph processing (line by line)
++            + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)" + "|" + "--[^\n]*";  // for visible paragraph processing (line by line)
+ 
+ 
+     private static final Pattern PATTERN = Pattern.compile(
+             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+                     + "|(?<FUNCTION>" + FUNCTION_PATTERN + ")"
++                    + "|(?<PLSQLFUNCTION>" + PLSQL_FUNCTION_PATTERN + ")"
+                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
+                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
+                     + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
+@@ -113,6 +120,7 @@
+             String styleClass =
+                     matcher.group("KEYWORD") != null ? "keyword" :
+                             matcher.group("FUNCTION") != null ? "function" :
++                                matcher.group("PLSQLFUNCTION") != null ? "plsql_function" :
+                                     matcher.group("PAREN") != null ? "paren" :
+                                             matcher.group("BRACE") != null ? "brace" :
+                                                     matcher.group("BRACKET") != null ? "bracket" :
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(date 1613215324756)
++++ .idea/jarRepositories.xml	(date 1613215324756)
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Central Repository" />
++      <option name="url" value="https://repo.maven.apache.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/encodings.xml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ .idea/encodings.xml	(date 1613215324729)
+@@ -2,6 +2,8 @@
+ <project version="4">
+   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="windows-1251">
+     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+     <file url="PROJECT" charset="UTF-8" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/test/java/ru/inversion/plshed/utils/DateUtilsTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/ru/inversion/plshed/utils/DateUtilsTest.java	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/test/java/ru/inversion/plshed/utils/DateUtilsTest.java	(date 1613119582032)
+@@ -1,57 +1,6 @@
+ package ru.inversion.plshed.utils;
+ 
+ 
+-import org.junit.Test;
+-
+-import java.util.*;
+-import java.util.stream.Collectors;
+-import java.util.stream.IntStream;
+-import java.util.stream.Stream;
+-
+ public class DateUtilsTest {
+ 
+- @Test
+- public void streamTest(){
+-  Map<Integer,String> map = new HashMap<Integer,String>(){{
+-   put(1,"One");
+-   put(2,"Two");
+-   put(3,"Three");
+-   put(4,"Four");
+-   put(5,"Five");
+-  }};
+-
+-
+-  Stream stream = map.entrySet().stream().flatMap(a -> Stream.of(a.getKey(),a.getValue()));
+-         stream.forEach(System.out::println);
+-
+-  IntStream intStream = IntStream.generate(() -> {return 100;});
+-
+-  Stream intStream1 = Stream.of(100,200,300,400,500);
+-  intStream1.flatMap(a -> Stream.of(a,((int)a + 50))).forEach(System.out::println);
+-
+-  System.out.println(String.join("|", "erwer", "rweterer", "645464"));
+- }
+-
+- @Test
+- public void stringTest(){
+-  List<String> list = new ArrayList<String>(){{
+-   add("1");add("2");add("3");add("4");add("5");add("6");add("7");add("8");
+-  }};
+-
+-  list.forEach(System.out::print);
+- System.out.println("");
+- System.out.println(String.format("========================================================="));
+- System.out.println(String.format("joining: %s",list.stream().collect(Collectors.joining(",","(",")"))));
+- System.out.println(String.format("========================================================="));
+- System.out.println(String.format("count: %s",list.stream().mapToInt(Integer::valueOf).count()));
+- System.out.println(String.format("========================================================="));
+- System.out.println(String.format("average: %s",list.stream().mapToInt(Integer::valueOf).average()));
+- System.out.println(String.format("========================================================="));
+-
+- list.forEach(System.out::println);
+- }
+-
+-
+-
+-
+  }
+Index: src/main/resources/ru/inversion/plshed/utils/plsql/def.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/ru/inversion/plshed/utils/plsql/def.xml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/resources/ru/inversion/plshed/utils/plsql/def.xml	(date 1612946416210)
+@@ -120,6 +120,18 @@
+             end;
+         ]]></script>
+     </expression>
++    <!-- Проверка SQL -->
++    <expression name="Check_SQL" lang="PL/SQL">
++        <script><![CDATA[
++            begin
++              N3D_FX_Pkg.Check_SQL(:sql,:type,:name,:result,:message);
++            end;
++        ]]></script>
++        <parameters>
++            <parameter name="result" mode="OUT" sqlType="BIGINT" javaType="Long" />
++            <parameter name="message" mode="OUT" sqlType="VARCHAR" javaType="String" />
++        </parameters>
++    </expression>
+ 
+ 
+ </sql_expr_list>
+Index: src/main/java/ru/inversion/plshed/model/TasksContainer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/inversion/plshed/model/TasksContainer.java	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/java/ru/inversion/plshed/model/TasksContainer.java	(date 1612941314230)
+@@ -67,7 +67,12 @@
+                 tasksList.forEach((id, task) -> {
+                     if (task.getNextStart() != null) {
+                         String nextDate = task.getNextStart().format(formatter);
+-                        if (nowDate.equals(nextDate)) {
++//                        logger.info(String.format("nextDate: %s nowDate: %s exceptday: %s nowDay: %s",nextDate,nowDate,
++//                                task.getPIkpTasks().getEXCEPTDAY(),String.valueOf(now.getDayOfWeek().getValue())));
++                        if (nowDate.equals(nextDate)
++                                && !task.getPIkpTasks().getEXCEPTDAY().contains(String.valueOf(now.getDayOfWeek().getValue()))
++                                && (task.getPIkpTasks().getDTASKTODT() == null
++                                || task.getPIkpTasks().getDTASKTODT().isAfter(now.toLocalDate()))) {
+                             logger.info(String.format("Start task %d",task.getPIkpTasks().getITASKID()));
+                             task.startTask(Task.StartType.Timer);
+                         }
+Index: src/main/resources/ru/inversion/plshed/userInterfaces/mainui/fxml/EditIkpTasks.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/ru/inversion/plshed/userInterfaces/mainui/fxml/EditIkpTasks.fxml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/resources/ru/inversion/plshed/userInterfaces/mainui/fxml/EditIkpTasks.fxml	(date 1612943070463)
+@@ -55,7 +55,14 @@
+                      </HBox.margin>
+                   </JInvLabel>
+       <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" required="true" />
+-                  <JInvLabel fx:id="lblSTOPEDEVENT" text="%STOPEDEVENT">
++
++                   <JInvLabel fx:id="lblDTASKTOTM" layoutX="122.0" layoutY="15.0" text="%DTASKTOTM">
++                     <HBox.margin>
++                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
++                     </HBox.margin></JInvLabel>
++                  <JInvTimeField fx:id="DTASKTOTMV" fieldName="DTASKTOTMV" layoutX="223.0" layoutY="10.0"/>
++
++                   <JInvLabel fx:id="lblSTOPEDEVENT" text="%STOPEDEVENT">
+                      <HBox.margin>
+                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                      </HBox.margin>
+@@ -65,7 +72,7 @@
+                   <JInvLabel fx:id="lblRUNNINGEVENT1" disable="true" layoutX="562.0" layoutY="10.0" text="%RUNNINGEVENT" visible="false" />
+                </children>
+             </HBox>
+-            <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
++            <HBox fx:id="DAYCHECK" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                <children>
+                   <CheckBox fx:id="MON" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Пн." textOverrun="CLIP">
+                      <HBox.margin>
+@@ -87,15 +94,14 @@
+                      <HBox.margin>
+                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                      </HBox.margin></CheckBox>
+-                  <CheckBox fx:id="SAT" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="138.0" layoutY="10.0" mnemonicParsing="false" text="Сб.">
++                  <CheckBox fx:id="SAT" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="138.0" layoutY="10.0" mnemonicParsing="false" text="Сб." textFill="#9d0208">
+                      <HBox.margin>
+                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                      </HBox.margin></CheckBox>
+-                  <CheckBox fx:id="SUN" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="202.0" layoutY="10.0" mnemonicParsing="false" text="Вс.">
++                  <CheckBox fx:id="SUN" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="202.0" layoutY="10.0" mnemonicParsing="false" text="Вс." textFill="#9d0208">
+                      <HBox.margin>
+                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                      </HBox.margin></CheckBox>
+-                  <JInvTextField fx:id="EXCEPTDAY" fieldName="EXCEPTDAY" visible="false" />
+                </children>
+                <padding>
+                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+Index: src/main/java/ru/inversion/plshed/userInterfaces/mainui/EditIkpTasksController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/inversion/plshed/userInterfaces/mainui/EditIkpTasksController.java	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/java/ru/inversion/plshed/userInterfaces/mainui/EditIkpTasksController.java	(date 1612939084539)
+@@ -2,12 +2,19 @@
+ 
+ import javafx.fxml.FXML;
+ import javafx.scene.control.CheckBox;
++import javafx.scene.layout.HBox;
+ import ru.inversion.fx.app.AppException;
+ import ru.inversion.fx.form.JInvFXFormController;
+-import ru.inversion.fx.form.controls.*;
++import ru.inversion.fx.form.controls.JInvCalendar;
++import ru.inversion.fx.form.controls.JInvComboBox;
++import ru.inversion.fx.form.controls.JInvLongField;
++import ru.inversion.fx.form.controls.JInvTimeField;
+ import ru.inversion.plshed.entity.PIkpTasks;
+ import ru.inversion.plshed.entity.lovEntity.*;
+ 
++import java.util.Arrays;
++import java.util.stream.IntStream;
++
+ import static lovUtils.LovUtils.initCombobox;
+ 
+ 
+@@ -27,7 +34,7 @@
+     @FXML CheckBox FRI;
+     @FXML CheckBox SAT;
+     @FXML CheckBox SUN;
+-    @FXML JInvTextField EXCEPTDAY;
++    @FXML HBox DAYCHECK;
+     @FXML JInvCalendar DTASKFROMDT;
+     @FXML  JInvLongField ITASKINTERVAL;
+     @FXML JInvComboBox<Long, String> ITASKPERIOD;
+@@ -50,14 +57,11 @@
+     @Override
+     protected void afterInit() throws AppException {
+         super.afterInit();
+-        String str = EXCEPTDAY.getText();
+-        if(str.contains("1")) MON.setSelected(true);
+-        if(str.contains("2")) TUE.setSelected(true);
+-        if(str.contains("3")) WED.setSelected(true);
+-        if(str.contains("4")) THU.setSelected(true);
+-        if(str.contains("5")) FRI.setSelected(true);
+-        if(str.contains("6")) SAT.setSelected(true);
+-        if(str.contains("7")) SUN.setSelected(true);
++        Arrays.asList(getFXEntity().getValue("EXCEPTDAY").toString().split(""))
++                .forEach(a -> {
++                    if(!a.isEmpty())
++                        ((CheckBox)DAYCHECK.getChildren().get(Integer.valueOf(a) - 1)).setSelected(true);
++                });
+     }
+ 
+     private void initComboBox() throws ru.inversion.dataset.DataSetException {
+@@ -79,14 +83,12 @@
+     @Override
+     protected boolean onOK() {
+         StringBuilder resultDayString = new StringBuilder();
+-        if(MON.isSelected()) resultDayString.append(1);
+-        if(TUE.isSelected()) resultDayString.append(2);
+-        if(WED.isSelected()) resultDayString.append(3);
+-        if(THU.isSelected()) resultDayString.append(4);
+-        if(FRI.isSelected()) resultDayString.append(5);
+-        if(SAT.isSelected()) resultDayString.append(6);
+-        if(SUN.isSelected()) resultDayString.append(7);
+-        EXCEPTDAY.setText(resultDayString.toString());
++        IntStream.range(0,7)
++                .forEach(p -> {
++                    if(((CheckBox)DAYCHECK.getChildren().get(p)).isSelected())
++                        resultDayString.append(p + 1);
++                });
++        getFXEntity().setValue("EXCEPTDAY",resultDayString.toString());
+         return super.onOK();
+     }
+ }
+Index: src/main/resources/ru/inversion/plshed/userInterfaces/mainui/res/EditIkpTasks.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>NATIVE_TO_ASCII_windows-1251
+===================================================================
+--- src/main/resources/ru/inversion/plshed/userInterfaces/mainui/res/EditIkpTasks.properties	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/resources/ru/inversion/plshed/userInterfaces/mainui/res/EditIkpTasks.properties	(date 1612942885911)
+@@ -8,7 +8,8 @@
+ ITASKID=ИД
+ ITASKSIDE=Сторона выполнения
+ ITASKINTERVAL=Интервал
+-DTASKFROMTM=Время запуска
++DTASKFROMTM=Время запуска с:
++DTASKTOTM=До
+ ITASKFREQUENCY=Частота
+ ITASKPERIOD=Периодичность
+ CTASKNAME=Наименование задачи 
+Index: src/main/java/ru/inversion/plshed/userInterfaces/mainui/EditIkpTaskEventsController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/inversion/plshed/userInterfaces/mainui/EditIkpTaskEventsController.java	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ src/main/java/ru/inversion/plshed/userInterfaces/mainui/EditIkpTaskEventsController.java	(date 1613116238395)
+@@ -10,6 +10,7 @@
+ import javafx.scene.layout.HBox;
+ import javafx.scene.layout.StackPane;
+ import javafx.scene.layout.VBox;
++import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
+ import ru.inversion.fx.form.FXFormLauncher;
+ import ru.inversion.fx.form.JInvFXFormController;
+ import ru.inversion.fx.form.controls.JInvButton;
+@@ -18,6 +19,8 @@
+ import ru.inversion.fx.form.controls.JInvTextField;
+ import ru.inversion.fx.form.lov.JInvDirectoryChooserLov;
+ import ru.inversion.fx.form.valid.Validator;
++import ru.inversion.fxn3d.action.ActionCheckSQL;
++import ru.inversion.fxn3d.action.PSQL;
+ import ru.inversion.icons.enums.FontAwesome;
+ import ru.inversion.plshed.entity.PIkpTaskEvents;
+ import ru.inversion.plshed.entity.lovEntity.PIkpEventEnebledTextValue;
+@@ -81,7 +84,12 @@
+     AnchorPane TEXTANCHORPANE;
+ 
+     private Boolean isDebugOpen = false;
+-    private final Long ENABLED_SCRIPT = 2L;
++    private final Long JAVA_SCRIPT = 2L;
++    private final Long PLSQL_SCRIPT = 1L;
++    private final double OPEN_DEBUG = 0.5d;
++    private final double CLOSE_DEBUG = 0.9225d;
++
++    
+ 
+ 
+     @Override
+@@ -91,6 +99,14 @@
+         initInnerButton();
+         initCustomButtons();
+         initRichText();
++        initDeviderPosition();
++    }
++
++    private void initDeviderPosition() {
++        SCRIPTSPLIT.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
++            SCRIPTSPLIT.getDividers().get(0).setPosition(isDebugOpen ? OPEN_DEBUG: CLOSE_DEBUG) ;
++           //System.out.println(String.format("observable: %s  oldValue: %s  newValue: %s",observable.getValue(),oldValue,newValue));
++        });
+     }
+ 
+     private void initRichText() {
+@@ -127,8 +143,8 @@
+     }
+ 
+     private void initComboBox() throws ru.inversion.dataset.DataSetException {
+-        initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event ->
+-                TESTBUTTON.setDisable(!(((JInvComboBox) event.getSource()).getValue() == ENABLED_SCRIPT))
++        initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event ->{}
++                //TESTBUTTON.setDisable(!(((JInvComboBox) event.getSource()).getValue() == JAVA_SCRIPT))
+         );
+         initCombobox(getTaskContext(), IEVENTFILEDIR, PIkpEventFileTypeTextValue.class);
+         initCombobox(getTaskContext(), BEVENTENABLED, PIkpEventEnebledTextValue.class);
+@@ -155,6 +171,21 @@
+ 
+     public void testCode(ActionEvent actionEvent) {
+         TESTAREA.clear();
++        if(IEVENTTYPE.getValue() == JAVA_SCRIPT)
++            javaCodeTest();
++        if(IEVENTTYPE.getValue() == PLSQL_SCRIPT)
++        plsqlCodeTest();
++        
++
++    }
++
++    private void plsqlCodeTest() {
++        ActionCheckSQL checkSQL = new ActionCheckSQL(this::preSQL);
++        checkSQL.setActionContext(getViewContext(), getTaskContext());
++        checkSQL.handle();
++    }
++
++    private void javaCodeTest() {
+         Object result = null;
+         String compileText = "";
+         String codeText = JavaKeywords.getCodeText();
+@@ -171,7 +202,6 @@
+             compileText = "Compile:\n" + scriptRunner.checkCodeResult + "\n";
+             TESTAREA.setText(compileText.concat(String.valueOf(result)));
+         }
+-
+     }
+ 
+     public void onTabSelect(Event event) {
+@@ -182,16 +212,22 @@
+     protected boolean onOK() {
+         if(JavaKeywords.isCodeChange())
+             LEVENTTEXT.setText(JavaKeywords.getCodeText());
+-//            //getFXEntity().getBaseEntity().setLEVENTTEXT(JavaKeywords.getCodeText());
+-//            //getDataObject().setLEVENTTEXT(JavaKeywords.getCodeText());
+         return super.onOK();
+     }
+ 
+     @FXML
+     private void openCloseDebugWin() {
+-        SCRIPTSPLIT.setDividerPositions(isDebugOpen ? 0.9225d : 0.5d);
++        SCRIPTSPLIT.setDividerPositions(isDebugOpen ? CLOSE_DEBUG : OPEN_DEBUG);
+         isDebugOpen = !isDebugOpen;
+     }
+ 
++    private void preSQL(PSQL p) {
++        String codeText = JavaKeywords.getCodeText();
++        if (codeText.isEmpty()) throw new StopExecuteActionBiCompException();
++        p.setName("PL/SQL CODE");
++        p.setStatement(codeText);
++        p.setType(PSQL.TypeEnum.PLSQL);
++    }
++
+ }
+ 
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(revision 49129f82c101dd6fc8a2856420b76e51c0d01a3b)
++++ pom.xml	(date 1613117351930)
+@@ -36,7 +36,7 @@
+         <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
+         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
+         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
+-
++        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXN3D_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\FXN3D.jar</systemPath></dependency>
+         <dependency>
+             <groupId>org.fxmisc.richtext</groupId>
+             <artifactId>richtextfx</artifactId>
+@@ -73,6 +73,7 @@
+                 <artifactId>maven-assembly-plugin</artifactId>
+                 <version>3.1.1</version>
+                 <configuration>
++                    <finalName>${project.name}</finalName>
+                     <archive>
+                         <manifest>
+                             <mainClass>ru.inversion.plshed.PLShedMain</mainClass>
+@@ -90,6 +91,7 @@
+                     <descriptorRefs>
+                         <descriptorRef>jar-with-dependencies</descriptorRef>
+                     </descriptorRefs>
++                    <appendAssemblyId>false</appendAssemblyId>
+                 </configuration>
+                 <executions>
+                     <execution>

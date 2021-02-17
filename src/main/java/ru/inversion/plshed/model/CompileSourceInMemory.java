@@ -7,11 +7,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
+
+//import javax.tools.*;
 
 /**
  * @author Dmitry Hvastunov
@@ -41,8 +44,20 @@ public class CompileSourceInMemory {
         checkCodeResult = "";
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
+        if(compiler == null) {
+            Class<?> javacTool = null;
+            try {
+                javacTool = Class.forName("com.sun.tools.javac.api.JavacTool");
+                Method create = javacTool.getMethod("create");
+                compiler = (JavaCompiler) create.invoke(null);
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
         if(compiler == null){
             logger.error("compiler is null");
+            checkCodeResult = "compiler is null";
             return false;
         }
 
@@ -55,14 +70,12 @@ public class CompileSourceInMemory {
 
         boolean success = task.call();
         for (Diagnostic<?> diagnostic : diagnostics.getDiagnostics()) {
-            checkCodeResult += diagnostic;
-            logger.error(String.valueOf(diagnostic));
+            checkCodeResult += diagnostic + "\n";
         }
-        if(success) {
+        if(success)
             checkCodeResult = "Success: " + success;
-            logger.info("Success: " + success);
-        }
 
+        logger.error(checkCodeResult);
         return success;
     }
 
@@ -97,7 +110,7 @@ public class CompileSourceInMemory {
 
         public Class getClassFromFile(File f) {
             byte[] raw = new byte[(int) f.length()];
-            System.out.println(f.length());
+            logger.info(String.valueOf(f.length()));
             InputStream in = null;
             try {
                 in = new FileInputStream(f);

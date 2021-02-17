@@ -120,6 +120,18 @@
             end;
         ]]></script>
     </expression>
+    <!-- Проверка SQL -->
+    <expression name="Check_SQL" lang="PL/SQL">
+        <script><![CDATA[
+            begin
+              N3D_FX_Pkg.Check_SQL(:sql,:type,:name,:result,:message);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="result" mode="OUT" sqlType="BIGINT" javaType="Long" />
+            <parameter name="message" mode="OUT" sqlType="VARCHAR" javaType="String" />
+        </parameters>
+    </expression>
 
 
 </sql_expr_list>

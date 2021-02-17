@@ -22,15 +22,19 @@ public class PIkpTasks extends IDMarkable implements Serializable {
     private String CTASKNAME;
     private Long ITASKPERIOD;
     private LocalDate DTASKFROMDT;
+    private LocalDate DTASKTODT;
     private LocalDateTime DTASKFROMTM;
+    private LocalDateTime DTASKTOTM;
+
     private Long ITASKFREQUENCY;
     private Long ITASKINTERVAL;
     private Long ITASKSIDE;
     private Long BTASKRUNNING;
     private Long RUNNINGEVENT;
+    private Long FTASKRUN;
+    private String EXCEPTDAY;
 
     /**Это транзиентные поля*/
-    private LocalTime DTASKFROMTMV;
     private Long LOGLEVEL;
     LocalDateTime DTASKFROMTMMV;
 
@@ -73,14 +77,21 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         DTASKFROMDT = val;
     }
 
+    @Column(name = "DTASKTODT")
+    public LocalDate getDTASKTODT() {return DTASKTODT;}
+    public void setDTASKTODT(LocalDate val) {DTASKTODT = val;}
+
     @Column(name = "DTASKFROMTM")
     public LocalDateTime getDTASKFROMTM() {
         return DTASKFROMTM;
     }
-
     public void setDTASKFROMTM(LocalDateTime val) {
         DTASKFROMTM = val;
     }
+
+    @Column(name = "DTASKTOTM")
+    public LocalDateTime getDTASKTOTM() {return DTASKTOTM;}
+    public void setDTASKTOTM(LocalDateTime val) {DTASKTOTM = val;}
 
     @Column(name = "ITASKFREQUENCY", length = 0)
     public Long getITASKFREQUENCY() {
@@ -125,6 +136,13 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         this.RUNNINGEVENT = RUNNINGEVENT;
     }
 
+    @Column(name = "FTASKRUN", length = 0)
+    public Long getFTASKRUN() {return FTASKRUN == null ? 0L : FTASKRUN;}
+    public void setFTASKRUN(Long FTASKRUN) {this.FTASKRUN = FTASKRUN == null ? 0L : FTASKRUN;}
+
+    @Column(name = "EXCEPTDAY")
+    public String getEXCEPTDAY() {return EXCEPTDAY != null ? EXCEPTDAY : "" ;}
+    public void setEXCEPTDAY(String EXCEPTDAY) {this.EXCEPTDAY = EXCEPTDAY;}
 
     @Transient
     @ProxyFor(columnName = "DTASKFROMTM")
@@ -132,6 +150,10 @@ public class PIkpTasks extends IDMarkable implements Serializable {
         return  DTASKFROMTM == null ? null : DTASKFROMTM.toLocalTime();
     }
     public void setDTASKFROMTMV(LocalTime val) {  DTASKFROMTM = LocalDateTime.of(DTASKFROMDT, val);}
+
+    @ProxyFor(columnName = "DTASKTOTM")
+    public LocalTime getDTASKTOTMV() {return  DTASKTOTM == null ? null : DTASKTOTM.toLocalTime();}
+    public void setDTASKTOTMV(LocalTime val) {DTASKTOTM = val != null ? LocalDateTime.of(DTASKFROMDT, val) : null;}
 
     public LocalDateTime getDTASKFROMTMMV() {return  DTASKFROMTMMV == null ? DTASKFROMTM : DTASKFROMTMMV; }
     public void setDTASKFROMTMMV(LocalDateTime val) {  DTASKFROMTMMV = val;}

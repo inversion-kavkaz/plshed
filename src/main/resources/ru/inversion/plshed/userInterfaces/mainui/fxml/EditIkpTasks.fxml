@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,16 +16,16 @@
 <?import ru.inversion.fx.form.controls.JInvTextField?>
 <?import ru.inversion.fx.form.controls.JInvTimeField?>
 
-<VBox maxHeight="200.0" minHeight="200.0" prefHeight="200.0" prefWidth="800.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTasksController">
+<VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="230.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTasksController">
 <children>
-<GridPane hgap="5.0" prefHeight="170.0" prefWidth="674.0" vgap="5.0" VBox.vgrow="ALWAYS">
+<GridPane hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
 <children>
 
 <JInvLabel fx:id="lblCTASKNAME" text="%CTASKNAME" GridPane.columnIndex="0" GridPane.rowIndex="1" />
 <JInvTextField fx:id="CTASKNAME" fieldName="CTASKNAME" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-<JInvLabel fx:id="lblITASKPERIOD" text="%ITASKPERIOD" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+<JInvLabel fx:id="lblITASKPERIOD" text="%ITASKPERIOD" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
       <JInvComboBox fx:id="ITASKPERIOD" fieldName="ITASKPERIOD" maxWidth="-Infinity" />
       
@@ -34,25 +35,17 @@
                      </HBox.margin>
                   </JInvLabel>
       <JInvComboBox fx:id="ITASKFREQUENCY" fieldName="ITASKFREQUENCY" maxWidth="-Infinity" />
-      
-      <JInvLabel fx:id="lblITASKSIDE" text="%ITASKSIDE">
+      <JInvLabel fx:id="lblITASKINTERVAL" text="%ITASKINTERVAL">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
-      <JInvComboBox fx:id="ITASKSIDE" fieldName="ITASKSIDE" maxWidth="-Infinity" />
-      
-      <JInvLabel fx:id="lblBTASKRUNNING" text="%BTASKRUNNING">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </JInvLabel>
-      <JInvComboBox fx:id="BTASKRUNNING" fieldName="BTASKRUNNING" maxWidth="-Infinity" />
+      <JInvLongField fx:id="ITASKINTERVAL" fieldName="ITASKINTERVAL" prefHeight="25.0" prefWidth="76.0" />
                </children>
             </HBox>
 
-<JInvLabel fx:id="lblDTASKFROMDT" text="%DTASKFROMDT" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+<JInvLabel fx:id="lblDTASKFROMDT" text="%DTASKFROMDT" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
       <JInvCalendar fx:id="DTASKFROMDT" fieldName="DTASKFROMDT" required="true" />
       
@@ -62,18 +55,71 @@
                      </HBox.margin>
                   </JInvLabel>
       <JInvTimeField fx:id="DTASKFROMTMV" fieldName="DTASKFROMTMV" required="true" />
-      <JInvLabel fx:id="lblITASKINTERVAL" text="%ITASKINTERVAL">
+
+                   <JInvLabel fx:id="lblDTASKTOTM" layoutX="122.0" layoutY="15.0" text="%DTASKTOTM">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></JInvLabel>
+                  <JInvTimeField fx:id="DTASKTOTMV" fieldName="DTASKTOTMV" layoutX="223.0" layoutY="10.0"/>
+
+                   <JInvLabel fx:id="lblSTOPEDEVENT" text="%STOPEDEVENT">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
-      <JInvLongField fx:id="ITASKINTERVAL" fieldName="ITASKINTERVAL" prefHeight="25.0" prefWidth="76.0" />
-                  <JInvLabel fx:id="lblRUNNINGEVENT" disable="true" text="%RUNNINGEVENT">
+                  <JInvCalendar fx:id="DTASKTODT" fieldName="DTASKTODT" required="false" />
+                  <JInvComboBox fx:id="RUNNINGEVENT" disable="true" fieldName="RUNNINGEVENT" maxWidth="-Infinity" visible="false" />
+                  <JInvLabel fx:id="lblRUNNINGEVENT1" disable="true" layoutX="562.0" layoutY="10.0" text="%RUNNINGEVENT" visible="false" />
+               </children>
+            </HBox>
+            <HBox fx:id="DAYCHECK" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <CheckBox fx:id="MON" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Пн." textOverrun="CLIP">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+                  <CheckBox fx:id="TUE" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Вт.">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+                  <CheckBox fx:id="WED" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Ср.">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+                  <CheckBox fx:id="THU" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="74.0" layoutY="10.0" mnemonicParsing="false" text="Чт.">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+                  <CheckBox fx:id="FRI" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="74.0" layoutY="10.0" mnemonicParsing="false" text="Пт.">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+                  <CheckBox fx:id="SAT" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="138.0" layoutY="10.0" mnemonicParsing="false" text="Сб." textFill="#9d0208">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+                  <CheckBox fx:id="SUN" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="202.0" layoutY="10.0" mnemonicParsing="false" text="Вс." textFill="#9d0208">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></CheckBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <JInvLabel fx:id="lblEXCEPTED" text="%EXCEPTED" GridPane.rowIndex="5" />
+
+<JInvLabel fx:id="lblITASKSIDE" text="%ITASKSIDE" GridPane.rowIndex="2" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+      <JInvComboBox fx:id="ITASKSIDE" fieldName="ITASKSIDE" maxWidth="-Infinity" />
+      
+      <JInvLabel fx:id="lblBTASKRUNNING" text="%BTASKRUNNING">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </JInvLabel>
-                  <JInvComboBox fx:id="RUNNINGEVENT" disable="true" fieldName="RUNNINGEVENT" maxWidth="-Infinity" />
+      <JInvComboBox fx:id="BTASKRUNNING" fieldName="BTASKRUNNING" maxWidth="-Infinity" />
                </children>
             </HBox>
 
@@ -88,6 +134,8 @@
 </VBox.margin>
 <rowConstraints>
 <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />

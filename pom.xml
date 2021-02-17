@@ -36,21 +36,74 @@
         <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
         <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
-        <dependency><groupId>org.jprocesses</groupId><artifactId>jProcesses</artifactId><version>1.6.5</version><scope>system</scope><systemPath>C:\JAPP_603\lib\jProcesses-1.6.5.jar</systemPath></dependency>
-        <dependency><groupId>com.profesorfalken</groupId><artifactId>WMI4Java</artifactId><version>1.6.3</version><scope>system</scope><systemPath>C:\JAPP_603\lib\WMI4Java-1.6.3.jar</systemPath></dependency>
-        <dependency><groupId>jdk.tools</groupId><artifactId>jdk.tools</artifactId><version>jdk1.8.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\tools.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXN3D_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\FXN3D.jar</systemPath></dependency>
+        <dependency>
+            <groupId>org.fxmisc.richtext</groupId>
+            <artifactId>richtextfx</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
 
 
-<!--        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/-->
 
+        <!--        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/-->
+<!--        <dependency><groupId>org.jprocesses</groupId><artifactId>jProcesses</artifactId><version>1.6.5</version><scope>system</scope><systemPath>C:\JAPP_603\lib\jProcesses-1.6.5.jar</systemPath></dependency>-->
+<!--        <dependency><groupId>com.profesorfalken</groupId><artifactId>WMI4Java</artifactId><version>1.6.3</version><scope>system</scope><systemPath>C:\JAPP_603\lib\WMI4Java-1.6.3.jar</systemPath></dependency>-->
+        <!-- https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava -->
+        <dependency>
+            <groupId>io.reactivex.rxjava3</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>3.0.9</version>
+        </dependency>
 
-<!--        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/-->
+        <!--        /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/-->
 
     </dependencies>
 
     <build>
         <finalName>${artifactId}</finalName>
+
         <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <finalName>${project.name}</finalName>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.inversion.plshed.PLShedMain</mainClass>
+                            <classpathLayoutType>custom</classpathLayoutType>
+                            <customClasspathLayout>$${project.artifactId}.$${project.packaging}</customClasspathLayout>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>JInvFore.jar FXbicomp.jar lib\manifest-reader.jar lib\lovUtils.jar lib\tools.jar</Class-Path>
+                            <Codebase>*</Codebase><Permissions>all-permissions</Permissions>
+                            <Build>${buildNumber}</Build>
+                            <Version>${project.version}</Version>
+                            <Build-date>${timestamp}</Build-date>
+                        </manifestEntries>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -63,7 +116,7 @@
                             <customClasspathLayout>$${project.artifactId}.$${project.packaging}</customClasspathLayout>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>JInvFore.jar FXbicomp.jar lib/manifest-reader.jar lib/lovUtils.jar lib/jProcesses-1.6.5.jar lib/WMI4Java-1.6.3.jar lib/tools.jar</Class-Path>
+                            <Class-Path>JInvFore.jar FXbicomp.jar lib\manifest-reader.jar lib\lovUtils.jar lib\tools.jar</Class-Path>
                             <Codebase>*</Codebase><Permissions>all-permissions</Permissions>
                             <Build>${buildNumber}</Build>
                             <Version>${project.version}</Version>
@@ -99,7 +152,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
+                <version>3.1</version>
                 <executions>
                     <execution>
                         <id>compile</id>

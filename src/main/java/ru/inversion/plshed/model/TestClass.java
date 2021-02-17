@@ -18,30 +18,21 @@ public class TestClass {
     public static Connection connection ;
 
     public static class CustomClass {
+
         public static String CustomFunction(String preResult) {
             String result = "OK";
-            String fileName = null;
-            Integer str = 56;
-            Float fff = 1.23f;
-            fileName = "dir_name" + "\\" + "file_name";
+            String fileName = "C:\\PL\\TR\\IN\\TR.dbf";
+            int counter = 10;
 
-            if (isFileExist(fileName))
-                System.out.println("true");
-            else
-                System.out.println("falsee");
+            System.out.println(String.format("fileName =  %s", fileName));
 
-            System.out.println("fileName");
+            while(!isFileExist(fileName) && counter-- > 0 ) {
+                System.out.println(String.format("counter =  %d", counter));
+                wait(20000);
+            }
 
-            fileName = (String) CallSqlFunc(connection,"XXI.IKP_ADM.GetEventFileName", 1);
-            System.out.println(String.format("fileNmae =  %s", fileName));
+            return isFileExist(fileName) ? result :  "StopTask";
 
-//            for (int i = 0; i < 10; i++) {
-//                System.out.println(result + " = " + i);
-//                wait(1000);
-//            }
-
-
-            return result;
         }
 
         private static void wait(int mlsec) {

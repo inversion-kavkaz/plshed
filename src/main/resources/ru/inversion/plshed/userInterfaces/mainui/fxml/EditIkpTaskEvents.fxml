@@ -1,158 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import ru.inversion.fx.form.controls.JInvButton?>
-<?import ru.inversion.fx.form.controls.JInvComboBox?>
-<?import ru.inversion.fx.form.controls.JInvLabel?>
-<?import ru.inversion.fx.form.controls.JInvLongField?>
-<?import ru.inversion.fx.form.controls.JInvTextArea?>
-<?import ru.inversion.fx.form.controls.JInvTextField?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import ru.inversion.fx.form.controls.*?>
 <AnchorPane prefHeight="626.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/8.0.251" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.EditIkpTaskEventsController">
-   <children>
-<GridPane hgap="5.0" layoutX="5.0" layoutY="5.0" vgap="5.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-<children>
+    <children>
+        <GridPane hgap="5.0" layoutX="5.0" layoutY="5.0" vgap="5.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+            <children>
 
-<JInvLabel fx:id="lblCEVENTNAME" text="%CEVENTNAME" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-<JInvTextField fx:id="CEVENTNAME" fieldName="CEVENTNAME" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <JInvLabel fx:id="lblCEVENTNAME" text="%CEVENTNAME" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <JInvTextField fx:id="CEVENTNAME" fieldName="CEVENTNAME" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-<JInvLabel fx:id="lblIEVENTNPP" text="%IEVENTNPP" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-<JInvLongField fx:id="IEVENTNPP" alignment="BOTTOM_LEFT" fieldName="IEVENTNPP" prefColumnCount="0" promptText="Порядковый номер " GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <JInvLabel fx:id="lblIEVENTNPP" text="%IEVENTNPP" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <JInvLongField fx:id="IEVENTNPP" alignment="BOTTOM_LEFT" fieldName="IEVENTNPP" prefColumnCount="0" promptText="Порядковый номер " GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-<JInvLabel fx:id="lblIEVENTTYPE" text="%IEVENTTYPE" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <JInvLabel fx:id="lblIEVENTTYPE" text="%IEVENTTYPE" GridPane.columnIndex="0" GridPane.rowIndex="4" />
 
-<JInvLabel fx:id="lblIEVENTPRESETID" text="%IEVENTPRESETID" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-<JInvLongField fx:id="IEVENTPRESETID" alignment="BOTTOM_LEFT" fieldName="IEVENTPRESETID" prefColumnCount="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <JInvLabel fx:id="lblIEVENTPRESETID" text="%IEVENTPRESETID" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                <JInvLongField fx:id="IEVENTPRESETID" alignment="BOTTOM_LEFT" fieldName="IEVENTPRESETID" prefColumnCount="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-<JInvLabel fx:id="lblLEVENTTEXT" text="%LEVENTTEXT" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-            <AnchorPane fx:id="COMMANDBARANCHOR" GridPane.columnIndex="1" GridPane.rowIndex="6">
-               <children>
-                  <HBox fx:id="COMMANDBAR" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                      <JInvButton fx:id="TESTBUTTON" mnemonicParsing="false" onAction="#testCode" text="Тестировать код">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </JInvButton>
-                        <Label text="Результат предыдущего события:">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
-                           </HBox.margin>
-                        </Label>
-                        <TextField fx:id="EVENTRESULT">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <SplitPane fx:id="SCRIPTSPLIT" dividerPositions="0.9295" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
-                     <items>
-            <JInvTextArea fx:id="LEVENTTEXT" fieldName="LEVENTTEXT" promptText="Текст скрипта" wrapText="true">
-                           <font>
-                              <Font name="Arial Bold" size="14.0" />
-                           </font>
-                        </JInvTextArea>
-                        <TabPane onMouseClicked="#openCloseDebugWin" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
-                          <tabs>
-                            <Tab onSelectionChanged="#onTabSelect" text="Компиляция">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TextArea fx:id="TESTAREA" editable="false" prefHeight="138.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                            <Tab onSelectionChanged="#onTabSelect" text="Вывод">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TextArea prefHeight="138.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
-                              </content>
-                            </Tab>
-                          </tabs>
-                        </TabPane>
-                     </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
+                <JInvLabel fx:id="lblLEVENTTEXT" text="%LEVENTTEXT" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                <AnchorPane fx:id="COMMANDBARANCHOR" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                    <children>
+                        <HBox fx:id="COMMANDBAR" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <JInvButton fx:id="TESTBUTTON" mnemonicParsing="false" onAction="#testCode" text="Тестировать код">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                </JInvButton>
+                                <Label text="Результат предыдущего события:">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="EVENTRESULT">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <SplitPane fx:id="SCRIPTSPLIT" dividerPositions="0.9014925373134328" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+                            <items>
+                        <AnchorPane fx:id="TEXTANCHORPANE">
+                           <children>
+                              <JInvTextArea fx:id="LEVENTTEXT" fieldName="LEVENTTEXT" opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
+                           </children></AnchorPane>
+                                <TabPane onMouseClicked="#openCloseDebugWin" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                                    <tabs>
+                                        <Tab onSelectionChanged="#onTabSelect" text="Компиляция">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <TextArea fx:id="TESTAREA" editable="false" prefHeight="138.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab onSelectionChanged="#onTabSelect" text="Вывод">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <TextArea prefHeight="138.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
 
-<JInvLabel fx:id="lblCEVENTINDIR" text="%CEVENTINDIR" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-<JInvTextField fx:id="CEVENTINDIR" fieldName="CEVENTINDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <JInvLabel fx:id="lblCEVENTINDIR" text="%CEVENTINDIR" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                <JInvTextField fx:id="CEVENTINDIR" fieldName="CEVENTINDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
-<JInvLabel fx:id="lblCEVENTOUTDIR" text="%CEVENTOUTDIR" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-<JInvTextField fx:id="CEVENTOUTDIR" fieldName="CEVENTOUTDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <JInvLabel fx:id="lblCEVENTOUTDIR" text="%CEVENTOUTDIR" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                <JInvTextField fx:id="CEVENTOUTDIR" fieldName="CEVENTOUTDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-<JInvLabel fx:id="lblCEVENTARHDIR" text="%CEVENTARHDIR" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-<JInvTextField fx:id="CEVENTARHDIR" fieldName="CEVENTARHDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-
-
-            <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
-               <children>
-                   <JInvComboBox fx:id="IEVENTTYPE" fieldName="IEVENTTYPE" maxWidth="100" />
-                   <JInvLabel fx:id="lblIEVENTFILEDIR" text="%IEVENTFILEDIR">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </JInvLabel>
-                   <JInvComboBox fx:id="IEVENTFILEDIR" fieldName="IEVENTFILEDIR" maxWidth="100" />
-
-                   <JInvLabel fx:id="lblBEVENTENABLED" text="%BEVENTENABLED">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </JInvLabel>
-                   <JInvComboBox fx:id="BEVENTENABLED" fieldName="BEVENTENABLED" maxWidth="100.0" />
+                <JInvLabel fx:id="lblCEVENTARHDIR" text="%CEVENTARHDIR" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+                <JInvTextField fx:id="CEVENTARHDIR" fieldName="CEVENTARHDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
 
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <children>
+                        <JInvComboBox fx:id="IEVENTTYPE" fieldName="IEVENTTYPE" maxWidth="100" />
+                        <JInvLabel fx:id="lblIEVENTFILEDIR" text="%IEVENTFILEDIR">
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                        </JInvLabel>
+                        <JInvComboBox fx:id="IEVENTFILEDIR" fieldName="IEVENTFILEDIR" maxWidth="100" />
 
-               </children>
-            </HBox>
-</children>
-<columnConstraints>
-<ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
-<ColumnConstraints hgrow="ALWAYS" />
-</columnConstraints>
-<rowConstraints>
-<RowConstraints />
-<RowConstraints />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints percentHeight="70.0" />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
-<RowConstraints />
-<RowConstraints />
-<RowConstraints minHeight="1.0" />
-</rowConstraints>
-</GridPane>
-<ButtonBar buttonMinWidth="80.0" layoutX="5.0" layoutY="455.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-<buttons>
-<JInvButton fx:id="btOK" text="%EDIT.OK" />
-<JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
-</buttons>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-</ButtonBar>
-   </children>
+                        <JInvLabel fx:id="lblBEVENTENABLED" text="%BEVENTENABLED">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                        </JInvLabel>
+                        <JInvComboBox fx:id="BEVENTENABLED" fieldName="BEVENTENABLED" maxWidth="100.0" />
+
+
+                    </children>
+                </HBox>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints percentHeight="70.0" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints minHeight="1.0" />
+            </rowConstraints>
+        </GridPane>
+        <ButtonBar buttonMinWidth="80.0" layoutX="5.0" layoutY="455.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <buttons>
+                <JInvButton fx:id="btOK" text="%EDIT.OK" />
+                <JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
+            </buttons>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </ButtonBar>
+    </children>
 </AnchorPane>
