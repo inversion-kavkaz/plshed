@@ -23,6 +23,8 @@ public class GridPaneRowAnim {
     private final Window mainWin;
     private final int rowIndex;
     private Transition gridRowTransition;
+    private final int COLLAPSE = 1;
+    private final int UNCOLLAPSE = -1;
 
     public GridPaneRowAnim(GridPane gridPane, Window mainWin, int rowIndex) {
         this.gridPane = gridPane;
@@ -53,7 +55,7 @@ public class GridPaneRowAnim {
 
     public void setcollapse(boolean collapse){
         if(isCollapse && collapse) return;
-            gridRowTransition.setRate(collapse ? 1 : -1);
+            gridRowTransition.setRate(collapse ? COLLAPSE : UNCOLLAPSE);
             gridRowTransition.play();
             isCollapse = collapse;
      }
