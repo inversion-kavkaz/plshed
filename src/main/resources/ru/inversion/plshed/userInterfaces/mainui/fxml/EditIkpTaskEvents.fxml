@@ -34,7 +34,18 @@
                 <JInvLabel fx:id="lblIEVENTTYPE" text="%IEVENTTYPE" GridPane.columnIndex="0" GridPane.rowIndex="4" />
 
                 <JInvLabel fx:id="lblIEVENTPRESETID" text="%IEVENTPRESETID" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                <JInvLongField fx:id="IEVENTPRESETID" alignment="BOTTOM_LEFT" fieldName="IEVENTPRESETID" prefColumnCount="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                      <JInvLongField fx:id="IEVENTPRESETID" alignment="BOTTOM_LEFT" fieldName="IEVENTPRESETID" prefColumnCount="5" />
+                  <JInvLabel fx:id="lblPRESETNAME" text="%PRESETNAME">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </JInvLabel>
+                  <JInvTextField fx:id="PRESETNAME" fieldName="PRESETNAME" HBox.hgrow="ALWAYS" />
+                  <JInvButton fx:id="PRESETBUTTON" mnemonicParsing="false" onAction="#checkPreset" text="%PRESETBUTTON" />
+               </children>
+            </HBox>
 
                 <JInvLabel fx:id="lblLEVENTTEXT" text="%LEVENTTEXT" GridPane.columnIndex="0" GridPane.rowIndex="6" />
                 <AnchorPane fx:id="COMMANDBARANCHOR" GridPane.columnIndex="1" GridPane.rowIndex="6">

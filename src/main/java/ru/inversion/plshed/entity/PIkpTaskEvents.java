@@ -11,6 +11,10 @@ import java.io.Serializable;
 */
 @Entity (name="ru.inversion.plshed.entity.PIkpTaskEvents")
 @Table (name="IKP_TASK_EVENTS")
+@NamedNativeQuery(name = "query", query = "select \n" +
+        "a.*, " +
+        "(select v.CPRESETNAME from xxi.ikp_event_presets v where v.IPRESETID = a.ieventpresetid) as PRESETNAME " +
+        "from xxi.ikp_task_events a")
 public class PIkpTaskEvents extends IDMarkable implements Serializable
 {
     private static final long serialVersionUID = 10_12_2020_16_07_19l;
@@ -27,6 +31,7 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
     private String CEVENTARHDIR;
     private Long BEVENTENABLED;
     private Long IEVENTFILEDIR;
+    private String PRESETNAME;
 
     public PIkpTaskEvents(){}
 
@@ -124,5 +129,13 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
     @Override
     public boolean isMark() {
         return super.isMark();
+    }
+    @Transient
+    @Column(name = "PRESETNAME")
+    public String getPRESETNAME() {
+        return PRESETNAME;
+    }
+    public void setPRESETNAME(String PRESETNAME) {
+        this.PRESETNAME = PRESETNAME;
     }
 }

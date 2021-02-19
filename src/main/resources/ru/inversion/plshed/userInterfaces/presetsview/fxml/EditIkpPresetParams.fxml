@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import ru.inversion.fx.form.controls.*?>
+<?import ru.inversion.fx.form.lov.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.presetsview.EditIkpPresetParamsController">
+<children>
+<GridPane hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
+<children>
+<JInvLabel fx:id="lblID_PRESET" text="%ID_PRESET" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+<JInvTextField fx:id="ID_PRESET" maxWidth="-Infinity" prefColumnCount="0" fieldName="ID_PRESET" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+<JInvLabel fx:id="lblCPARAMFULLNAME" text="%CPARAMFULLNAME" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+<JInvTextField fx:id="CPARAMFULLNAME" prefColumnCount="50" fieldName="CPARAMFULLNAME" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+<JInvLabel fx:id="lblCPARAMNAME" text="%CPARAMNAME" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+<JInvTextField fx:id="CPARAMNAME" prefColumnCount="50" fieldName="CPARAMNAME" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+<JInvLabel fx:id="lblIS_SPR" text="%IS_SPR" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+<JInvLongField fx:id="IS_SPR" maxWidth="-Infinity" prefColumnCount="1" fieldName="IS_SPR" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+<JInvLabel fx:id="lblCSPRSQL" text="%CSPRSQL" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+<JInvTextField fx:id="CSPRSQL" fieldName="CSPRSQL" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+<JInvLabel fx:id="lblIS_MULTI" text="%IS_MULTI" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+<JInvLongField fx:id="IS_MULTI" maxWidth="-Infinity" prefColumnCount="1" fieldName="IS_MULTI" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+</children>
+<columnConstraints>
+<ColumnConstraints />
+<ColumnConstraints hgrow="ALWAYS" />
+</columnConstraints>
+<VBox.margin>
+<Insets />
+</VBox.margin>
+<rowConstraints>
+<RowConstraints />
+<RowConstraints />
+<RowConstraints />
+<RowConstraints />
+<RowConstraints />
+<RowConstraints />
+<RowConstraints minHeight="1.0"/>
+</rowConstraints>
+</GridPane>
+<ButtonBar buttonMinWidth="80.0">
+<buttons>
+<JInvButton fx:id="btOK" text="%EDIT.OK" />
+<JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
+</buttons>
+</ButtonBar>
+</children>
+<padding>
+<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+</padding>
+</VBox>

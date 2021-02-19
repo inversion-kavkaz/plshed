@@ -22,11 +22,14 @@ import ru.inversion.plshed.entity.lovEntity.PIkpEventEnebledTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventFileTypeTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventTypeTextValue;
 import ru.inversion.plshed.model.ScriptRunner;
+import ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController;
 import ru.inversion.plshed.utils.ButtonUtils;
+import ru.inversion.plshed.utils.GridPaneRowAnim;
 import ru.inversion.plshed.utils.JavaKeywords;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Optional;
 
 import static lovUtils.LovUtils.initCombobox;
 import static ru.inversion.plshed.utils.ButtonUtils.setInnerGraphicButton;
@@ -57,6 +60,8 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     JInvLabel lblCEVENTARHDIR;
     @FXML
     JInvLabel lblLEVENTTEXT;
+    @FXML
+    JInvLabel lblPRESETNAME;
 
 
     @FXML
@@ -64,9 +69,13 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     @FXML
     private TextField EVENTRESULT;
     @FXML
+    private JInvTextField PRESETNAME;
+    @FXML
     private VBox TESTPANE;
     @FXML
     private JInvButton TESTBUTTON;
+    @FXML
+    private JInvButton PRESETBUTTON;
     @FXML
     private SplitPane SCRIPTSPLIT;
     @FXML
@@ -102,8 +111,10 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     private final Long FILE_DOWNLOAD = 0L;
     private final Long FILE_NONE = -1L;
     private final SimpleBooleanProperty isPrest = new SimpleBooleanProperty();
-
-
+    private GridPaneRowAnim presetGridRow;
+    private GridPaneRowAnim outDirGridRow;
+    private GridPaneRowAnim inDirGridRow;
+    private GridPaneRowAnim archDirGridRow;
 
 
     @Override
@@ -118,16 +129,15 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     }
 
     private void initBinding() {
-        lblCEVENTINDIR.visibleProperty().bind(CEVENTINDIR.visibleProperty());
-        lblCEVENTOUTDIR.visibleProperty().bind(CEVENTOUTDIR.visibleProperty());
-        lblCEVENTARHDIR.visibleProperty().bind(CEVENTARHDIR.visibleProperty());
-        lblIEVENTPRESETID.visibleProperty().bind(IEVENTPRESETID.visibleProperty());
+        presetGridRow = new GridPaneRowAnim(MAINGRID,MAINGRID.getScene().getWindow(),5);
+        inDirGridRow = new GridPaneRowAnim(MAINGRID,MAINGRID.getScene().getWindow(),7);
+        outDirGridRow = new GridPaneRowAnim(MAINGRID,MAINGRID.getScene().getWindow(),8);
+        archDirGridRow = new GridPaneRowAnim(MAINGRID,MAINGRID.getScene().getWindow(),9);
 
+        lblPRESETNAME.visibleProperty().bind(isPrest);
         IEVENTFILEDIR.disableProperty().bind(isPrest);
-        IEVENTPRESETID.visibleProperty().bind(isPrest);
         COMMANDBAR.visibleProperty().bind(isPrest.not());
         SCRIPTSPLIT.visibleProperty().bind(isPrest.not());
-
     }
 
     private void initDeviderPosition() {
@@ -173,15 +183,15 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     private void initComboBox() throws ru.inversion.dataset.DataSetException {
         initCombobox(getTaskContext(), IEVENTTYPE, PIkpEventTypeTextValue.class).setOnAction(event -> {
             isPrest.setValue(((JInvComboBox) event.getSource()).getValue() == PRESET);
-            if(isPrest.get()) IEVENTFILEDIR.setValue(-1L);
-            COMMANDBARANCHOR.setStyle(isPrest.get() ? "-fx-border-color: GREEN" : "-fx-border-color: NONE");
+            presetGridRow.setcollapse(!isPrest.get());
             lblLEVENTTEXT.setText(isPrest.get() ? getBundleString("LEVENTTEXT2"): getBundleString("LEVENTTEXT"));
             }
         );
         initCombobox(getTaskContext(), IEVENTFILEDIR, PIkpEventFileTypeTextValue.class).setOnAction(event -> {
-            CEVENTOUTDIR.setVisible((((JInvComboBox) event.getSource()).getValue() == FILE_UPLOAD));
-            CEVENTINDIR.setVisible((((JInvComboBox) event.getSource()).getValue() == FILE_DOWNLOAD));
-            CEVENTARHDIR.setVisible((((JInvComboBox) event.getSource()).getValue() == FILE_DOWNLOAD));
+            Long fileType = (Long)((JInvComboBox) event.getSource()).getValue();
+            inDirGridRow.setcollapse(fileType == FILE_UPLOAD || fileType == FILE_NONE);
+            archDirGridRow.setcollapse(fileType == FILE_UPLOAD || fileType == FILE_NONE);
+            outDirGridRow.setcollapse(fileType == FILE_DOWNLOAD || fileType == FILE_NONE);
         });
         initCombobox(getTaskContext(), BEVENTENABLED, PIkpEventEnebledTextValue.class);
     }
@@ -263,5 +273,22 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
         p.setType(PSQL.TypeEnum.PLSQL);
     }
 
+    public void checkPreset(ActionEvent actionEvent) {
+        new FXFormLauncher<>(getTaskContext(), getViewContext(), ViewPresetsController.class)
+                .callback(this::doFormResult)
+                .modal(true)
+                .show();
+    }
+
+    private void doFormResult(FormReturnEnum formReturnEnum, JInvFXFormController<Object> presetObject) {
+        if (JInvFXFormController.FormReturnEnum.RET_OK == formReturnEnum){
+            Optional
+                .of(((ViewPresetsController) presetObject).dsIKP_EVENT_PRESETS.getCurrentRow())
+                .ifPresent(pIkpEventPresets -> {
+                    PRESETNAME.setText(pIkpEventPresets.getCPRESETNAME());
+                    IEVENTPRESETID.setValue(pIkpEventPresets.getIPRESETID());
+            });
+        }
+    }
 }
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import ru.inversion.fx.form.controls.*?>
+<?import ru.inversion.fx.form.lov.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.presetsview.EditIkpEventPresetsController">
+<children>
+<GridPane hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
+<children>
+<JInvLabel fx:id="lblCPRESETNAME" text="%CPRESETNAME" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+<JInvTextField fx:id="CPRESETNAME" prefColumnCount="50" fieldName="CPRESETNAME" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+<JInvLabel fx:id="lblCPRESETTEXT" text="%CPRESETTEXT" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+<JInvTextField fx:id="CPRESETTEXT" prefColumnCount="50" fieldName="CPRESETTEXT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+<JInvLabel fx:id="lblIEVENTFILEDIR" text="%IEVENTFILEDIR" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+<JInvComboBox fx:id="IEVENTFILEDIR" maxWidth="-Infinity"  fieldName="IEVENTFILEDIR" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+</children>
+<columnConstraints>
+<ColumnConstraints />
+<ColumnConstraints hgrow="ALWAYS" />
+</columnConstraints>
+<VBox.margin>
+<Insets />
+</VBox.margin>
+<rowConstraints>
+<RowConstraints />
+<RowConstraints />
+<RowConstraints />
+<RowConstraints />
+<RowConstraints minHeight="1.0"/>
+</rowConstraints>
+</GridPane>
+<ButtonBar buttonMinWidth="80.0">
+<buttons>
+<JInvButton fx:id="btOK" text="%EDIT.OK" />
+<JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
+</buttons>
+</ButtonBar>
+</children>
+<padding>
+<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+</padding>
+</VBox>
