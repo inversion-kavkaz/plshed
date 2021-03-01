@@ -239,8 +239,8 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
                     codeText,
                     getDataObject(),
                     !codeText.isEmpty() ? codeText : null,
-                    getTaskContext().getConnection()
-            );
+                    getTaskContext().getConnection(),
+                    viewContext, taskContext);
 
             result = "Result:\n" + scriptRunner.startScript() + "\n";
             compileText = "Compile:\n" + scriptRunner.checkCodeResult + "\n";

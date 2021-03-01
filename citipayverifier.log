@@ -1,0 +1,24 @@
+24.02.2021 18:07:10.492 [main] INFO   r.i.c.Main - registerRequest: transactionID=555, cpsevdo=VRF, dateStart=20190101235959, dateEnd=20201118235959, payElementID=
+25.02.2021 08:09:11.180 [main] INFO   o.hibernate.Version - HHH000412: Hibernate Core {1.0-SNAPSHOT 2021-02-24T13:26:02Z}
+25.02.2021 08:09:12.661 [main] INFO   o.h.a.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+25.02.2021 08:09:14.373 [main] WARN   o.h.o.c.pooling - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+25.02.2021 08:09:14.620 [main] INFO   o.h.o.c.pooling - HHH10001005: using driver [oracle.jdbc.driver.OracleDriver] at URL [jdbc:oracle:thin:@odb12]
+25.02.2021 08:09:14.621 [main] INFO   o.h.o.c.pooling - HHH10001001: Connection properties: {user=xxi, password=****}
+25.02.2021 08:09:14.622 [main] INFO   o.h.o.c.pooling - HHH10001003: Autocommit mode: false
+25.02.2021 08:09:14.627 [main] INFO   o.h.e.j.c.i.DriverManagerConnectionProviderImpl - HHH000115: Hibernate connection pool size: 20 (min=1)
+25.02.2021 08:09:35.841 [main] WARN   o.h.e.j.e.i.JdbcEnvironmentInitiator - HHH000342: Could not obtain connection to query metadata : null
+25.02.2021 08:09:35.864 [main] INFO   o.h.dialect.Dialect - HHH000400: Using dialect: ru.inversionkavkaz.payverifierscore.utils.CustomOracleDialect
+25.02.2021 08:09:35.892 [main] WARN   o.h.e.j.s.SqlExceptionHelper - SQL Error: 17002, SQLState: 08006
+25.02.2021 08:09:35.892 [main] ERROR  o.h.e.j.s.SqlExceptionHelper - Ошибка ввода/вывода: The Network Adapter could not establish the connection
+25.02.2021 08:09:35.912 [main] INFO   o.h.s.i.AbstractServiceRegistryImpl - HHH000369: Error stopping service [class org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl]
+java.lang.NullPointerException: null
+	at org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl.stop(DriverManagerConnectionProviderImpl.java:207)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.stopService(AbstractServiceRegistryImpl.java:389)
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.destroy(AbstractServiceRegistryImpl.java:372)
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.destroy(StandardServiceRegistryImpl.java:129)
+	at org.hibernate.boot.registry.StandardServiceRegistryBuilder.destroy(StandardServiceRegistryBuilder.java:340)
+	at ru.inversionkavkaz.payverifierscore.utils.HibernateUtils.getSessionFactory(HibernateUtils.java:73)
+	at ru.inversionkavkaz.payverifierscore.utils.HibernateUtils.getSession(HibernateUtils.java:94)
+	at ru.inversionkavkaz.citypayverifier.Main.send(Main.java:47)
+	at ru.inversionkavkaz.citypayverifier.Main.start(Main.java:204)
+	at ru.inversionkavkaz.citypayverifier.Main.main(Main.java:208)

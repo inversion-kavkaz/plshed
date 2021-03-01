@@ -52,7 +52,10 @@ public class PLShedMain extends BaseApp {
 
     public static void showViewIkpTasksa(ViewContext vc, TaskContext tc, Map<String, Object> p) {
 //        TestClass.connection = tc.getConnection();
+//        TestClass.taskContext = tc;
+//        TestClass.viewContext = vc;
 //        TestClass.CustomClass.CustomFunction("555");
+
 
 
         new FXFormLauncher(tc, vc, ViewIkpTasksController.class)

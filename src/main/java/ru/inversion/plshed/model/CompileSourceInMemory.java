@@ -1,6 +1,8 @@
 package ru.inversion.plshed.model;
 
 import org.slf4j.Logger;
+import ru.inversion.fx.form.ViewContext;
+import ru.inversion.tc.TaskContext;
 
 import javax.tools.*;
 import java.io.File;
@@ -27,11 +29,16 @@ public class CompileSourceInMemory {
     private static Logger logger;
     private static Connection connection;
     public static String checkCodeResult ;
+    public static ViewContext viewContext;
+    public static TaskContext taskContext;
 
 
-    public static Object runCode(List<String> codeList, Object preEventResult, Logger log,Connection con) throws IOException {
+
+    public static Object runCode(List<String> codeList, Object preEventResult, Logger log,Connection con, ViewContext vc, TaskContext tc) throws IOException {
         logger = log;
         connection = con;
+        viewContext = vc;
+        taskContext = tc;
 
         boolean success = testCode(codeList);
 
@@ -63,7 +70,8 @@ public class CompileSourceInMemory {
 
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
         StringBuilder builder = new StringBuilder();
-        codeList.forEach(str -> { builder.append(str); });
+        codeList.forEach(s -> builder.append(s).append("\n"));
+        logger.debug(builder.toString());
         JavaFileObject file = new JavaSourceFromString("CustomClass", builder.toString());
         Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
         JavaCompiler.CompilationTask task = compiler.getTask(null, null, diagnostics, null, null, compilationUnits);
@@ -83,9 +91,9 @@ public class CompileSourceInMemory {
         try {
             MyClassLoader loader = new MyClassLoader();
             Class my = loader.getClassFromFile(new File("CustomClass.class"));
-            Method m = my.getMethod("CustomFunction", Object.class, Connection.class);
+            Method m = my.getMethod("CustomFunction", Object.class, Connection.class, ViewContext.class, TaskContext.class);
             Object o = my.newInstance();
-            return m.invoke(o, preEventResult,connection);
+            return m.invoke(o, preEventResult,connection,viewContext, taskContext);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.slf4j.Logger;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.XXIDataSet;
+import ru.inversion.fx.form.ViewContext;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.interfaces.TaskCallBack;
@@ -42,6 +43,7 @@ public class Task {
     private Boolean isWork = false;
     private TaskContext localTaskContext;
     private TaskContext taskContext;
+    private ViewContext viewContext;
     private Logger logger;
     private TaskCallBack taskCallBack;
     private Boolean isPeriod;
@@ -60,6 +62,7 @@ public class Task {
     private Task(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext, TaskCallBack taskCallBack) {
         this.pIkpTasks = pIkpTasks;
         this.taskContext = taskContext;
+        this.viewContext = getViewContext();
         this.logger = logger;
         this.taskCallBack = taskCallBack;
         this.isPeriod = pIkpTasks.getITASKPERIOD() == 1L;
@@ -158,7 +161,7 @@ public class Task {
     }
 
     private Object runEventScript(PIkpTaskEvents event, Object preEventResult) {
-        ScriptRunner scriptRunner = new ScriptRunner(logger, event.getLEVENTTEXT(), event, preEventResult, localTaskContext.getConnection());
+        ScriptRunner scriptRunner = new ScriptRunner(logger, event.getLEVENTTEXT(), event, preEventResult, localTaskContext.getConnection(), viewContext, taskContext);
         return scriptRunner.startScript();
     }
 
