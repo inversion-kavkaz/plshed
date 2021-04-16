@@ -3,86 +3,62 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import ru.inversion.fx.form.controls.JInvButton?>
+<?import ru.inversion.fx.form.controls.JInvLabel?>
 <?import ru.inversion.fx.form.controls.JInvTable?>
 <?import ru.inversion.fx.form.controls.JInvTableColumn?>
 <?import ru.inversion.fx.form.controls.JInvTextArea?>
 <?import ru.inversion.fx.form.controls.JInvToolBar?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController">
+<VBox prefHeight="679.0" prefWidth="791.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController">
    <children>
-      <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <JInvToolBar fx:id="toolBar" multipleUse="true" />
+      <SplitPane dividerPositions="0.7" orientation="VERTICAL">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-               <children>
-                  <VBox prefHeight="248.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <SplitPane dividerPositions="0.2916201117318436, 0.6614525139664804">
+              <items>
+                  <JInvTable fx:id="IKP_PRESET_GR" tableMenuButtonVisible="true">
+                     <columns>
+                        <JInvTableColumn fx:id="IPRESETGRID" alignment="CENTER" fieldName="IPRESETGRID" maxWidth="50" text="%IPRESETGRID" />
+                        <JInvTableColumn fx:id="CPRESETGRNAME" fieldName="CPRESETGRNAME" maxWidth="5000" prefWidth="300.0" text="%CPRESETGRNAME" />
+                     </columns>
+                  </JInvTable>
+                  <JInvTable fx:id="IKP_EVENT_PRESETS" tableMenuButtonVisible="true">
+                      <columns>
+                          <JInvTableColumn fx:id="CPRESETNAME" fieldName="CPRESETNAME" minWidth="50" maxWidth="5000" text="%CPRESETNAME" />
+                          <JInvTableColumn fx:id="IEVENTFILEDIR" fieldName="IEVENTFILEDIR" minWidth="50" maxWidth="100" text="%IEVENTFILEDIR" />
+                      </columns>
+                  </JInvTable>
+                  <AnchorPane>
                      <children>
-                         <JInvToolBar fx:id="toolBar" />
-                        <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
-                          <items>
-                            <AnchorPane fx:id="PRESETTABLEANCHOR" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                <children>
-                                    <JInvTable fx:id="IKP_EVENT_PRESETS" prefHeight="236.0" prefWidth="295.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-                                        <columns>
-                                            <JInvTableColumn fx:id="CPRESETNAME" fieldName="CPRESETNAME" text="%CPRESETNAME" />
-                                            <JInvTableColumn fx:id="IEVENTFILEDIR" fieldName="IEVENTFILEDIR" text="%IEVENTFILEDIR" />
-                                        </columns>
-                                        <VBox.margin>
-                                            <Insets bottom="5.0" left="5.0" right="5.0" />
-                                        </VBox.margin>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                    </JInvTable>
-                                </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                            </AnchorPane>
-      
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <JInvTextArea fx:id="CPRESETTEXT" editable="false" extensionType="SQL" fieldName="CPRESETTEXT" layoutX="-13.0" layoutY="23.0" prefHeight="246.0" prefWidth="295.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
+                        <JInvLabel text="SQL код" AnchorPane.leftAnchor="5.0">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></JInvLabel>
+                        <JInvTextArea fx:id="CPRESETTEXT" editable="false" extensionType="SQL" fieldName="CPRESETTEXT" prefHeight="439.0" prefWidth="478.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0" />
                      </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-          <AnchorPane fx:id="PARAMSANCHOR" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-              <children>
-                  <VBox prefHeight="106.0" prefWidth="598.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
-                      <children>
-                          <JInvToolBar fx:id="toolBarParams" />
-                          <JInvTable fx:id="IKP_PRESET_PARAMS" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
-                              <columns>
-                                  <JInvTableColumn fx:id="CPARAMFULLNAME" fieldName="CPARAMFULLNAME" prefWidth="300.0" text="%CPARAMFULLNAME" />
-                                  <JInvTableColumn fx:id="CPARAMNAME" fieldName="CPARAMNAME" prefWidth="300.0" text="%CPARAMNAME" />
-                                  <JInvTableColumn fx:id="IS_SPR" fieldName="IS_SPR" text="%IS_SPR" />
-                                  <JInvTableColumn fx:id="IS_MULTI" fieldName="IS_MULTI" text="%IS_MULTI" />
-                              </columns>
-                              <VBox.margin>
-                                  <Insets bottom="5.0" left="5.0" right="5.0" />
-                              </VBox.margin>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                          </JInvTable>
-                      </children>
-                  </VBox>
-              </children>
-          </AnchorPane>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+            <SplitPane dividerPositions="0.6264441591784339">
+               <items>
+                    <JInvTable fx:id="IKP_PRESET_PARAMS" tableMenuButtonVisible="true">
+                        <columns>
+                            <JInvTableColumn fx:id="CPARAMFULLNAME" fieldName="CPARAMFULLNAME" minWidth="50" prefWidth="300.0" text="%CPARAMFULLNAME" />
+                            <JInvTableColumn fx:id="CPARAMNAME" fieldName="CPARAMNAME" minWidth="50" prefWidth="300.0" text="%CPARAMNAME" />
+                            <JInvTableColumn fx:id="IS_SPR" fieldName="IS_SPR" text="%IS_SPR" minWidth="50"/>
+                            <JInvTableColumn fx:id="IS_MULTI" fieldName="IS_MULTI" text="%IS_MULTI" minWidth="50"/>
+                        </columns>
+                    </JInvTable>
+                  <JInvTextArea fx:id="CSPRSQL" editable="false" fieldName="CSPRSQL" prefHeight="200.0" prefWidth="200.0" promptText="PL/SQL код" toolBarVisible="true" />
+               </items>
+            </SplitPane>
         </items>
       </SplitPane>
-       <ButtonBar buttonMinWidth="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+       <ButtonBar fx:id="downToolBar" buttonMinWidth="80.0">
            <buttons>
                <JInvButton fx:id="btOK" text="%EDIT.OK" />
                <JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
@@ -92,4 +68,7 @@
          </padding>
        </ButtonBar>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>

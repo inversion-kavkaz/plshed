@@ -119,8 +119,17 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
         return IEVENTFILEDIR;
     }
     public void setIEVENTFILEDIR(Long val) {
-        IEVENTFILEDIR = val; 
+        IEVENTFILEDIR = val;
     }
+    @Column(name = "PRESETNAME",columnDefinition = "(select a.CPRESETNAME from IKP_EVENT_PRESETS a where a.IPRESETID = IEVENTPRESETID)",
+            insertable = false,updatable = false)
+    public String getPRESETNAME() {
+        return PRESETNAME;
+    }
+    public void setPRESETNAME(String PRESETNAME) {
+        this.PRESETNAME = PRESETNAME;
+    }
+
     @Transient
     @Override
     public Long getMarkLongID() {
@@ -129,13 +138,5 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
     @Override
     public boolean isMark() {
         return super.isMark();
-    }
-    @Transient
-    @Column(name = "PRESETNAME")
-    public String getPRESETNAME() {
-        return PRESETNAME;
-    }
-    public void setPRESETNAME(String PRESETNAME) {
-        this.PRESETNAME = PRESETNAME;
     }
 }

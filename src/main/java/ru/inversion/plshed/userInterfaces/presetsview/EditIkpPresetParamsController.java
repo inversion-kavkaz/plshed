@@ -16,7 +16,7 @@ public class EditIkpPresetParamsController extends JInvFXFormController <PIkpPre
 //    @FXML JInvTextField CPARAMFULLNAME;
 //    @FXML JInvTextField CPARAMNAME;
 //    @FXML JInvLongField IS_SPR;
-//    @FXML JInvTextField CSPRSQL;
+//    @FXML JInvTextArea CSPRSQL;
 //    @FXML JInvLongField IS_MULTI;
 
 //

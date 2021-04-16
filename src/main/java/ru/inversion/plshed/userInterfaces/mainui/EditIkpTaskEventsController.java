@@ -8,16 +8,24 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import lombok.SneakyThrows;
 import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
+import ru.inversion.dataset.DataSetException;
+import ru.inversion.dataset.XXIDataSet;
+import ru.inversion.dataset.fx.DSFXAdapter;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.JInvFXFormController;
 import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.lov.JInvDirectoryChooserLov;
+import ru.inversion.fx.form.lov.JInvEntityLov;
 import ru.inversion.fx.form.valid.Validator;
 import ru.inversion.fxn3d.action.ActionCheckSQL;
 import ru.inversion.fxn3d.action.PSQL;
 import ru.inversion.icons.enums.FontAwesome;
+import ru.inversion.plshed.entity.PIkpEventParams;
+import ru.inversion.plshed.entity.PIkpPresetParams;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
+import ru.inversion.plshed.entity.lovEntity.PDual;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventEnebledTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventFileTypeTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventTypeTextValue;
@@ -28,6 +36,7 @@ import ru.inversion.plshed.utils.GridPaneRowAnim;
 import ru.inversion.plshed.utils.JavaKeywords;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.Optional;
 
@@ -46,60 +55,33 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
 //    @FXML JInvLongField IEVENTTASKID;
 //    @FXML JInvLongField IEVENTNPP;
 //    @FXML JInvTextField CEVENTNAME;
-    @FXML
-    GridPane MAINGRID;
-    @FXML
-    JInvLabel lblIEVENTPRESETID;
-    @FXML
-    JInvLongField IEVENTPRESETID;
-    @FXML
-    JInvLabel lblCEVENTINDIR;
-    @FXML
-    JInvLabel lblCEVENTOUTDIR;
-    @FXML
-    JInvLabel lblCEVENTARHDIR;
-    @FXML
-    JInvLabel lblLEVENTTEXT;
-    @FXML
-    JInvLabel lblPRESETNAME;
-
-
-    @FXML
-    private TextArea TESTAREA;
-    @FXML
-    private TextField EVENTRESULT;
-    @FXML
-    private JInvTextField PRESETNAME;
-    @FXML
-    private VBox TESTPANE;
-    @FXML
-    private JInvButton TESTBUTTON;
-    @FXML
-    private JInvButton PRESETBUTTON;
-    @FXML
-    private SplitPane SCRIPTSPLIT;
-    @FXML
-    private HBox COMMANDBAR;
-    @FXML
-    private AnchorPane COMMANDBARANCHOR;
-
-
-    @FXML
-    JInvTextArea LEVENTTEXT;
-    @FXML
-    JInvComboBox<Long, String> IEVENTTYPE;
-    @FXML
-    JInvTextField CEVENTINDIR;
-    @FXML
-    JInvTextField CEVENTOUTDIR;
-    @FXML
-    JInvTextField CEVENTARHDIR;
-    @FXML
-    JInvComboBox<Long, String> BEVENTENABLED;
-    @FXML
-    JInvComboBox<Long, String> IEVENTFILEDIR;
-    @FXML
-    AnchorPane TEXTANCHORPANE;
+    @FXML GridPane MAINGRID;
+    @FXML JInvLabel lblIEVENTPRESETID;
+    @FXML JInvLongField IEVENTPRESETID;
+    @FXML JInvLabel lblCEVENTINDIR;
+    @FXML JInvLabel lblCEVENTOUTDIR;
+    @FXML JInvLabel lblCEVENTARHDIR;
+    @FXML JInvLabel lblLEVENTTEXT;
+    @FXML JInvLabel lblPRESETNAME;
+    @FXML private TextArea TESTAREA;
+    @FXML private TextField EVENTRESULT;
+    @FXML private JInvTextField PRESETNAME;
+    @FXML private VBox TESTPANE;
+    @FXML private JInvButton TESTBUTTON;
+    @FXML private JInvButton PRESETBUTTON;
+    @FXML private SplitPane SCRIPTSPLIT;
+    @FXML private HBox COMMANDBAR;
+    @FXML private AnchorPane COMMANDBARANCHOR;
+    @FXML JInvTextArea LEVENTTEXT;
+    @FXML JInvComboBox<Long, String> IEVENTTYPE;
+    @FXML JInvTextField CEVENTINDIR;
+    @FXML JInvTextField CEVENTOUTDIR;
+    @FXML JInvTextField CEVENTARHDIR;
+    @FXML JInvComboBox<Long, String> BEVENTENABLED;
+    @FXML JInvComboBox<Long, String> IEVENTFILEDIR;
+    @FXML AnchorPane TEXTANCHORPANE;
+    @FXML JInvTable IKP_EVENT_PARAMS;
+    @FXML JInvTableColumn<PIkpEventParams, String> CPARAMVALUE;
 
     private Boolean isDebugOpen = false;
     private final Long PRESET = 0L;
@@ -116,16 +98,82 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     private GridPaneRowAnim inDirGridRow;
     private GridPaneRowAnim archDirGridRow;
 
+    private final XXIDataSet<PIkpEventParams> dsIKP_EVENT_PARAMS = new XXIDataSet<>(getTaskContext(), PIkpEventParams.class);
+    private final XXIDataSet<PIkpPresetParams> dsIKP_PRESET_PARAMS = new XXIDataSet<>(getTaskContext(), PIkpPresetParams.class);
 
     @Override
     protected void init() throws Exception {
         super.init();
+
+        initParamsData();
         initComboBox();
         initInnerButton();
         initCustomButtons();
         initRichText();
         initDeviderPosition();
         initBinding();
+        initEventParamsTable();
+        CPARAMVALUE.setEditable(true);
+        CPARAMVALUE.setCellRenderer((cell, val) -> {
+            PIkpEventParams pojo = cell.getPojo();
+            JInvTextField textField = new JInvTextField();
+            PIkpPresetParams pIkpPresetParams = dsIKP_PRESET_PARAMS.getRows().stream().filter(p -> p.getCPARAMNAME().equalsIgnoreCase(pojo.getCPARAMNAME())).findFirst().get();
+            if(pIkpPresetParams.getIS_SPR() != 0){
+                String sqlLovRequest = pIkpPresetParams.getCSPRSQL();
+                setLov(PDual.class,"VAL",null,null,textField, false,sqlLovRequest);
+            }
+            textField.setText(val);
+            cell.setGraphic(textField);
+        });
+
+    }
+
+    @SneakyThrows
+    private JInvEntityLov setLov(Class lovClass, String valueColumnName, String wherePredicat, String orderBy, JInvTextField field, Boolean required, String lovSql)  {
+        JInvEntityLov lov_field = new JInvEntityLov<>(lovClass,valueColumnName);
+        //lov_field.setParameters(new ParamMap("query", lovSql));
+        lov_field.setWherePredicat(wherePredicat);
+        lov_field.setSkipFilterString(true);
+        lov_field.setChoiceOrderBy(orderBy);
+        lov_field.setTaskContext(getTaskContext());
+        field.setLOV(lov_field);
+        field.setRequired(required);
+        field.setValidateFromLOV(true);
+        return  lov_field;
+    }
+
+
+    private void initEventParamsTable() {
+        IEVENTPRESETID.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue == null || oldValue == newValue) return;
+                dsIKP_PRESET_PARAMS.setWherePredicat(String.format("ID_PRESET = %s",newValue));
+            try {
+                dsIKP_EVENT_PARAMS.getRows().clear();
+                dsIKP_PRESET_PARAMS.executeQuery();
+                dsIKP_PRESET_PARAMS.getRows().forEach(row -> {
+                    PIkpEventParams newPIkpEventParams = new PIkpEventParams();
+                    newPIkpEventParams.setIEVENTID(BigDecimal.valueOf(getDataObject().getIEVENTID()));
+                    newPIkpEventParams.setCPARAMFULLNAME(row.getCPARAMFULLNAME());
+                    newPIkpEventParams.setCPARAMNAME(row.getCPARAMNAME());
+                    dsIKP_EVENT_PARAMS.getRows().add(newPIkpEventParams);
+                });
+            } catch (DataSetException e) {
+                e.printStackTrace();
+            }
+
+        });
+    }
+
+    private void initParamsData() throws Exception {
+        DSFXAdapter dsfx = DSFXAdapter.bind(dsIKP_EVENT_PARAMS, IKP_EVENT_PARAMS, null, false);
+        dsIKP_EVENT_PARAMS.setWherePredicat(String.format(" IEVENTID = %s",getDataObject().getIEVENTID()));
+        doRefresh();
+    }
+
+    private void doRefresh(){
+        if (IEVENTPRESETID.getValue() == null) return;
+        dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",IEVENTPRESETID.getValue());
+        IKP_EVENT_PARAMS.executeQuery();
     }
 
     private void initBinding() {
@@ -138,6 +186,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
         IEVENTFILEDIR.disableProperty().bind(isPrest);
         COMMANDBAR.visibleProperty().bind(isPrest.not());
         SCRIPTSPLIT.visibleProperty().bind(isPrest.not());
+        IKP_EVENT_PARAMS.visibleProperty().bind(isPrest);
     }
 
     private void initDeviderPosition() {
@@ -166,6 +215,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
         AnchorPane.setRightAnchor(helpButton, 5.0);
         AnchorPane.setTopAnchor(helpButton, 5.0);
         COMMANDBARANCHOR.getChildren().add(helpButton);
+        helpButton.visibleProperty().bind(isPrest.not());
     }
 
     private void helpWindow() {
@@ -275,6 +325,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
 
     public void checkPreset(ActionEvent actionEvent) {
         new FXFormLauncher<>(getTaskContext(), getViewContext(), ViewPresetsController.class)
+                .dialogMode(FormModeEnum.VM_CHOICE)
                 .callback(this::doFormResult)
                 .modal(true)
                 .show();

@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.sql.Clob;
 
 /**
 @author  XDWeloper
@@ -21,7 +20,7 @@ public class PIkpPresetParams implements Serializable
     private String CPARAMFULLNAME;
     private String CPARAMNAME;
     private Long IS_SPR;
-    private Clob CSPRSQL;
+    private String CSPRSQL;
     private Long IS_MULTI;
 
     public PIkpPresetParams(){}
@@ -57,10 +56,10 @@ public class PIkpPresetParams implements Serializable
         IS_SPR = val; 
     }
     @Column(name="CSPRSQL")
-    public Clob getCSPRSQL() {
+    public String getCSPRSQL() {
         return CSPRSQL;
     }
-    public void setCSPRSQL(Clob val) {
+    public void setCSPRSQL(String val) {
         CSPRSQL = val; 
     }
     @Column(name="IS_MULTI",nullable = false,length = 1)

@@ -17,6 +17,8 @@
 <?import ru.inversion.fx.form.controls.JInvComboBox?>
 <?import ru.inversion.fx.form.controls.JInvLabel?>
 <?import ru.inversion.fx.form.controls.JInvLongField?>
+<?import ru.inversion.fx.form.controls.JInvTable?>
+<?import ru.inversion.fx.form.controls.JInvTableColumn?>
 <?import ru.inversion.fx.form.controls.JInvTextArea?>
 <?import ru.inversion.fx.form.controls.JInvTextField?>
 
@@ -50,7 +52,7 @@
                 <JInvLabel fx:id="lblLEVENTTEXT" text="%LEVENTTEXT" GridPane.columnIndex="0" GridPane.rowIndex="6" />
                 <AnchorPane fx:id="COMMANDBARANCHOR" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <children>
-                        <HBox fx:id="COMMANDBAR" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+                        <HBox fx:id="COMMANDBAR" prefHeight="372.0" prefWidth="519.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
                                 <JInvButton fx:id="TESTBUTTON" mnemonicParsing="false" onAction="#testCode" text="Тестировать код">
                                     <HBox.margin>
@@ -73,7 +75,7 @@
                             <items>
                         <AnchorPane fx:id="TEXTANCHORPANE">
                            <children>
-                              <JInvTextArea fx:id="LEVENTTEXT" fieldName="LEVENTTEXT" opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
+                              <JInvTextArea fx:id="LEVENTTEXT" fieldName="LEVENTTEXT" opacity="0.0" prefHeight="299.0" prefWidth="517.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children></AnchorPane>
                                 <TabPane onMouseClicked="#openCloseDebugWin" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                                     <tabs>
@@ -99,6 +101,13 @@
                                 </TabPane>
                             </items>
                         </SplitPane>
+                  <JInvTable fx:id="IKP_EVENT_PARAMS" prefHeight="372.0" prefWidth="519.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columns>
+                        <JInvTableColumn fx:id="CPARAMFULLNAME" fieldName="CPARAMFULLNAME" prefWidth="200.0" text="%CPARAMFULLNAME" />
+                        <JInvTableColumn fx:id="CPARAMNAME" fieldName="CPARAMNAME" prefWidth="200.0" text="%CPARAMNAME" />
+                        <JInvTableColumn fx:id="CPARAMVALUE" fieldName="CPARAMVALUE" prefWidth="100.0" text="%CPARAMVALUE" />
+                     </columns>
+                  </JInvTable>
                     </children>
                 </AnchorPane>
 

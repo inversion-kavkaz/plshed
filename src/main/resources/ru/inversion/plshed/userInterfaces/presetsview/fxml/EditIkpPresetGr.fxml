@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.*?>
+<?import ru.inversion.fx.form.controls.JInvButton?>
+<?import ru.inversion.fx.form.controls.JInvLabel?>
+<?import ru.inversion.fx.form.controls.JInvTextField?>
+<VBox spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ru.inversion.plshed.userInterfaces.presetsview.EditIkpPresetGrController">
+    <children>
+        <GridPane hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
+            <children>
+                <JInvLabel fx:id="lblCPRESETGRNAME" text="%CPRESETGRNAME" GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+                <JInvTextField fx:id="CPRESETGRNAME" prefColumnCount="50" fieldName="CPRESETGRNAME"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+            <rowConstraints>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints minHeight="1.0"/>
+            </rowConstraints>
+        </GridPane>
+        <ButtonBar buttonMinWidth="80.0">
+            <buttons>
+                <JInvButton fx:id="btOK"/>
+                <JInvButton fx:id="btCancel"/>
+            </buttons>
+        </ButtonBar>
+    </children>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+</VBox>

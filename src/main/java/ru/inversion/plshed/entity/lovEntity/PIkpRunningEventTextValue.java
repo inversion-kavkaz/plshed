@@ -15,7 +15,7 @@ import java.io.Serializable;
         name = "running",
         query = "SELECT * FROM ikp_text_value where parent_alias ='runningevent'"
 )
-
+//'runningevent'
 public class PIkpRunningEventTextValue implements Serializable, lovUtils.LovInterface {
     private static final long serialVersionUID = 11_12_2020_13_11_17l;
 

@@ -3,6 +3,7 @@ package ru.inversion.plshed.userInterfaces.mainui;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
@@ -31,6 +32,7 @@ import ru.inversion.plshed.entity.lovEntity.*;
 import ru.inversion.plshed.interfaces.TaskCallBack;
 import ru.inversion.plshed.interfaces.callFunc;
 import ru.inversion.plshed.model.TasksContainer;
+import ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController;
 import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.plshed.utils.dataSetUtils;
 import ru.inversion.utils.ConnectionStringFormatEnum;
@@ -112,6 +114,7 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
     private final XXIDataSet<PIkpTaskEvents> dsIKP_TASK_EVENTS = new XXIDataSet<>(getTaskContext(), PIkpTaskEvents.class);
     private final XXIDataSet<PIkpTasks> dsIKP_TASKS = new XXIDataSet<>(getTaskContext(), PIkpTasks.class);
     private final XXIDataSet<PIkpLog> dsIKP_LOG = new XXIDataSet<>(getTaskContext(), PIkpLog.class);
+
     private final PublishSubject sessionSubject = PublishSubject.create();
 
 
@@ -454,7 +457,6 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         dsIKP_TASKS.setCurrentRow(sellectedRow);
     }
 
-
     @Override
     public void onTaskFinish(Long taskId,Long code) {
         markedRunningRow(taskId, 0L);
@@ -545,5 +547,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         doRefresh(dsIKP_TASK_EVENTS);
         }
     }
+
+    public void presetProps(ActionEvent actionEvent) {
+            new FXFormLauncher<>(getTaskContext(), getViewContext(), ViewPresetsController.class)
+                    .dialogMode(FormModeEnum.VM_EDIT)
+                    .modal(true)
+                    .show();
+        }
+
 }
 

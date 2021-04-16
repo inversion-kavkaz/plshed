@@ -20,11 +20,12 @@ public class PIkpEventPresets implements Serializable
     private String CPRESETNAME;
     private String CPRESETTEXT;
     private Long IEVENTFILEDIR;
+    private Long IPRESETGR;
 
     public PIkpEventPresets(){}
 
     @Id 
-    @Column(name="IPRESETID",nullable = false,length = 0)
+    @Column(name="IPRESETID",length = 0)
     public Long getIPRESETID() {
         return IPRESETID;
     }
@@ -38,7 +39,7 @@ public class PIkpEventPresets implements Serializable
     public void setCPRESETNAME(String val) {
         CPRESETNAME = val; 
     }
-    @Column(name="CPRESETTEXT",nullable = false,length = 4000)
+    @Column(name="CPRESETTEXT",length = 4000)
     public String getCPRESETTEXT() {
         return CPRESETTEXT;
     }
@@ -50,6 +51,9 @@ public class PIkpEventPresets implements Serializable
         return IEVENTFILEDIR;
     }
     public void setIEVENTFILEDIR(Long val) {
-        IEVENTFILEDIR = val; 
+        IEVENTFILEDIR = val;
     }
+    @Column(name="IPRESETGR",nullable = false,length = 1)
+    public Long getIPRESETGR() {return IPRESETGR;}
+    public void setIPRESETGR(Long IPRESETGR) {this.IPRESETGR = IPRESETGR;}
 }

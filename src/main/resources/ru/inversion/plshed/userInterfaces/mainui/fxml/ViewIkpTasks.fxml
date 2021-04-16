@@ -3,6 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -22,13 +25,35 @@
 <?import ru.inversion.fx.form.controls.JInvToolBar?>
 <?import ru.inversion.fx.form.controls.dsbar.DSInfoBar?>
 
-<SplitPane dividerPositions="0.5, 0.5" orientation="VERTICAL" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.ViewIkpTasksController">
-  <items>
-    <AnchorPane>
-         <children>
-            <VBox prefHeight="296.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+<VBox prefHeight="579.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.ViewIkpTasksController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Файл">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Импорт пресетов" />
+                  <MenuItem mnemonicParsing="false" text="Экспорт пресетов" />
+              <MenuItem mnemonicParsing="false" onAction="#exit" text="Выход" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Настройки">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#presetProps" text="Справочник пресетов" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Помощь">
+            <items>
+              <MenuItem mnemonicParsing="false" text="О программе" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.5, 0.5" orientation="VERTICAL">
+        <items>
+            <VBox>
                <children>
-            <JInvToolBar fx:id="toolBar" />
+            <JInvToolBar fx:id="toolBar" multipleUse="true" />
                   <StackPane alignment="CENTER_LEFT" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0">
                      <children>
                         <HBox fx:id="SHEDINFOBOX">
@@ -41,7 +66,8 @@
                               <JInvComboBox fx:id="LOGLEVEL" fieldName="LOGLEVEL" prefWidth="150.0">
                                  <HBox.margin>
                                     <Insets right="10.0" />
-                                 </HBox.margin></JInvComboBox>
+                                 </HBox.margin>
+                              </JInvComboBox>
                               <Label text="%STARTDATETIME">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -50,7 +76,8 @@
                               <JInvCalendarTime fx:id="STARTDATETIME" editable="false" fieldName="DTASKFROMTMMV">
                                  <HBox.margin>
                                     <Insets right="10.0" />
-                                 </HBox.margin></JInvCalendarTime>
+                                 </HBox.margin>
+                              </JInvCalendarTime>
                            </children>
                         </HBox>
                      </children>
@@ -85,11 +112,7 @@
             </DSInfoBar>
                </children>
             </VBox>
-         </children>
-      </AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-         <children>
-            <TabPane prefHeight="250.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TabPane tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="%TASKEVENTS">
                   <content>
@@ -169,21 +192,21 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                             </JInvTable>
-                        </children>
+                              </children>
                     </AnchorPane>
                   </content>
                 </Tab>
               </tabs>
             </TabPane>
-         </children>
-      </AnchorPane>
-      <JInvToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
-        <items>
-          <Button mnemonicParsing="false" onAction="#exit" text="%EXITBUTTON" />
+            <JInvToolBar nodeOrientation="RIGHT_TO_LEFT">
+              <items>
+                <Button mnemonicParsing="false" onAction="#exit" text="%EXITBUTTON" />
+              </items>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </JInvToolBar>
         </items>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </JInvToolBar>
-  </items>
-</SplitPane>
+      </SplitPane>
+   </children>
+</VBox>

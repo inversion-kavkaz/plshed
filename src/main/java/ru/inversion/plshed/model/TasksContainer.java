@@ -17,7 +17,7 @@ import java.util.Map;
  */
 
 public class TasksContainer {
-    private final int WAIT_SECOND = 30;
+    private final int WAIT_SECOND = 60;
     private final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm";
 
     private Map<Long, Task> tasksList = new HashMap<>();

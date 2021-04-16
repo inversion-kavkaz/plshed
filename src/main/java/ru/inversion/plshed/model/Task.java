@@ -41,7 +41,7 @@ public class Task {
     private PIkpTasks pIkpTasks;
     private Boolean isLaunch;
     private Boolean isWork = false;
-    private TaskContext localTaskContext;
+    private TaskContext localTaskContext = null;
     private TaskContext taskContext;
     private ViewContext viewContext;
     private Logger logger;
@@ -97,9 +97,12 @@ public class Task {
         isWork = true;
         taskThread = new Thread(() -> {
             Object eventResult = null;
+            if(localTaskContext != null){
+                logger.info(String.format("Process is running"));
+                return;
+            }
             localTaskContext = new TaskContext();
             logger.info(String.format("Start new thread task id: %d sessionID: %d", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
-
             try {
                 /**Инициализация процесса*/
                 Long initResult = initTask(pIkpTasks.getITASKID(), localTaskContext);
@@ -108,7 +111,6 @@ public class Task {
                 } else if (initResult == -100) {
                     logger.info("init task error");
                 } else if (initResult == 0) {
-
                     /**Запуск процесса*/
                     runTask(pIkpTasks.getITASKID(), localTaskContext);
 
@@ -150,8 +152,11 @@ public class Task {
                     setNextStartDate();
                 isWork = false;
             } finally {
-                finishTask(pIkpTasks.getITASKID(), localTaskContext);
-                localTaskContext.close();
+                if (localTaskContext != null) {
+                    finishTask(pIkpTasks.getITASKID(), localTaskContext);
+                    localTaskContext.close();
+                    localTaskContext = null;
+                }
                 logger.info(String.format("Stop thread is end task id: %d sessionID: %d is closed", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
             }
         });
