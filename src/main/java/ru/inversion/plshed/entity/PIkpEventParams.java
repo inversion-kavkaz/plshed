@@ -13,7 +13,8 @@ import java.math.BigDecimal;
 */
 @Entity (name="ru.inversion.plshed.entity.PIkpEventParams")
 @Table (name="IKP_EVENT_PARAMS")
-public class PIkpEventParams implements Serializable
+public class
+PIkpEventParams implements Serializable
 {
     private static final long serialVersionUID = 16_04_2021_13_48_19l;
 
@@ -62,8 +63,7 @@ public class PIkpEventParams implements Serializable
     }
 
     @Column(name="CPARAMFULLNAME",length = 250,columnDefinition = "(select a.CPARAMFULLNAME from IKP_PRESET_PARAMS a where a.CPARAMNAME = CPARAMNAME " +
-            "and a.ID_PRESET = :PRESET_ID)",
-            insertable = false,updatable = false)
+            "and a.ID_PRESET = :PRESET_ID)", insertable = false,updatable = false)
     public String getCPARAMFULLNAME() {return CPARAMFULLNAME;}
     public void setCPARAMFULLNAME(String CPARAMFULLNAME) {this.CPARAMFULLNAME = CPARAMFULLNAME;}
 }

@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.XXIDataSet;
@@ -25,7 +26,6 @@ import ru.inversion.icons.enums.FontAwesome;
 import ru.inversion.plshed.entity.PIkpEventParams;
 import ru.inversion.plshed.entity.PIkpPresetParams;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
-import ru.inversion.plshed.entity.lovEntity.PDual;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventEnebledTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventFileTypeTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventTypeTextValue;
@@ -34,14 +34,19 @@ import ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController;
 import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.plshed.utils.GridPaneRowAnim;
 import ru.inversion.plshed.utils.JavaKeywords;
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import static lovUtils.LovUtils.initCombobox;
 import static ru.inversion.plshed.utils.ButtonUtils.setInnerGraphicButton;
+import static ru.inversion.plshed.utils.ConstantParams.classString;
+import static ru.inversion.plshed.utils.dataSetUtils.getClassFromString;
 
 
 /**
@@ -101,6 +106,9 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     private final XXIDataSet<PIkpEventParams> dsIKP_EVENT_PARAMS = new XXIDataSet<>(getTaskContext(), PIkpEventParams.class);
     private final XXIDataSet<PIkpPresetParams> dsIKP_PRESET_PARAMS = new XXIDataSet<>(getTaskContext(), PIkpPresetParams.class);
 
+    private Map<String,String> paramsList = new HashMap<>();
+
+
     @Override
     protected void init() throws Exception {
         super.init();
@@ -115,13 +123,34 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
         initEventParamsTable();
         CPARAMVALUE.setEditable(true);
         CPARAMVALUE.setCellRenderer((cell, val) -> {
-            PIkpEventParams pojo = cell.getPojo();
+
+            if(cell.getPojo() == null) return;
+            String cParamName = cell.getPojo().getCPARAMNAME();
+
             JInvTextField textField = new JInvTextField();
-            PIkpPresetParams pIkpPresetParams = dsIKP_PRESET_PARAMS.getRows().stream().filter(p -> p.getCPARAMNAME().equalsIgnoreCase(pojo.getCPARAMNAME())).findFirst().get();
-            if(pIkpPresetParams.getIS_SPR() != 0){
+
+            PIkpPresetParams pIkpPresetParams = dsIKP_PRESET_PARAMS.getRows()
+                    .stream()
+                    .filter(p -> !StringUtils.isEmpty(cParamName)  && p.getCPARAMNAME().equalsIgnoreCase(cParamName))
+                    .findFirst()
+                    .get();
+
+            if(pIkpPresetParams != null && pIkpPresetParams.getIS_SPR() != 0){
                 String sqlLovRequest = pIkpPresetParams.getCSPRSQL();
-                setLov(PDual.class,"VAL",null,null,textField, false,sqlLovRequest);
+                for(Map.Entry es : paramsList.entrySet()){
+                    sqlLovRequest = sqlLovRequest.replaceAll(String.format("#%s#",es.getKey()), String.valueOf(es.getValue()));
+                }
+
+                if(!sqlLovRequest.contains("#")){
+                    setLov("VAL",textField, false,sqlLovRequest)
+                    .valueProperty().addListener((observable, oldValue, newValue) -> {
+                        paramsList.put(pIkpPresetParams.getCPARAMNAME(), (String) newValue);
+                        IKP_EVENT_PARAMS.refresh();
+                    });
+                } else
+                    textField.setEditable(false);
             }
+            val = paramsList.get(cParamName);
             textField.setText(val);
             cell.setGraphic(textField);
         });
@@ -129,18 +158,24 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     }
 
     @SneakyThrows
-    private JInvEntityLov setLov(Class lovClass, String valueColumnName, String wherePredicat, String orderBy, JInvTextField field, Boolean required, String lovSql)  {
-        JInvEntityLov lov_field = new JInvEntityLov<>(lovClass,valueColumnName);
-        //lov_field.setParameters(new ParamMap("query", lovSql));
-        lov_field.setWherePredicat(wherePredicat);
-        lov_field.setSkipFilterString(true);
-        lov_field.setChoiceOrderBy(orderBy);
-        lov_field.setTaskContext(getTaskContext());
-        field.setLOV(lov_field);
-        field.setRequired(required);
-        field.setValidateFromLOV(true);
-        return  lov_field;
+    private JInvEntityLov setLov(String valueColumnName,JInvTextField field, Boolean required, String lovSql)  {
+
+        final JInvEntityLov[] lov_field = new JInvEntityLov[1];
+        String className = "PDual";
+        lovSql = lovSql.replaceAll("\n"," ");
+        lovSql = classString.replaceAll(":QUERY",lovSql).replaceAll(":CLASSNAME",className);
+
+        Optional.ofNullable(getClassFromString(lovSql,className,logger)).ifPresent(cls -> {
+            lov_field[0] = new JInvEntityLov<>(cls,valueColumnName);
+            lov_field[0].setSkipFilterString(true);
+            lov_field[0].setTaskContext(getTaskContext());
+            field.setLOV(lov_field[0]);
+            field.setRequired(required);
+            field.setValidateFromLOV(true);
+        });
+        return lov_field[0];
     }
+
 
 
     private void initEventParamsTable() {
