@@ -1,5 +1,6 @@
 package ru.inversion.plshed.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import ru.inversion.bicomp.util.ParamMap;
 import ru.inversion.db.expr.SQLExpressionException;
 import ru.inversion.fx.form.AbstractBaseController;
@@ -145,5 +146,32 @@ public class SqlUtils extends AbstractBaseController {
             return ;
         }
     }
+
+    public static void clearPresetParams(TaskContext taskContext, Long eventID) {
+        ParamMap p;
+        try {
+            p = new ParamMap()
+                    .add("IEVENTID", eventID)
+                    .exec(taskContext, location,"clear_preset_params");
+        } catch (SQLExpressionException ex) {
+            logger.error(ex.getContentText());
+            return ;
+        }
+    }
+
+    public static void savePresetParams(TaskContext taskContext, Long eventID, String cParamName, String cParamValue) {
+        ParamMap p;
+        try {
+            p = new ParamMap()
+                    .add("IEVENTID", eventID)
+                    .add("CPARAMNAME", cParamName)
+                    .add("CPARAMVALUE", cParamValue)
+                    .exec(taskContext, location,"save_preset_params");
+        } catch (SQLExpressionException ex) {
+            logger.error(ex.getContentText());
+            return ;
+        }
+    }
+
 
 }

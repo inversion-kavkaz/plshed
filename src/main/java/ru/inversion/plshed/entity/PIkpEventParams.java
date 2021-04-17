@@ -1,9 +1,6 @@
 package ru.inversion.plshed.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -13,6 +10,10 @@ import java.math.BigDecimal;
 */
 @Entity (name="ru.inversion.plshed.entity.PIkpEventParams")
 @Table (name="IKP_EVENT_PARAMS")
+@NamedNativeQuery(name = "query", query = "SELECT v.CPARAMNAME,v.CPARAMVALUE,\n" +
+        "(select a.CPARAMFULLNAME from IKP_PRESET_PARAMS a where a.CPARAMNAME = v.CPARAMNAME and a.ID_PRESET = :PRESET_ID) CPARAMFULLNAME,\n" +
+        "v.IEVENTID F" +
+        "ROM IKP_EVENT_PARAMS v")
 public class
 PIkpEventParams implements Serializable
 {
@@ -62,8 +63,9 @@ PIkpEventParams implements Serializable
         CPARAMVALUE = val; 
     }
 
-    @Column(name="CPARAMFULLNAME",length = 250,columnDefinition = "(select a.CPARAMFULLNAME from IKP_PRESET_PARAMS a where a.CPARAMNAME = CPARAMNAME " +
-            "and a.ID_PRESET = :PRESET_ID)", insertable = false,updatable = false)
+    @Column(name="CPARAMFULLNAME",length = 250)
     public String getCPARAMFULLNAME() {return CPARAMFULLNAME;}
     public void setCPARAMFULLNAME(String CPARAMFULLNAME) {this.CPARAMFULLNAME = CPARAMFULLNAME;}
+
+
 }

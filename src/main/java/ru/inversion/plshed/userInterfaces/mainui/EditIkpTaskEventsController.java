@@ -14,6 +14,7 @@ import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.XXIDataSet;
 import ru.inversion.dataset.fx.DSFXAdapter;
+import ru.inversion.fx.app.AppException;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.JInvFXFormController;
 import ru.inversion.fx.form.controls.*;
@@ -34,13 +35,12 @@ import ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController;
 import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.plshed.utils.GridPaneRowAnim;
 import ru.inversion.plshed.utils.JavaKeywords;
+import ru.inversion.plshed.utils.SqlUtils;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static lovUtils.LovUtils.initCombobox;
@@ -108,6 +108,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
 
     private Map<String,String> paramsList = new HashMap<>();
 
+    private final Long EVENT_TYPE_PRESET = 0L;
 
     @Override
     protected void init() throws Exception {
@@ -120,11 +121,30 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
         initRichText();
         initDeviderPosition();
         initBinding();
+
+        dsIKP_PRESET_PARAMS.setWherePredicat(String.format("ID_PRESET = %s",getDataObject().getIEVENTPRESETID()));
+        dsIKP_PRESET_PARAMS.executeQuery();
+
+
+        if(getDataObject().getIEVENTTYPE() == EVENT_TYPE_PRESET)
+            doRefresh();
+
+        initCellFactory();
         initEventParamsTable();
+    }
+
+    @Override
+    protected void afterInit() throws AppException {
+        super.afterInit();
+        dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",IEVENTPRESETID.getValue());
+    }
+
+    private void initCellFactory() {
         CPARAMVALUE.setEditable(true);
         CPARAMVALUE.setCellRenderer((cell, val) -> {
 
             if(cell.getPojo() == null) return;
+            cell.setText("");
             String cParamName = cell.getPojo().getCPARAMNAME();
 
             JInvTextField textField = new JInvTextField();
@@ -150,11 +170,11 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
                 } else
                     textField.setEditable(false);
             }
-            val = paramsList.get(cParamName);
+            if(!StringUtils.isEmpty(paramsList.get(cParamName)))
+                val = paramsList.get(cParamName);
             textField.setText(val);
             cell.setGraphic(textField);
         });
-
     }
 
     @SneakyThrows
@@ -176,8 +196,6 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
         return lov_field[0];
     }
 
-
-
     private void initEventParamsTable() {
         IEVENTPRESETID.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue == null || oldValue == newValue) return;
@@ -190,12 +208,13 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
                     newPIkpEventParams.setIEVENTID(BigDecimal.valueOf(getDataObject().getIEVENTID()));
                     newPIkpEventParams.setCPARAMFULLNAME(row.getCPARAMFULLNAME());
                     newPIkpEventParams.setCPARAMNAME(row.getCPARAMNAME());
-                    dsIKP_EVENT_PARAMS.getRows().add(newPIkpEventParams);
+                    if(!dsIKP_EVENT_PARAMS.getRows().stream().filter(p -> p.getCPARAMNAME().equalsIgnoreCase(row.getCPARAMNAME())).findAny().isPresent())
+                        dsIKP_EVENT_PARAMS.getRows().add(newPIkpEventParams);
                 });
             } catch (DataSetException e) {
                 e.printStackTrace();
             }
-
+            IKP_EVENT_PARAMS.refresh();
         });
     }
 
@@ -206,8 +225,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     }
 
     private void doRefresh(){
-        if (IEVENTPRESETID.getValue() == null) return;
-        dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",IEVENTPRESETID.getValue());
+        dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",getDataObject().getIEVENTPRESETID());
         IKP_EVENT_PARAMS.executeQuery();
     }
 
@@ -341,6 +359,12 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     protected boolean onOK() {
         if (JavaKeywords.isCodeChange())
             LEVENTTEXT.setText(JavaKeywords.getCodeText());
+        SqlUtils.clearPresetParams(getTaskContext(),getDataObject().getIEVENTID());
+        for(PIkpEventParams item : dsIKP_EVENT_PARAMS.getRows()){
+            item.setCPARAMVALUE(paramsList.get(item.getCPARAMNAME()));
+            SqlUtils.savePresetParams(getTaskContext(),getDataObject().getIEVENTID(),item.getCPARAMNAME(),item.getCPARAMVALUE());
+        }
+
         return super.onOK();
     }
 
@@ -374,6 +398,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
                     PRESETNAME.setText(pIkpEventPresets.getCPRESETNAME());
                     IEVENTPRESETID.setValue(pIkpEventPresets.getIPRESETID());
             });
+            paramsList.clear();
         }
     }
 }

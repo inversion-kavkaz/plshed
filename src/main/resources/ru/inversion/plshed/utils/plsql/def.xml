@@ -133,6 +133,32 @@
         </parameters>
     </expression>
 
+    <!-- Сохраняем параметры пресета -->
+    <expression name="save_preset_params" lang="PL/SQL">
+        <script><![CDATA[
+            begin
+                insert into IKP_EVENT_PARAMS (IEVENTID,CPARAMNAME,CPARAMVALUE) VALUES (:IEVENTID,:CPARAMNAME,:CPARAMVALUE);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="IEVENTID" mode="IN" sqlType="VARCHAR" javaType="String" />
+            <parameter name="CPARAMNAME" mode="IN" sqlType="VARCHAR" javaType="String" />
+            <parameter name="CPARAMVALUE" mode="IN" sqlType="VARCHAR" javaType="String" />
+        </parameters>
+    </expression>
+
+    <!-- Сохраняем параметры пресета -->
+    <expression name="clear_preset_params" lang="PL/SQL">
+        <script><![CDATA[
+            begin
+                delete IKP_EVENT_PARAMS where IEVENTID = :IEVENTID;
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="IEVENTID" mode="IN" sqlType="VARCHAR" javaType="String" />
+        </parameters>
+    </expression>
+
 
 </sql_expr_list>
 
