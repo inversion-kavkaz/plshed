@@ -137,7 +137,7 @@
     <expression name="save_preset_params" lang="PL/SQL">
         <script><![CDATA[
             begin
-                insert into IKP_EVENT_PARAMS (IEVENTID,CPARAMNAME,CPARAMVALUE) VALUES (:IEVENTID,:CPARAMNAME,:CPARAMVALUE);
+                insert into XXI.IKP_EVENT_PARAMS (IEVENTID,CPARAMNAME,CPARAMVALUE) VALUES (:IEVENTID,:CPARAMNAME,:CPARAMVALUE);
             end;
         ]]></script>
         <parameters>
@@ -155,7 +155,19 @@
             end;
         ]]></script>
         <parameters>
-            <parameter name="IEVENTID" mode="IN" sqlType="VARCHAR" javaType="String" />
+            <parameter name="IEVENTID" mode="IN" sqlType="BIGINT" javaType="Long" />
+        </parameters>
+    </expression>
+
+    <!-- Установить уровень логирования -->
+    <expression name="set_log_level" lang="PL/SQL">
+        <script><![CDATA[
+            begin
+                ikp_debug.SetLvl(:LOGLEVEL);
+            end;
+        ]]></script>
+        <parameters>
+            <parameter name="LOGLEVEL" mode="IN" sqlType="BIGINT" javaType="Long" />
         </parameters>
     </expression>
 

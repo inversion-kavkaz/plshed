@@ -125,11 +125,13 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         dsIKP_TASKS.pageSize(200);
     }
 
-    private final TasksContainer tasksContainer = new TasksContainer(logger, getTaskContext(), this);
+    private TasksContainer tasksContainer;
+
 
     @Override
     protected void init() throws Exception {
         //checkRunning();
+        tasksContainer = new TasksContainer(logger, getTaskContext(), getViewContext(), this);
         initTitle();
         initTableColorized();
         DSFXAdapter<PIkpTasks> pIkpTasksDSFXAdapter = initDataSetAdapter(dsIKP_TASKS, IKP_TASKS, IKP_TASKS$MARK, true);
@@ -204,6 +206,14 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
             dsIKP_TASKS.getCurrentRow().setLOGLEVEL((Long) ((JInvComboBox) event.getTarget()).getValue());
         });
         pIkpTasksDSFXAdapter.bindControl(STARTDATETIME);
+
+//        LOGLEVEL.setCellFactory(param -> new ListCell(){
+//            @Override
+//            protected void updateItem(Object item, boolean empty) {
+//                super.updateItem(item, empty);
+//            }
+//        });
+
     }
 
     private void initTasks() throws DataSetException {

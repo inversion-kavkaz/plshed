@@ -1,5 +1,6 @@
 package ru.inversion.plshed.model;
 
+import ru.inversion.bicomp.util.ParamMap;
 import ru.inversion.fx.form.ViewContext;
 import ru.inversion.tc.TaskContext;
 import ru.inversion.utils.ConnectionStringFormatEnum;
@@ -39,17 +40,27 @@ public class TestClass {
 
         public static String CustomFunction(String preResult) {
 
-
             try {
-                sendRequest();
-            } catch (ClassNotFoundException
-                    | InvocationTargetException
-                    | IllegalAccessException
-                    | NoSuchMethodException
-                    | InstantiationException
-                    | MalformedURLException e) {
-                e.printStackTrace();
+                Class var6 = Class.forName("ru.inversion.bicomp.fxreport.ApMain");
+                Method var7 = var6.getDeclaredMethod("runReport", ViewContext.class, TaskContext.class, Map.class);
+                var7.invoke((Object)null, viewContext,taskContext, new ParamMap().add("REPORT_TYPE_ID",1));
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassNotFoundException var8) {
+                var8.printStackTrace();
             }
+
+            int v = 0;
+
+
+//            try {
+//                sendRequest();
+//            } catch (ClassNotFoundException
+//                    | InvocationTargetException
+//                    | IllegalAccessException
+//                    | NoSuchMethodException
+//                    | InstantiationException
+//                    | MalformedURLException e) {
+//                e.printStackTrace();
+//            }
 //
 //            StartProcess("",
 //                    "c:\\Program Files\\Notepad++",

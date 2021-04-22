@@ -1,6 +1,7 @@
 package ru.inversion.plshed.model;
 
 import org.slf4j.Logger;
+import ru.inversion.fx.form.ViewContext;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.interfaces.TaskCallBack;
 import ru.inversion.tc.TaskContext;
@@ -24,12 +25,14 @@ public class TasksContainer {
     private Logger logger;
     TaskContext taskContext;
     TaskCallBack taskCallBack;
+    ViewContext viewContext;
     Thread taskSheduler = null;
 
-    public TasksContainer(Logger logger, TaskContext taskContext, TaskCallBack taskCallBac) {
+    public TasksContainer(Logger logger, TaskContext taskContext, ViewContext viewContext,TaskCallBack taskCallBac) {
         this.logger = logger;
         this.taskContext = taskContext;
         this.taskCallBack = taskCallBac;
+        this.viewContext = viewContext;
         initTaskScheduler();
     }
 
@@ -37,7 +40,7 @@ public class TasksContainer {
         if (tasksList.containsKey(pIkpTasks.getITASKID()))
             return;
 
-        tasksList.put(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks, logger, taskContext, taskCallBack));
+        tasksList.put(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks, logger, taskContext, viewContext, taskCallBack));
     }
 
     public Task startTask(Long taskId) {
@@ -46,7 +49,7 @@ public class TasksContainer {
 
     public void updateTask(PIkpTasks pIkpTasks) {
         if (tasksList.containsKey(pIkpTasks.getITASKID())) {
-            tasksList.replace(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks, logger, taskContext, taskCallBack));
+            tasksList.replace(pIkpTasks.getITASKID(), Task.taskFactory(pIkpTasks, logger, taskContext, viewContext, taskCallBack));
         } else
             initTask(pIkpTasks);
     }

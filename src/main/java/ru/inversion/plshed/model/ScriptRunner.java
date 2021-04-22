@@ -150,7 +150,8 @@ public class ScriptRunner {
                 "import java.net.URLClassLoader;\n" +
                 "import java.lang.reflect.InvocationTargetException;\n" +
                 "import java.lang.reflect.Method;\n" +
-                "import java.net.MalformedURLException;\n";
+                "import java.net.MalformedURLException;\n" +
+                "import ru.inversion.bicomp.util.ParamMap;\n";
     }
 
     private String addCallSqlFunc(){

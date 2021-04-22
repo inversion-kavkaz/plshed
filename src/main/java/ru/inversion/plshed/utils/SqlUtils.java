@@ -1,6 +1,5 @@
 package ru.inversion.plshed.utils;
 
-import org.apache.commons.lang3.StringUtils;
 import ru.inversion.bicomp.util.ParamMap;
 import ru.inversion.db.expr.SQLExpressionException;
 import ru.inversion.fx.form.AbstractBaseController;
@@ -153,9 +152,8 @@ public class SqlUtils extends AbstractBaseController {
             p = new ParamMap()
                     .add("IEVENTID", eventID)
                     .exec(taskContext, location,"clear_preset_params");
-        } catch (SQLExpressionException ex) {
-            logger.error(ex.getContentText());
-            return ;
+        } catch (SQLExpressionException e) {
+            e.printStackTrace();
         }
     }
 
@@ -167,6 +165,16 @@ public class SqlUtils extends AbstractBaseController {
                     .add("CPARAMNAME", cParamName)
                     .add("CPARAMVALUE", cParamValue)
                     .exec(taskContext, location,"save_preset_params");
+        } catch (SQLExpressionException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public static void setLogLevel(TaskContext taskContext, Long logLevel) {
+        ParamMap p;
+        try {
+            p = new ParamMap()
+                    .add("LOGLEVEL", logLevel)
+                    .exec(taskContext, location,"set_log_level");
         } catch (SQLExpressionException ex) {
             logger.error(ex.getContentText());
             return ;

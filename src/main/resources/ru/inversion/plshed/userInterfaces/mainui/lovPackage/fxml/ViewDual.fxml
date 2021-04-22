@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import ru.inversion.fx.form.controls.JInvButton?>
+<?import ru.inversion.fx.form.controls.JInvTable?>
+<?import ru.inversion.fx.form.controls.JInvTableColumn?>
+<?import ru.inversion.fx.form.controls.JInvToolBar?>
+<?import ru.inversion.fx.form.controls.dsbar.DSInfoBar?>
+
+<VBox prefHeight="400.0" prefWidth="800.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.271" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.inversion.plshed.userInterfaces.mainui.lovPackage.ViewDualController">
+<children>
+<JInvToolBar fx:id="toolBar" />
+<JInvTable fx:id="DUAL" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+<columns>
+    <JInvTableColumn fx:id="DESCR" fieldName="DESCR" prefWidth="400" text="%DESCR" />
+    <JInvTableColumn fx:id="VAL" fieldName="VAL" prefWidth="200" text="%VAL" />
+</columns>
+<VBox.margin>
+<Insets left="5.0" right="5.0" />
+</VBox.margin>
+</JInvTable>
+<DSInfoBar fx:id="DUAL$MARK">
+<VBox.margin>
+<Insets bottom="5.0" left="5.0" right="5.0" />
+</VBox.margin>
+</DSInfoBar>
+    <ButtonBar buttonMinWidth="80.0" layoutX="5.0" layoutY="455.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <buttons>
+            <JInvButton fx:id="btOK" text="%EDIT.OK" />
+            <JInvButton fx:id="btCancel" text="%EDIT.CANCEL" />
+        </buttons>
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+        </padding>
+    </ButtonBar>
+
+</children>
+</VBox>

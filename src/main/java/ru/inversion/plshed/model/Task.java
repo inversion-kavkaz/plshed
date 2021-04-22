@@ -8,6 +8,7 @@ import ru.inversion.fx.form.ViewContext;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
 import ru.inversion.plshed.entity.PIkpTasks;
 import ru.inversion.plshed.interfaces.TaskCallBack;
+import ru.inversion.plshed.utils.SqlUtils;
 import ru.inversion.tc.TaskContext;
 
 import java.io.File;
@@ -55,14 +56,14 @@ public class Task {
 
     public enum StartType {Forced, Timer}
 
-    public static Task taskFactory(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext, TaskCallBack taskCallBack) {
-        return new Task(pIkpTasks, logger, taskContext, taskCallBack);
+    public static Task taskFactory(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext,ViewContext viewContext, TaskCallBack taskCallBack) {
+        return new Task(pIkpTasks, logger, taskContext,viewContext, taskCallBack);
     }
 
-    private Task(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext, TaskCallBack taskCallBack) {
+    private Task(PIkpTasks pIkpTasks, Logger logger, TaskContext taskContext,ViewContext viewContext, TaskCallBack taskCallBack) {
         this.pIkpTasks = pIkpTasks;
         this.taskContext = taskContext;
-        this.viewContext = getViewContext();
+        this.viewContext = viewContext;
         this.logger = logger;
         this.taskCallBack = taskCallBack;
         this.isPeriod = pIkpTasks.getITASKPERIOD() == 1L;
@@ -103,9 +104,12 @@ public class Task {
             }
             localTaskContext = new TaskContext();
             logger.info(String.format("Start new thread task id: %d sessionID: %d", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
+            /**Выставляем уровень логирования для данного задания в локальном потоке*/
+            SqlUtils.setLogLevel(getTaskContext(),pIkpTasks.getLOGLEVEL());
+            logger.info(String.format("Set lvl: %s", this.pIkpTasks.getLOGLEVEL()));
             try {
                 /**Инициализация процесса*/
-                Long initResult = initTask(pIkpTasks.getITASKID(), localTaskContext);
+                Long initResult = 0L;//initTask(pIkpTasks.getITASKID(), localTaskContext);
                 if (initResult == -1) {
                     logger.info("Task already running");
                 } else if (initResult == -100) {
@@ -152,12 +156,12 @@ public class Task {
                     setNextStartDate();
                 isWork = false;
             } finally {
+                logger.info(String.format("Stop thread is end task id: %d sessionID: %d is closed", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
                 if (localTaskContext != null) {
                     finishTask(pIkpTasks.getITASKID(), localTaskContext);
                     localTaskContext.close();
                     localTaskContext = null;
                 }
-                logger.info(String.format("Stop thread is end task id: %d sessionID: %d is closed", this.pIkpTasks.getITASKID(), localTaskContext.getSessionID()));
             }
         });
         taskThread.setDaemon(true);

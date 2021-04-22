@@ -112,13 +112,13 @@
                 </AnchorPane>
 
                 <JInvLabel fx:id="lblCEVENTINDIR" text="%CEVENTINDIR" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                <JInvTextField fx:id="CEVENTINDIR" fieldName="CEVENTINDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <JInvTextField fx:id="CEVENTINDIR" fieldName="CEVENTINDIR" prefColumnCount="50" validateFromLOV="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
                 <JInvLabel fx:id="lblCEVENTOUTDIR" text="%CEVENTOUTDIR" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-                <JInvTextField fx:id="CEVENTOUTDIR" fieldName="CEVENTOUTDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <JInvTextField fx:id="CEVENTOUTDIR" fieldName="CEVENTOUTDIR" prefColumnCount="50" validateFromLOV="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
                 <JInvLabel fx:id="lblCEVENTARHDIR" text="%CEVENTARHDIR" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-                <JInvTextField fx:id="CEVENTARHDIR" fieldName="CEVENTARHDIR" prefColumnCount="50" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                <JInvTextField fx:id="CEVENTARHDIR" fieldName="CEVENTARHDIR" prefColumnCount="50" validateFromLOV="false" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
 
                 <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">

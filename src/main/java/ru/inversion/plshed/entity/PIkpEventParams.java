@@ -12,8 +12,7 @@ import java.math.BigDecimal;
 @Table (name="IKP_EVENT_PARAMS")
 @NamedNativeQuery(name = "query", query = "SELECT v.CPARAMNAME,v.CPARAMVALUE,\n" +
         "(select a.CPARAMFULLNAME from IKP_PRESET_PARAMS a where a.CPARAMNAME = v.CPARAMNAME and a.ID_PRESET = :PRESET_ID) CPARAMFULLNAME,\n" +
-        "v.IEVENTID F" +
-        "ROM IKP_EVENT_PARAMS v")
+        "v.IEVENTID FROM IKP_EVENT_PARAMS v")
 public class
 PIkpEventParams implements Serializable
 {

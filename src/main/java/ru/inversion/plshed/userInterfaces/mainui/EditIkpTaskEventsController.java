@@ -8,18 +8,18 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import ru.inversion.bicomp.action.StopExecuteActionBiCompException;
 import ru.inversion.dataset.DataSetException;
 import ru.inversion.dataset.XXIDataSet;
 import ru.inversion.dataset.fx.DSFXAdapter;
 import ru.inversion.fx.app.AppException;
+import ru.inversion.fx.form.ActionFactory;
 import ru.inversion.fx.form.FXFormLauncher;
 import ru.inversion.fx.form.JInvFXFormController;
 import ru.inversion.fx.form.controls.*;
+import ru.inversion.fx.form.controls.renderer.JInvTableCell;
 import ru.inversion.fx.form.lov.JInvDirectoryChooserLov;
-import ru.inversion.fx.form.lov.JInvEntityLov;
 import ru.inversion.fx.form.valid.Validator;
 import ru.inversion.fxn3d.action.ActionCheckSQL;
 import ru.inversion.fxn3d.action.PSQL;
@@ -31,6 +31,7 @@ import ru.inversion.plshed.entity.lovEntity.PIkpEventEnebledTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventFileTypeTextValue;
 import ru.inversion.plshed.entity.lovEntity.PIkpEventTypeTextValue;
 import ru.inversion.plshed.model.ScriptRunner;
+import ru.inversion.plshed.userInterfaces.mainui.lovPackage.ViewDualController;
 import ru.inversion.plshed.userInterfaces.presetsview.ViewPresetsController;
 import ru.inversion.plshed.utils.ButtonUtils;
 import ru.inversion.plshed.utils.GridPaneRowAnim;
@@ -40,13 +41,12 @@ import ru.inversion.plshed.utils.SqlUtils;
 import java.io.File;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import static lovUtils.LovUtils.initCombobox;
 import static ru.inversion.plshed.utils.ButtonUtils.setInnerGraphicButton;
-import static ru.inversion.plshed.utils.ConstantParams.classString;
-import static ru.inversion.plshed.utils.dataSetUtils.getClassFromString;
 
 
 /**
@@ -114,29 +114,33 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     protected void init() throws Exception {
         super.init();
 
-        initParamsData();
         initComboBox();
         initInnerButton();
         initCustomButtons();
         initRichText();
         initDeviderPosition();
         initBinding();
-
-        dsIKP_PRESET_PARAMS.setWherePredicat(String.format("ID_PRESET = %s",getDataObject().getIEVENTPRESETID()));
-        dsIKP_PRESET_PARAMS.executeQuery();
-
-
-        if(getDataObject().getIEVENTTYPE() == EVENT_TYPE_PRESET)
-            doRefresh();
-
+        initParmsList();
         initCellFactory();
         initEventParamsTable();
+    }
+
+    private void initParmsList() throws Exception {
+        if(getDataObject().getIEVENTTYPE() == EVENT_TYPE_PRESET) {
+            dsIKP_PRESET_PARAMS.setWherePredicat(String.format("ID_PRESET = %s",getDataObject().getIEVENTPRESETID()));
+            dsIKP_PRESET_PARAMS.executeQuery();
+            initParamsData();
+            doRefresh();
+            paramsList.clear();
+            for (PIkpEventParams row :dsIKP_EVENT_PARAMS.getRows())
+                paramsList.put(row.getCPARAMNAME(),row.getCPARAMVALUE());
+        }
     }
 
     @Override
     protected void afterInit() throws AppException {
         super.afterInit();
-        dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",IEVENTPRESETID.getValue());
+        //dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",IEVENTPRESETID.getValue());
     }
 
     private void initCellFactory() {
@@ -152,56 +156,64 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
             PIkpPresetParams pIkpPresetParams = dsIKP_PRESET_PARAMS.getRows()
                     .stream()
                     .filter(p -> !StringUtils.isEmpty(cParamName)  && p.getCPARAMNAME().equalsIgnoreCase(cParamName))
-                    .findFirst()
-                    .get();
+                    .findAny()
+                    .orElse(null);
+                    //.get();
 
             if(pIkpPresetParams != null && pIkpPresetParams.getIS_SPR() != 0){
-                String sqlLovRequest = pIkpPresetParams.getCSPRSQL();
-                for(Map.Entry es : paramsList.entrySet()){
-                    sqlLovRequest = sqlLovRequest.replaceAll(String.format("#%s#",es.getKey()), String.valueOf(es.getValue()));
-                }
+                String sqlLovRequest = getSqlString(pIkpPresetParams);
 
-                if(!sqlLovRequest.contains("#")){
-                    setLov("VAL",textField, false,sqlLovRequest)
-                    .valueProperty().addListener((observable, oldValue, newValue) -> {
-                        paramsList.put(pIkpPresetParams.getCPARAMNAME(), (String) newValue);
-                        IKP_EVENT_PARAMS.refresh();
-                    });
+                if(!sqlLovRequest.contains("#") && !StringUtils.isEmpty(sqlLovRequest)){
+                    textField.setInnerButton((JInvButton) ActionFactory.createButton(FontAwesome.fa_table,(a) -> {
+                        new FXFormLauncher(getTaskContext(), getViewContext(), ViewDualController.class)
+                            .initProperties(new HashMap<String, String>(){{put("sql", getSqlString(pIkpPresetParams));put("multi",pIkpPresetParams.getIS_MULTI() > 0 ? "Y": "N");}})
+                                .dialogMode(FormModeEnum.VM_CHOICE)
+                                .callback((formReturnEnum, jInvFXFormController) -> {
+                                    if(formReturnEnum == FormReturnEnum.RET_OK){
+                                        if(paramsList.containsKey(pIkpPresetParams.getCPARAMNAME()))
+                                            paramsList.replace(pIkpPresetParams.getCPARAMNAME(),String.join(",",((ViewDualController)jInvFXFormController).resultValues));
+                                        else
+                                            paramsList.put(pIkpPresetParams.getCPARAMNAME(),String.join(",",((ViewDualController)jInvFXFormController).resultValues));
+                                        setFieldValue(cell, val, cParamName, textField);
+                                        IKP_EVENT_PARAMS.refresh();
+                                    }
+                                })
+                                .modal(true)
+                            .show();
+                    }));
+
+
                 } else
                     textField.setEditable(false);
             }
-            if(!StringUtils.isEmpty(paramsList.get(cParamName)))
-                val = paramsList.get(cParamName);
-            textField.setText(val);
-            cell.setGraphic(textField);
+            setFieldValue(cell, val, cParamName, textField);
         });
+
+
     }
 
-    @SneakyThrows
-    private JInvEntityLov setLov(String valueColumnName,JInvTextField field, Boolean required, String lovSql)  {
+    private String getSqlString(PIkpPresetParams pIkpPresetParams) {
+        String sqlLovRequest = pIkpPresetParams.getCSPRSQL();
+        for(Map.Entry es : paramsList.entrySet()){
+            sqlLovRequest = sqlLovRequest.replaceAll(String.format("#%s#",es.getKey()), String.valueOf(es.getValue()));
+        }
+        return sqlLovRequest;
+    }
 
-        final JInvEntityLov[] lov_field = new JInvEntityLov[1];
-        String className = "PDual";
-        lovSql = lovSql.replaceAll("\n"," ");
-        lovSql = classString.replaceAll(":QUERY",lovSql).replaceAll(":CLASSNAME",className);
-
-        Optional.ofNullable(getClassFromString(lovSql,className,logger)).ifPresent(cls -> {
-            lov_field[0] = new JInvEntityLov<>(cls,valueColumnName);
-            lov_field[0].setSkipFilterString(true);
-            lov_field[0].setTaskContext(getTaskContext());
-            field.setLOV(lov_field[0]);
-            field.setRequired(required);
-            field.setValidateFromLOV(true);
-        });
-        return lov_field[0];
+    private void setFieldValue(JInvTableCell<PIkpEventParams, String> cell, String val, String cParamName, JInvTextField textField) {
+        if(!StringUtils.isEmpty(paramsList.get(cParamName)))
+            val = paramsList.get(cParamName);
+        textField.setText(val);
+        cell.setGraphic(textField);
     }
 
     private void initEventParamsTable() {
         IEVENTPRESETID.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue == null || oldValue == newValue) return;
+            if(newValue == null || oldValue == null || oldValue == newValue) return;
                 dsIKP_PRESET_PARAMS.setWherePredicat(String.format("ID_PRESET = %s",newValue));
             try {
                 dsIKP_EVENT_PARAMS.getRows().clear();
+                paramsList.clear();
                 dsIKP_PRESET_PARAMS.executeQuery();
                 dsIKP_PRESET_PARAMS.getRows().forEach(row -> {
                     PIkpEventParams newPIkpEventParams = new PIkpEventParams();
@@ -213,6 +225,8 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
                 });
             } catch (DataSetException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             IKP_EVENT_PARAMS.refresh();
         });
@@ -221,12 +235,15 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
     private void initParamsData() throws Exception {
         DSFXAdapter dsfx = DSFXAdapter.bind(dsIKP_EVENT_PARAMS, IKP_EVENT_PARAMS, null, false);
         dsIKP_EVENT_PARAMS.setWherePredicat(String.format(" IEVENTID = %s",getDataObject().getIEVENTID()));
-        doRefresh();
     }
 
     private void doRefresh(){
         dsIKP_EVENT_PARAMS.setParameter("PRESET_ID",getDataObject().getIEVENTPRESETID());
-        IKP_EVENT_PARAMS.executeQuery();
+        try {
+            dsIKP_EVENT_PARAMS.executeQuery();
+        } catch (DataSetException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initBinding() {
