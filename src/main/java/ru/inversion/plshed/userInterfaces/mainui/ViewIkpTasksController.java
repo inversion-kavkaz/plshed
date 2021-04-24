@@ -13,17 +13,17 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 import ru.inversion.bicomp.action.JInvButtonPrint;
-import ru.inversion.dataset.DataLinkBuilder;
-import ru.inversion.dataset.DataSetException;
-import ru.inversion.dataset.IDataSet;
-import ru.inversion.dataset.XXIDataSet;
+import ru.inversion.dataset.*;
 import ru.inversion.dataset.aggr.AggrFuncEnum;
 import ru.inversion.dataset.fx.DSFXAdapter;
+import ru.inversion.dataset.fx.F7FilterGroup;
+import ru.inversion.dataset.fx.F7FilterItem;
 import ru.inversion.fx.form.*;
 import ru.inversion.fx.form.controls.*;
 import ru.inversion.fx.form.controls.dsbar.DSInfoBar;
 import ru.inversion.fx.form.controls.renderer.Colorizer;
 import ru.inversion.fx.form.controls.table.toolbar.AggregatorType;
+import ru.inversion.fx.form.lov.JInvEntityLov;
 import ru.inversion.icons.enums.FontAwesome;
 import ru.inversion.plshed.entity.PIkpLog;
 import ru.inversion.plshed.entity.PIkpTaskEvents;
@@ -39,6 +39,9 @@ import ru.inversion.utils.ConnectionStringFormatEnum;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -150,6 +153,34 @@ public class ViewIkpTasksController extends JInvFXBrowserController implements c
         initLogFilterBinding();
 
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
+//        AtomicReference<Long> ID = new AtomicReference<>(null);
+//
+//        pIkpTasksDSFXAdapter.setFilterModifier(new DSFXAdapter.IFilterModifier() {
+//            @Override
+//            public void modifyBefore(Map<F7FilterGroup, Set<F7FilterItem>> filterMap) {
+//                F7FilterItem itaskperiod = filterMap.entrySet().stream().flatMap(p -> p.getValue().stream())
+//                        .filter(p -> p.getColumn().equalsIgnoreCase("ITASKPERIOD")).findAny().get();
+//
+//                JInvEntityLov jInvEntityLov = new JInvEntityLov(PIkpPeriodTextValue.class,"VALUE", param -> {
+//                    ID.set(((PIkpPeriodTextValue)param).getID());
+//                    return ((PIkpPeriodTextValue)param).getVALUE();
+//                });
+//                itaskperiod.setType(String.class);
+//                //itaskperiod.setLov(jInvEntityLov);
+//                JInvTextField jInvTextField = new JInvTextField();
+//                jInvTextField.setLOV(jInvEntityLov, true);
+//                itaskperiod.setControl(jInvTextField);
+//            }
+//
+//            @Override
+//            public List<? extends IFilterItem> modifyAfter(List<F7FilterItem> filterList) {
+//                F7FilterItem itaskperiod = filterList.stream().filter(p -> p.getColumn().equalsIgnoreCase("ITASKPERIOD")).findAny().get();
+//                itaskperiod.setType(Long.class);
+//                itaskperiod.setValue(String.format("# = %s",ID.get()));
+//                itaskperiod.setControlValue(String.format("%s",ID.get()));
+//                return filterList;
+//            }
+//        });
         /** test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__test__*/
     }
 

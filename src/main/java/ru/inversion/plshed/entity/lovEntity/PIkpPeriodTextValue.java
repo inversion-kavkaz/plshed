@@ -1,9 +1,6 @@
 package ru.inversion.plshed.entity.lovEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedNativeQuery;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -13,7 +10,7 @@ import java.io.Serializable;
 @Entity(name = "ru.inversion.plshed.entity.PIkpRunningType")
 @NamedNativeQuery(
         name = "period",
-        query = "SELECT * FROM ikp_text_value where parent_alias ='period'"
+        query = "SELECT UPPER(PARENT_ID) as PARENT_ID, UPPER(VALUE) as VALUE FROM ikp_text_value where parent_alias ='period'"
 )
 
 public class PIkpPeriodTextValue implements Serializable, lovUtils.LovInterface {
@@ -25,26 +22,24 @@ public class PIkpPeriodTextValue implements Serializable, lovUtils.LovInterface 
     public PIkpPeriodTextValue() {
     }
 
-    @Id
     @Column(name = "PARENT_ID", nullable = false, length = 0)
     public Long getID() {
         return ID;
     }
-
     public void setID(Long val) {
         ID = val;
     }
 
+    @Id
     @Column(name = "VALUE", length = 50)
     public String getVALUE() {
         return VALUE;
     }
-
     public void setVALUE(String val) {
         VALUE = val;
     }
 
-
+    @Transient
     @Override
     public Object getKey() {
         return getID();

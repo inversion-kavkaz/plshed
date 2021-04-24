@@ -138,6 +138,7 @@
         <script><![CDATA[
             begin
                 insert into XXI.IKP_EVENT_PARAMS (IEVENTID,CPARAMNAME,CPARAMVALUE) VALUES (:IEVENTID,:CPARAMNAME,:CPARAMVALUE);
+                commit;
             end;
         ]]></script>
         <parameters>
@@ -152,6 +153,7 @@
         <script><![CDATA[
             begin
                 delete IKP_EVENT_PARAMS where IEVENTID = :IEVENTID;
+                commit;
             end;
         ]]></script>
         <parameters>

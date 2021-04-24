@@ -27,24 +27,18 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>dd.MM.yyyy</maven.build.timestamp.format>
         <slf4j.version>1.7.25</slf4j.version>
-        <kotlin.version>1.4.31</kotlin.version>
         <apache.common.version>3.12.0</apache.common.version>
     </properties>
 
     <dependencies>
-        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.4</version><scope>system</scope><systemPath>С:\JAPP_603\lib\lombok-1.18.4.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>JInvFore_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\JInvFore.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXbicomp_jar</artifactId><scope>system</scope><systemPath>c:\JAPP_603\FXbicomp.jar</systemPath></dependency>
-        <dependency><groupId>org.slf4j</groupId><version>1.0.0</version><artifactId>slf4j-api</artifactId><scope>system</scope><systemPath>c:\JAPP_603\lib\slf4j-api.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>C:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
-        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXN3D_jar</artifactId><scope>system</scope><systemPath>C:\JAPP_603\FXN3D.jar</systemPath></dependency>
-<!--        <dependency>-->
-<!--            <groupId>ru.inversion</groupId>-->
-<!--            <artifactId>JInvFore</artifactId>-->
-<!--            <version>4.0.0</version>-->
-<!--        </dependency>-->
+        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.4</version><scope>system</scope><systemPath>d:\JAPP_603\lib\lombok-1.18.4.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>JInvFore_jar</artifactId><scope>system</scope><systemPath>d:\JAPP_603\JInvFore.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXbicomp_jar</artifactId><scope>system</scope><systemPath>d:\JAPP_603\FXbicomp.jar</systemPath></dependency>
+        <dependency><groupId>org.slf4j</groupId><version>1.0.0</version><artifactId>slf4j-api</artifactId><scope>system</scope><systemPath>d:\JAPP_603\lib\slf4j-api.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>lib_javaee_api_jar</artifactId><scope>system</scope><systemPath>d:\JAPP_603\lib\javaee-api.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>manifest-reader</artifactId><version>1.0.0</version><scope>system</scope><systemPath>d:\JAPP_603\lib\manifest-reader.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion-kavkaz</groupId><artifactId>lovUtils</artifactId><version>1.0.0</version><scope>system</scope><systemPath>d:\JAPP_603\lib\lovUtils.jar</systemPath></dependency>
+        <dependency><groupId>ru.inversion.jp</groupId><version>1.0.0</version><artifactId>FXN3D_jar</artifactId><scope>system</scope><systemPath>d:\JAPP_603\FXN3D.jar</systemPath></dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -78,17 +72,6 @@
             <groupId>io.reactivex.rxjava3</groupId>
             <artifactId>rxjava</artifactId>
             <version>3.0.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

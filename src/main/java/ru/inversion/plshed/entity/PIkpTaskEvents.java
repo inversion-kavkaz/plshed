@@ -1,6 +1,7 @@
 package ru.inversion.plshed.entity;
 
 import ru.inversion.dataset.mark.IDMarkable;
+import ru.inversion.db.entity.DBReturningValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
 
     public PIkpTaskEvents(){}
 
+    @DBReturningValue
     @Column(name="IEVENTID",nullable = false,length = 0)
     public Long getIEVENTID() {
         return IEVENTID;
@@ -42,7 +44,8 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
     public void setIEVENTID(Long val) {
         IEVENTID = val; 
     }
-    @Id 
+    @Id
+    @DBReturningValue
     @Column(name="IEVENTTASKID",nullable = false,length = 0)
     public Long getIEVENTTASKID() {
         return IEVENTTASKID;
@@ -51,6 +54,7 @@ public class PIkpTaskEvents extends IDMarkable implements Serializable
         IEVENTTASKID = val; 
     }
     @Id
+    @DBReturningValue
     @Column(name="IEVENTNPP",nullable = false,length = 100)
     public Long getIEVENTNPP() {
         return IEVENTNPP;
