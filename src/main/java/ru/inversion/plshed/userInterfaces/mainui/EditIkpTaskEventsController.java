@@ -381,6 +381,7 @@ public class EditIkpTaskEventsController extends JInvFXFormController<PIkpTaskEv
             LEVENTTEXT.setText(JavaKeywords.getCodeText());
         boolean okRet = super.onOK();
         SqlUtils.clearPresetParams(getTaskContext(),getDataObject().getIEVENTID());
+        if(getFormMode() == FormModeEnum.VM_DEL) return okRet;
         for(PIkpEventParams item : dsIKP_EVENT_PARAMS.getRows()){
             item.setCPARAMVALUE(paramsList.get(item.getCPARAMNAME()));
             SqlUtils.savePresetParams(getTaskContext(),getDataObject().getIEVENTID(),item.getCPARAMNAME(),item.getCPARAMVALUE());
